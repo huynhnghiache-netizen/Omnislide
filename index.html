@@ -43,7 +43,7 @@
     }
     .start-btn:hover { color: #ff3344; transform: scale(1.05); }
 
-    /* ===== Frame 2: DANH SÁCH 10 SLIDE (GRID) ===== */
+    /* ===== Frame 2: MENU CHỌN SLIDE (GRID) ===== */
     #grid {
       position: fixed; inset: 0; z-index: 10; display: none; flex-direction: column;
       padding: 36px 48px 0; overflow: hidden;
@@ -105,7 +105,7 @@
     }
     @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* ===== KHU VỰC HIỂN THỊ SLIDE SỐNG (LIVE DOM) ===== */
+    /* ===== KHU VỰC 10 SLIDE SỐNG (LIVE DOM) TỪ X (GIỮ NGUYÊN 100% CSS GỐC) ===== */
     #live-slide-container {
       position: fixed; inset: 0; z-index: 30; pointer-events: none;
       opacity: 0; transform: scale(0.95); transition: opacity 0.4s ease, transform 0.4s ease;
@@ -115,7 +115,6 @@
       opacity: 1; transform: scale(1); pointer-events: auto;
     }
 
-    /* CSS GỐC 100% CỦA FILE X CHO SLIDE */
     .slide-x-live {
       position: absolute; width: 1280px; height: 720px;
       display: flex; flex-direction: column; padding: 70px 90px; overflow: hidden;
@@ -125,7 +124,7 @@
       color: #fff; font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
       box-shadow: 0 20px 50px rgba(0,0,0,0.8);
       transform-origin: center;
-      display: none; /* Mặc định ẩn, chỉ bật slide nào được chọn */
+      display: none;
     }
     .slide-x-live.active { display: flex; }
     .slide-x-live::before {
@@ -137,16 +136,29 @@
     .slide-tag-x { display: inline-block; padding: 7px 18px; border-radius: 20px; background: rgba(102,126,234,0.15); border: 1px solid rgba(143,167,255,0.3); color: #8fa7ff; font-size: 0.8rem; font-weight: 700; letter-spacing: 3px; margin-bottom: 20px; align-self: flex-start; }
     h2.title-x { font-size: 2.1rem; line-height: 1.35; margin-bottom: 35px; background: linear-gradient(135deg, #fff 0%, #8fa7ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
     .content-x { flex: 1; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2; }
+    
     .card-list-x { display: flex; flex-direction: column; gap: 16px; max-width: 1100px; }
     .card-item-x { background: rgba(255,255,255,0.04); border: 1px solid rgba(143,167,255,0.18); border-left: 4px solid #667eea; border-radius: 14px; padding: 18px 26px; display: flex; align-items: center; gap: 20px; font-size: 1.05rem; line-height: 1.5; backdrop-filter: blur(10px); }
     .badge-x { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 0.95rem; font-weight: 800; color: #fff; flex-shrink: 0; box-shadow: 0 6px 16px rgba(102,126,234,0.45); }
+    
     .team-grid-x { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; max-width: 900px; margin: 0 auto; width: 100%; }
     .member-x { background: linear-gradient(135deg, rgba(102,126,234,0.18), rgba(118,75,162,0.18)); border: 1px solid rgba(143,167,255,0.3); border-radius: 22px; padding: 36px 30px; text-align: center; }
     .avatar-x { width: 88px; height: 88px; margin: 0 auto 18px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; color: #fff; }
+    
     .timeline-x { display: flex; flex-direction: column; gap: 35px; max-width: 1000px; position: relative; padding-left: 20px; }
     .timeline-item-x { display: flex; gap: 30px; align-items: flex-start; }
     .timeline-year-x { font-size: 1.8rem; font-weight: 900; background: linear-gradient(135deg, #f9d423, #ff4e50); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: right; width: 90px; }
     .timeline-content-x { flex: 1; background: rgba(255,255,255,0.04); border-left: 3px solid #667eea; border-radius: 0 14px 14px 0; padding: 22px 28px; font-size: 1.02rem; line-height: 1.7; }
+
+    /* Scam Scene CSS */
+    .scam-scene { width: 100%; max-width: 1100px; margin: 0 auto; border-radius: 20px; overflow: hidden; background: radial-gradient(circle at 20% 30%, rgba(102,126,234,0.15), transparent 60%), radial-gradient(circle at 80% 70%, rgba(255,107,107,0.15), transparent 60%), linear-gradient(135deg, #0a0e27, #1a1f3a); border: 1px solid rgba(143,167,255,0.25); position: relative; }
+    .scam-svg { display: block; width: 100%; height: auto; position: relative; z-index: 2; }
+    .svg-label { font-family: 'Segoe UI', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: 3px; }
+    .svg-bubble-text { font-family: 'Segoe UI', sans-serif; font-weight: 700; }
+    .scene-caption { padding: 16px 24px; background: rgba(0,0,0,0.35); border-top: 1px solid rgba(143,167,255,0.2); text-align: center; color: #a0a8c0; font-size: 0.95rem; position: relative; z-index: 2; }
+    .scene-caption b { color: #f9d423; }
+    .replay-btn { position: absolute; top: 16px; right: 16px; padding: 8px 18px; border-radius: 20px; background: rgba(102,126,234,0.2); border: 1px solid rgba(143,167,255,0.4); color: #8fa7ff; font-size: 0.8rem; font-weight: 700; cursor: pointer; letter-spacing: 2px; z-index: 5; font-family: inherit; }
+    .replay-btn:hover { background: rgba(102,126,234,0.4); color: #fff; }
 
     /* Thanh hướng dẫn thoát slide */
     .detail-hint {
@@ -157,7 +169,7 @@
     }
     .detail-hint.show { opacity: 1; pointer-events: auto; }
 
-    /* ===== Bảng chọn kiếm khi bị Sans chặn ===== */
+    /* Bảng chọn kiếm khi bị Sans chặn */
     #choose {
       position: fixed; top: 36px; left: 50%; z-index: 70; text-align: center;
       transform: translate(-50%, -20px); opacity: 0; pointer-events: none;
@@ -213,7 +225,7 @@
     <div class="ticker"><div id="ticker-track" class="ticker-track"></div></div>
   </div>
 
-  <!-- KHU VỰC 10 SLIDE SỐNG (LIVE DOM) TỪ X -->
+  <!-- KHU VỰC 10 SLIDE SỐNG (LIVE DOM) TỪ X (ĐẦY ĐỦ 4 THÀNH VIÊN VÀ SVG SCAM) -->
   <div id="live-slide-container">
     <!-- Slide 1 -->
     <div class="slide-x-live" data-index="0">
@@ -231,9 +243,11 @@
       <div class="content-x">
         <span class="slide-tag-x">THÀNH VIÊN NHÓM BÁO CÁO</span>
         <h2 class="title-x">Nhóm của chúng em</h2>
-        <div class="team-grid-x">
-          <div class="member-x"><div class="avatar-x">HN</div><div style="font-size:1.5rem; font-weight:800;">Huỳnh Nghĩa</div><div style="color:#8fa7ff;">TRƯỞNG NHÓM</div></div>
-          <div class="member-x"><div class="avatar-x">HM</div><div style="font-size:1.5rem; font-weight:800;">Hoàng My</div><div style="color:#8fa7ff;">THÀNH VIÊN</div></div>
+        <div class="team-grid-x" style="grid-template-columns: repeat(4, 1fr);">
+          <div class="member-x"><div class="avatar-x">HN</div><div style="font-size:1.2rem; font-weight:800;">Huỳnh Nghĩa</div><div style="color:#8fa7ff; font-size:0.8rem;">TRƯỞNG NHÓM</div></div>
+          <div class="member-x"><div class="avatar-x">HM</div><div style="font-size:1.2rem; font-weight:800;">Hoàng My</div><div style="color:#8fa7ff; font-size:0.8rem;">THÀNH VIÊN</div></div>
+          <div class="member-x"><div class="avatar-x">BN</div><div style="font-size:1.2rem; font-weight:800;">Bảo Ngân</div><div style="color:#8fa7ff; font-size:0.8rem;">THÀNH VIÊN</div></div>
+          <div class="member-x"><div class="avatar-x">NH</div><div style="font-size:1.2rem; font-weight:800;">Ngọc Hân</div><div style="color:#8fa7ff; font-size:0.8rem;">THÀNH VIÊN</div></div>
         </div>
       </div>
     </div>
@@ -249,6 +263,7 @@
           <div class="card-item-x"><div class="badge-x">02</div><span>Làm lộ thông tin cá nhân, tổ chức gây ảnh hưởng xấu.</span></div>
           <div class="card-item-x"><div class="badge-x">03</div><span>Gửi <b style="color:#f9d423">thư rác</b>, tin nhắn rác, spam quấy rối.</span></div>
           <div class="card-item-x"><div class="badge-x">04</div><span>Sử dụng dữ liệu của người khác <b style="color:#f9d423">không xin phép</b>.</span></div>
+          <div class="card-item-x"><div class="badge-x">05</div><span>Sử dụng phần mềm <b style="color:#f9d423">không có bản quyền</b>.</span></div>
         </div>
       </div>
     </div>
@@ -308,15 +323,68 @@
       </div>
     </div>
 
-    <!-- Slide 8 -->
+    <!-- Slide 8 (Full SVG Scam Animation from X) -->
     <div class="slide-x-live" data-index="7">
       <span class="slide-num-x">08 / 10</span>
-      <div class="content-x" style="text-align:center;">
+      <div class="content-x" style="justify-content:center; align-items:center;">
         <span class="slide-tag-x" style="align-self:center;">MINH HOẠ TRỰC QUAN</span>
-        <h2 class="title-x" style="text-align:center;">Kịch bản lừa đảo trực tuyến điển hình</h2>
-        <div style="background:rgba(10,14,39,0.9); border:1px solid rgba(143,167,255,0.25); border-radius:16px; padding:35px; margin-top:20px; text-align:center;">
-          <p style="font-size:22px; color:#f9d423; font-weight:700; margin-bottom:15px;">"TRÚNG THƯỞNG 50 TRIỆU! Chuyển phí 2 triệu để nhận thưởng"</p>
-          <p style="font-size:18px; color:#ff4e50; font-weight:700;">Cảnh báo: Tuyệt đối không chuyển tiền qua mạng cho các đối tượng lạ!</p>
+        <h2 class="title-x" style="text-align:center; margin-bottom:20px;">Kịch bản lừa đảo trực tuyến điển hình</h2>
+        <div class="scam-scene">
+          <button class="replay-btn" id="replayBtn">PHÁT LẠI</button>
+          <svg class="scam-svg" viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="coinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffe066"/><stop offset="50%" stop-color="#f9d423"/><stop offset="100%" stop-color="#ff9a00"/>
+              </linearGradient>
+              <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <radialGradient id="puffGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ff6b6b" stop-opacity="0.9"/><stop offset="100%" stop-color="#ff6b6b" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <text x="250" y="55" text-anchor="middle" class="svg-label" fill="#8fa7ff">NẠN NHÂN</text>
+            <text x="750" y="55" text-anchor="middle" class="svg-label" fill="#ff6b6b">KẺ LỪA ĐẢO</text>
+            <line x1="60" y1="430" x2="940" y2="430" stroke="#3a4463" stroke-width="2" stroke-dasharray="10 8" opacity="0.6"/>
+            <g transform="translate(250, 280)"><g id="victim">
+              <g id="victim-head"><circle cx="0" cy="0" r="28" fill="rgba(143,167,255,0.08)" stroke="#8fa7ff" stroke-width="3"/><circle cx="-9" cy="-5" r="3" fill="#8fa7ff"/><circle cx="9" cy="-5" r="3" fill="#8fa7ff"/><path d="M-8 10 Q0 16 8 10" stroke="#8fa7ff" fill="none" stroke-width="2.5" stroke-linecap="round"/></g>
+              <line x1="0" y1="28" x2="0" y2="105" stroke="#8fa7ff" stroke-width="3.5" stroke-linecap="round"/>
+              <g transform="translate(0, 58)"><line x1="0" y1="0" x2="-42" y2="32" stroke="#8fa7ff" stroke-width="3.5" stroke-linecap="round"/></g>
+              <g transform="translate(0, 58)"><line x1="0" y1="0" x2="42" y2="32" stroke="#8fa7ff" stroke-width="3.5" stroke-linecap="round"/><g transform="translate(42, 32)"><rect x="-9" y="-14" width="18" height="30" rx="3" fill="#0a0e27" stroke="#8fa7ff" stroke-width="2"/><rect x="-6" y="-10" width="12" height="20" fill="#8fa7ff" opacity="0.3"/></g></g>
+              <line x1="0" y1="105" x2="-30" y2="150" stroke="#8fa7ff" stroke-width="3.5" stroke-linecap="round"/>
+              <line x1="0" y1="105" x2="30" y2="150" stroke="#8fa7ff" stroke-width="3.5" stroke-linecap="round"/>
+            </g></g>
+            <g transform="translate(750, 280)"><g id="scammer">
+              <g id="scammer-head"><circle cx="0" cy="0" r="28" fill="rgba(255,107,107,0.08)" stroke="#ff6b6b" stroke-width="3"/><rect x="-18" y="-9" width="16" height="10" rx="2" fill="#ff6b6b"/><rect x="2" y="-9" width="16" height="10" rx="2" fill="#ff6b6b"/><line x1="-2" y1="-4" x2="2" y2="-4" stroke="#ff6b6b" stroke-width="2"/><path d="M-9 12 Q0 20 9 12" stroke="#ff6b6b" fill="none" stroke-width="2.5" stroke-linecap="round"/></g>
+              <line x1="0" y1="28" x2="0" y2="105" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round"/>
+              <g id="scammer-arm-l" transform="translate(0, 58)"><line x1="0" y1="0" x2="-42" y2="32" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round"/></g>
+              <g id="scammer-arm-r" transform="translate(0, 58)"><line x1="0" y1="0" x2="42" y2="32" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round"/></g>
+              <g transform="translate(35, 92)"><rect x="-3" y="-2" width="46" height="30" rx="3" fill="#1a1f3a" stroke="#ff6b6b" stroke-width="2"/><rect x="3" y="3" width="34" height="20" fill="#ff6b6b" opacity="0.25"/><text x="20" y="18" text-anchor="middle" font-size="10" fill="#ff6b6b" font-weight="700" font-family="monospace">$ $ $</text></g>
+              <line x1="0" y1="105" x2="-30" y2="150" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round"/>
+              <line x1="0" y1="105" x2="30" y2="150" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round"/>
+            </g></g>
+            <g id="bubble" opacity="0" transform="translate(750, 150)">
+              <rect x="-180" y="-58" width="360" height="100" rx="18" fill="#141a30" stroke="#f9d423" stroke-width="2.5" filter="url(#softGlow)"/>
+              <path d="M-25 42 L0 70 L25 42 Z" fill="#141a30" stroke="#f9d423" stroke-width="2.5"/>
+              <line x1="-25" y1="42" x2="25" y2="42" stroke="#141a30" stroke-width="3"/>
+              <text x="0" y="-22" text-anchor="middle" class="svg-bubble-text" font-size="20" fill="#f9d423">TRÚNG THƯỞNG 50 TRIỆU!</text>
+              <text x="0" y="8" text-anchor="middle" class="svg-bubble-text" font-size="15" fill="#8fa7ff">Chuyển phí 2 triệu để nhận thưởng</text>
+            </g>
+            <g transform="translate(345, 330)"><g class="coin" opacity="0"><circle r="14" fill="url(#coinGrad)" stroke="#ff9a00" stroke-width="2"/><text text-anchor="middle" y="5" font-size="16" fill="#7a4a00" font-weight="900">$</text></g></g>
+            <g transform="translate(350, 355)"><g class="coin" opacity="0"><circle r="12" fill="url(#coinGrad)" stroke="#ff9a00" stroke-width="2"/><text text-anchor="middle" y="4" font-size="14" fill="#7a4a00" font-weight="900">$</text></g></g>
+            <g transform="translate(340, 375)"><g class="coin" opacity="0"><circle r="14" fill="url(#coinGrad)" stroke="#ff9a00" stroke-width="2"/><text text-anchor="middle" y="5" font-size="16" fill="#7a4a00" font-weight="900">$</text></g></g>
+            <g id="puffs" transform="translate(750, 300)" opacity="0">
+              <circle class="puff" r="10" fill="url(#puffGrad)" data-dx="80" data-dy="-90"/>
+              <circle class="puff" r="14" fill="url(#puffGrad)" data-dx="-85" data-dy="-60"/>
+              <circle class="puff" r="12" fill="url(#puffGrad)" data-dx="100" data-dy="10"/>
+            </g>
+            <g id="shock" opacity="0" transform="translate(250, 200)"><text text-anchor="middle" font-size="90" font-weight="900" fill="#ff4e50" style="filter:drop-shadow(0 0 15px #ff4e50)">!</text></g>
+            <g id="scam-text" opacity="0" transform="translate(500, 200)">
+              <rect x="-230" y="-50" width="460" height="100" rx="20" fill="rgba(255,78,80,0.15)" stroke="#ff4e50" stroke-width="3" filter="url(#softGlow)"/>
+              <text text-anchor="middle" y="15" font-size="52" font-weight="900" fill="#ff4e50" letter-spacing="4" style="filter:drop-shadow(0 0 20px #ff4e50)">ĐÃ BỊ LỪA!</text>
+            </g>
+          </svg>
+          <div class="scene-caption"><b>Cảnh báo:</b> Tuyệt đối không chuyển tiền, không cung cấp thông tin cá nhân cho bất kỳ ai qua tin nhắn "trúng thưởng".</div>
         </div>
       </div>
     </div>
@@ -364,14 +432,38 @@
       "Trách nhiệm công dân", "Tổng kết & Q&A"
     ];
 
-    let slideImages = new Array(10).fill('');
+    let scamTl = null;
+    function playScamScene() {
+      if (scamTl) { scamTl.kill(); scamTl = null; }
+      gsap.set('#victim-head',     { rotation: 0, transformOrigin: '50% 90%' });
+      gsap.set('#scammer',         { x: 0, y: 0, rotation: 0, opacity: 1, scale: 1 });
+      gsap.set('#bubble',          { opacity: 0, y: -30, scale: 0.6, transformOrigin: '50% 100%' });
+      gsap.set('.coin',            { x: 0, y: 0, opacity: 0, scale: 1 });
+      gsap.set('#shock',           { opacity: 0, scale: 0.3, transformOrigin: '50% 50%' });
+      gsap.set('#scam-text',       { opacity: 0, scale: 0.5, transformOrigin: '50% 50%' });
+      gsap.set('#puffs',           { opacity: 0 });
+
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: 2 });
+      scamTl = tl;
+      tl.to('#bubble', { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: 'back.out(2.2)' }, '+=0.2');
+      tl.to({}, { duration: 2.4 });
+      tl.to('#bubble', { opacity: 0, y: -30, scale: 0.6, duration: 0.4, ease: 'power2.in' });
+      tl.to('#victim-head', { rotation: 14, duration: 0.45, ease: 'power2.out' }, '-=0.3');
+      tl.to('.coin', { opacity: 1, duration: 0.2, stagger: 0.08 }, '+=0.2');
+      tl.to('.coin', { x: 400, y: -170, duration: 1.0, ease: 'power2.inOut', stagger: 0.1 }, '<0.15');
+      tl.to('.coin', { opacity: 0, scale: 0.4, duration: 0.35, stagger: 0.08 }, '-=0.45');
+      tl.to('#puffs', { opacity: 1, duration: 0.15 }, '+=0.1');
+      tl.to('#scammer', { x: -30, y: -30, rotation: 720, scale: 0.2, opacity: 0, duration: 0.7, ease: 'power2.in' }, '<');
+      tl.to('#shock', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(3)' }, '-=0.3');
+      tl.to('#scam-text', { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.8)' }, '-=0.6');
+      tl.to({}, { duration: 1.2 });
+    }
 
     const PX = 8;
     const BLOOD_PX = PX * 2.5;
     const BLOCK_CHANCE = 0.3;
     const pad2 = (n) => String(n).padStart(2, '0');
 
-    // Sprites Sans, Bone, Sword
     const SANS_ROWS = [
       "....................WWWWWWWWWWWW....................",
       ".................WWWWWWWWWWWWWWWWWW.................",
@@ -482,7 +574,6 @@
     const BONE_IMG = makeSprite(BONE_ROWS, (ch) => ({ W: '#f2f2f2', K: '#0b0b0b' }[ch] || null), 5);
     const SWORD_IMG = makeSprite(SWORD_ROWS, (ch) => SWORD_COLORS[ch] || null, 6);
 
-    // FX Canvas 2D
     const fxCanvas = document.getElementById('fx');
     const fx = fxCanvas.getContext('2d');
     fx.imageSmoothingEnabled = false;
@@ -540,7 +631,6 @@
       const bc = Math.ceil(innerWidth / BLOOD_PX), br = Math.ceil(innerHeight / BLOOD_PX);
       const body = new Uint8Array(bc * br), core = new Uint8Array(bc * br);
       const set = (m, x, y) => { if (x >= 0 && y >= 0 && x < bc && y < br) m[y * bc + x] = 1; };
-
       for (let j = 0; j < br; j++) {
         const s = Math.min(rows.length - 1, Math.floor((j * BLOOD_PX + BLOOD_PX / 2) / PX));
         const [a, b] = rows[s];
@@ -550,7 +640,6 @@
           set(body, cx + dx, j);
           if (dx === 0) set(core, cx, j);
         }
-        if (Math.random() < 0.05) for (let k = 1; k <= 4; k++) set(body, cx, j + k);
       }
       splat = { body, core, bc, br };
       bloodFade.a = 1;
@@ -751,27 +840,17 @@
     function flyTo(i, done) {
       const r = cards[i].getBoundingClientRect();
       const el = document.createElement('div');
-      el.className = 'fly';
-      el.style.position = 'fixed';
-      el.style.zIndex = '36';
-      el.style.pointerEvents = 'none';
-      el.style.boxShadow = '0 0 0 3px #000';
-      el.style.background = '#0f1626';
-      el.style.left = r.left + 'px';
-      el.style.top = r.top + 'px';
-      el.style.width = r.width + 'px';
-      el.style.height = r.height + 'px';
+      el.style.cssText = `position:fixed; z-index:36; pointer-events:none; box-shadow:0 0 0 3px #000; background:#0f1626; left:${r.left}px; top:${r.top}px; width:${r.width}px; height:${r.height}px;`;
       
-      // Lấy nội dung slide live nhúng vào hiệu ứng bay
       const liveSource = document.querySelector(`.slide-x-live[data-index="${i}"]`).cloneNode(true);
-      liveSource.style.cssText = "position:absolute; inset:0; width:1280px; height:720px; display:flex; transform-origin: top left; transform: scale(" + (r.width / 1280) + ");";
+      liveSource.style.cssText = `position:absolute; inset:0; width:1280px; height:720px; display:flex; transform-origin: top left; transform: scale(${r.width / 1280});`;
       el.appendChild(liveSource);
       document.body.appendChild(el);
 
       gsap.to(el, {
         left: 0, top: 0, width: innerWidth, height: innerHeight, duration: 0.7, ease: 'power3.inOut',
         onStart: () => {
-          gsap.to(liveSource, { transform: "scale(" + (innerWidth / 1280) + ")", duration: 0.7, ease: 'power3.inOut' });
+          gsap.to(liveSource, { transform: `scale(${innerWidth / 1280})`, duration: 0.7, ease: 'power3.inOut' });
         },
         onComplete: () => { done(); el.remove(); }
       });
@@ -795,7 +874,6 @@
     ].map(t => t + "   *   ").join('');
     tickerTrack.textContent = TICKER_LINE + TICKER_LINE;
 
-    // Tạo thumbnail cho các card bằng cách chụp nhanh html2canvas ngầm khi khởi động
     const cards = new Array(10).fill(0).map((_, i) => {
       const c = document.createElement('button');
       c.type = 'button';
@@ -818,7 +896,6 @@
       return b;
     });
 
-    // Trang trí nền (Tim + Xương bay)
     const HEART_SPR = [".XX.XX.", "XXXXXXX", "XXXXXXX", ".XXXXX.", "..XXX..", "...X..."];
     const decoCanvas = document.getElementById('deco');
     const dctx = decoCanvas.getContext('2d');
@@ -907,8 +984,12 @@
     function openSlide(i) {
       activeSlideIndex = i;
       liveSlides.forEach((s, idx) => {
-        if (idx === i) s.classList.add('active');
-        else s.classList.remove('active');
+        if (idx === i) {
+          s.classList.add('active');
+          if (idx === 7) playScamScene();
+        } else {
+          s.classList.remove('active');
+        }
       });
       liveContainer.classList.add('show');
       detailHint.classList.add('show');
@@ -918,6 +999,7 @@
     function closeDetail() {
       if (view !== 'detail') return;
       view = 'busy';
+      if (scamTl) { scamTl.kill(); scamTl = null; }
       liveContainer.classList.remove('show');
       detailHint.classList.remove('show');
       setTimeout(() => {
@@ -1039,7 +1121,14 @@
       }
     });
 
-    // Tự động render thumbnail nhỏ cho các card khi khởi động
+    // Sự kiện nút phát lại scam ở slide 8
+    document.addEventListener('click', (e) => {
+      if (e.target && e.target.id === 'replayBtn') {
+        e.stopPropagation();
+        playScamScene();
+      }
+    });
+
     window.addEventListener('DOMContentLoaded', async () => {
       const liveElements = document.querySelectorAll('.slide-x-live');
       for (let i = 0; i < liveElements.length; i++) {
