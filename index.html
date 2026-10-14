@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Critical Slash Slide Presentation</title>
+  <title>Tin học 9 - Critical Slash Presentation</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { overflow: hidden; background-color: #030303; font-family: 'Courier New', Courier, monospace; }
@@ -12,7 +12,6 @@
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       pointer-events: none; z-index: 10; image-rendering: pixelated;
     }
-    /* Lớp đồ họa phủ: vignette tối 4 góc + scanline mờ kiểu màn hình retro */
     #overlay {
       position: fixed; inset: 0; pointer-events: none; z-index: 25;
       background:
@@ -24,7 +23,6 @@
       image-rendering: pixelated; transform-origin: 50% 50%;
       filter: drop-shadow(4px 4px 0 #000);
     }
-    /* Slide đang được phóng từ thẻ lên toàn màn hình */
     .fly {
       position: fixed; z-index: 36; pointer-events: none;
       background-size: 100% 100%; background-repeat: no-repeat;
@@ -41,14 +39,13 @@
     }
     .start-btn {
       position: relative; z-index: 1;
-      font-family: 'Press Start 2P', monospace; font-size: clamp(22px, 5vw, 48px);
+      font-family: 'Press Start 2P', monospace; font-size: clamp(20px, 4vw, 42px);
       letter-spacing: 4px; color: #fff; background: none; border: none; cursor: pointer;
       text-shadow: 4px 4px 0 #8a0016, 8px 8px 0 #000;
       animation: pulse 1.6s ease-in-out infinite;
       transition: color 0.15s, transform 0.15s;
     }
     .start-btn:hover { color: #ff3344; transform: scale(1.05); }
-    .start-btn:focus-visible { outline: 3px dashed #ffb3b9; outline-offset: 14px; }
 
     /* ===== Frame 2: DANH SÁCH 10 SLIDE ===== */
     #grid {
@@ -100,16 +97,8 @@
       padding: 10px 12px; background: #0a0a0a; border-top: 3px solid #000;
     }
     .card-num { font-family: 'Press Start 2P', monospace; font-size: 10px; color: #ff3344; }
-    .card-title { font-size: 13px; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card::after {
-      content: ''; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; pointer-events: none;
-      background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.22), transparent);
-      transition: left 0.6s ease;
-    }
-    .card:hover::after { left: 120%; }
+    .card-title { font-size: 12px; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card:hover { transform: translateY(-4px); border-color: #ff3344; box-shadow: 0 10px 0 #000, 0 0 18px rgba(255, 51, 68, 0.45); }
-    .card:active { transform: translateY(2px); box-shadow: 0 2px 0 #000; }
-    .card:focus-visible { outline: 3px dashed #ffb3b9; outline-offset: 4px; }
     .ticker {
       flex: 0 0 auto; position: relative; z-index: 1; overflow: hidden; white-space: nowrap;
       margin: 0 -48px; padding: 12px 0; background: #000; border-top: 3px solid #000;
@@ -120,7 +109,7 @@
     }
     @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* ===== Chi tiết slide: thông tin nằm dưới màn hình ===== */
+    /* ===== Chi tiết slide ===== */
     .detail {
       position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; pointer-events: none;
       padding: 90px 48px 40px; color: #fff;
@@ -131,16 +120,16 @@
     .info { max-width: 720px; text-shadow: 3px 3px 0 #000; }
     .info-num { font-family: 'Press Start 2P', monospace; font-size: 11px; letter-spacing: 2px; color: #ff3344; }
     .info h2 {
-      font-family: 'Press Start 2P', monospace; font-weight: 400; font-size: clamp(18px, 3vw, 32px);
+      font-family: 'Press Start 2P', monospace; font-weight: 400; font-size: clamp(16px, 2.5vw, 26px);
       line-height: 1.3; margin: 14px 0 12px;
     }
-    .info p { font-size: 15px; line-height: 1.6; color: rgba(255, 255, 255, 0.75); }
+    .info p { font-size: 14px; line-height: 1.6; color: rgba(255, 255, 255, 0.75); }
     .info-hint {
       margin-top: 18px; font-family: 'Press Start 2P', monospace; font-size: 9px;
       letter-spacing: 1px; color: rgba(255, 255, 255, 0.4);
     }
 
-    /* ===== Bảng chọn slide cầm kiếm (khi bị Sans chặn) ===== */
+    /* ===== Bảng chọn kiếm khi bị Sans chặn ===== */
     #choose {
       position: fixed; top: 36px; left: 50%; z-index: 32; text-align: center;
       transform: translate(-50%, -20px); opacity: 0; pointer-events: none;
@@ -159,22 +148,19 @@
       box-shadow: 0 5px 0 #000; transition: transform 0.1s, background 0.15s;
     }
     .pick:hover:not(:disabled) { background: #ff5566; transform: translateY(-2px); }
-    .pick:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #000; }
-    .pick:disabled { background: #2a2a2a; color: #666; cursor: not-allowed; box-shadow: 0 5px 0 #000; }
+    .pick:disabled { background: #2a2a2a; color: #666; cursor: not-allowed; }
 
     @media (max-width: 760px) {
       #grid { padding: 24px 16px 0; overflow-y: auto; }
-      .grid-inner { flex: none; }
-      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; grid-auto-rows: 180px; }
-      .ticker { margin: 0 -16px; }
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 180px; }
     }
   </style>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <!-- Thêm thư viện html2canvas -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -182,12 +168,162 @@
   <canvas id="fx"></canvas>
   <div id="overlay"></div>
 
-  <!-- Frame 1: chỉ có chữ START -->
-  <div id="start">
-    <button id="startBtn" class="start-btn" type="button">ĐANG TẢI...</button>
+  <!-- KHUNG ẨN CHỨA 10 SLIDE CHUẨN GỐC CỦA X ĐỂ RENDER -->
+  <div id="x-source-container" style="position:fixed; left:-99999px; top:0; width:1280px; height:720px; overflow:hidden; pointer-events:none; z-index:-999;">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: 'Segoe UI', sans-serif; background: #0a0e27; color: #fff; }
+      .slide-x {
+        position: absolute; inset: 0; display: flex; flex-direction: column;
+        padding: 60px 80px; width: 1280px; height: 720px; overflow: hidden;
+        background: radial-gradient(circle at 15% 15%, rgba(102,126,234,0.12), transparent 45%),
+                    radial-gradient(circle at 85% 85%, rgba(118,75,162,0.12), transparent 45%),
+                    linear-gradient(135deg, #0f1626, #1a1f3a);
+      }
+      .slide-num-x { position: absolute; top: 30px; right: 50px; font-size: 0.9rem; color: #6a7ba0; font-weight: 700; letter-spacing: 3px; }
+      .slide-tag-x { display: inline-block; padding: 6px 16px; border-radius: 20px; background: rgba(102,126,234,0.15); border: 1px solid rgba(143,167,255,0.3); color: #8fa7ff; font-size: 0.8rem; font-weight: 700; letter-spacing: 3px; margin-bottom: 18px; align-self: flex-start; }
+      h2.title-x { font-size: 2rem; line-height: 1.35; margin-bottom: 25px; background: linear-gradient(135deg, #fff 0%, #8fa7ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+      .card-list-x { display: flex; flex-direction: column; gap: 14px; }
+      .card-item-x { background: rgba(255,255,255,0.04); border: 1px solid rgba(143,167,255,0.18); border-left: 4px solid #667eea; border-radius: 12px; padding: 14px 22px; display: flex; align-items: center; gap: 18px; font-size: 1rem; line-height: 1.5; color: #fff; }
+      .badge-x { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 800; color: #fff; flex-shrink: 0; }
+      .team-grid-x { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 800px; margin: 0 auto; width: 100%; }
+      .member-x { background: linear-gradient(135deg, rgba(102,126,234,0.18), rgba(118,75,162,0.18)); border: 1px solid rgba(143,167,255,0.3); border-radius: 18px; padding: 25px; text-align: center; }
+      .avatar-x { width: 75px; height: 75px; margin: 0 auto 15px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; color: #fff; }
+      .timeline-x { display: flex; flex-direction: column; gap: 25px; max-width: 950px; }
+      .timeline-item-x { display: flex; gap: 25px; align-items: flex-start; }
+      .timeline-year-x { font-size: 1.6rem; font-weight: 900; background: linear-gradient(135deg, #f9d423, #ff4e50); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: right; width: 80px; }
+      .timeline-content-x { flex: 1; background: rgba(255,255,255,0.04); border-left: 3px solid #667eea; border-radius: 0 12px 12px 0; padding: 18px 24px; font-size: 1rem; line-height: 1.6; }
+    </style>
+
+    <div id="x-slides-wrapper">
+      <!-- Slide 1 -->
+      <div class="slide-x">
+        <span class="slide-num-x">01 / 10</span>
+        <div style="margin:auto; text-align:center;">
+          <span class="slide-tag-x" style="align-self:center;">CHỦ ĐỀ D — BÀI 4</span>
+          <h2 class="title-x" style="font-size:2.6rem; text-align:center;">MỘT SỐ HÀNH VI VI PHẠM PHÁP LUẬT,<br>TRÁI ĐẠO ĐỨC, THIẾU VĂN HOÁ<br>TRONG MÔI TRƯỜNG SỐ</h2>
+          <p style="color:#a0a8c0; font-size:1.1rem; margin-top:20px;">Môn Tin học 9 — Sử dụng dịch vụ Internet đúng luật</p>
+        </div>
+      </div>
+      <!-- Slide 2 -->
+      <div class="slide-x">
+        <span class="slide-num-x">02 / 10</span>
+        <div>
+          <span class="slide-tag-x">THÀNH VIÊN NHÓM BÁO CÁO</span>
+          <h2 class="title-x">Nhóm của chúng em</h2>
+          <div class="team-grid-x">
+            <div class="member-x"><div class="avatar-x">HN</div><div style="font-size:1.4rem; font-weight:800;">Huỳnh Nghĩa</div><div style="color:#8fa7ff; font-size:0.9rem;">TRƯỞNG NHÓM</div></div>
+            <div class="member-x"><div class="avatar-x">HM</div><div style="font-size:1.4rem; font-weight:800;">Hoàng My</div><div style="color:#8fa7ff; font-size:0.9rem;">THÀNH VIÊN</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Slide 3 -->
+      <div class="slide-x">
+        <span class="slide-num-x">03 / 10</span>
+        <div>
+          <span class="slide-tag-x">HÀNH VI PHỔ BIẾN</span>
+          <h2 class="title-x">Các hành vi vi phạm phổ biến trong môi trường số</h2>
+          <div class="card-list-x">
+            <div class="card-item-x"><div class="badge-x">01</div><span>Viết, đăng, chia sẻ nội dung <b style="color:#f9d423">sai sự thật</b>, không phù hợp.</span></div>
+            <div class="card-item-x"><div class="badge-x">02</div><span>Làm lộ thông tin cá nhân, tổ chức gây ảnh hưởng xấu.</span></div>
+            <div class="card-item-x"><div class="badge-x">03</div><span>Gửi <b style="color:#f9d423">thư rác</b>, tin nhắn rác, spam quấy rối.</span></div>
+            <div class="card-item-x"><div class="badge-x">04</div><span>Sử dụng dữ liệu của người khác <b style="color:#f9d423">không xin phép</b>.</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Slide 4 -->
+      <div class="slide-x">
+        <span class="slide-num-x">04 / 10</span>
+        <div>
+          <span class="slide-tag-x">CẢNH BÁO NGUY HIỂM</span>
+          <h2 class="title-x">Bắt nạt, lừa đảo và thiếu văn hoá số</h2>
+          <div class="card-list-x">
+            <div class="card-item-x"><div class="badge-x">01</div><span><b>Bắt nạt qua mạng (Cyberbullying):</b> đe doạ, bôi nhọ, cô lập nạn nhân trên không gian mạng.</span></div>
+            <div class="card-item-x"><div class="badge-x">02</div><span><b>Lừa đảo qua mạng (Scam):</b> giả danh, dụ dỗ chuyển tiền, đánh cắp tài khoản.</span></div>
+            <div class="card-item-x"><div class="badge-x">03</div><span><b>Ứng xử thiếu văn hoá:</b> chửi bới, xúc phạm, kích động bạo lực trong bình luận.</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Slide 5 -->
+      <div class="slide-x">
+        <span class="slide-num-x">05 / 10</span>
+        <div>
+          <span class="slide-tag-x">TẦM QUAN TRỌNG</span>
+          <h2 class="title-x">Vì sao phải sử dụng Internet đúng luật?</h2>
+          <div class="card-list-x">
+            <div class="card-item-x"><div class="badge-x">01</div><span><b>Lớp 7:</b> Đã biết chỉ ra ví dụ truy cập không hợp lệ vào các nguồn thông tin.</span></div>
+            <div class="card-item-x"><div class="badge-x">02</div><span><b>Lớp 8:</b> Đã biết cách bảo đảm sản phẩm số do mình tạo ra thể hiện đạo đức, văn hoá.</span></div>
+            <div class="card-item-x"><div class="badge-x">03</div><span>Người dùng Internet <b style="color:#f9d423">phải trang bị kiến thức cần thiết</b> để sử dụng không gian mạng có trách nhiệm.</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Slide 6 -->
+      <div class="slide-x">
+        <span class="slide-num-x">06 / 10</span>
+        <div>
+          <span class="slide-tag-x">CĂN CỨ PHÁP LÝ</span>
+          <h2 class="title-x">Hành lang pháp lý Việt Nam (2006 – 2013)</h2>
+          <div class="timeline-x">
+            <div class="timeline-item-x"><div class="timeline-year-x">2006</div><div class="timeline-content-x"><b>Luật Công nghệ thông tin</b> số <b>67/2006/QH11</b> quy định chi tiết về quyền và trách nhiệm tổ chức, cá nhân.</div></div>
+            <div class="timeline-item-x"><div class="timeline-year-x">2013</div><div class="timeline-content-x"><b>Nghị định số 72/2013/NĐ-CP</b> quy định quản lí, cung cấp, sử dụng dịch vụ Internet và thông tin trên mạng.</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Slide 7 -->
+      <div class="slide-x">
+        <span class="slide-num-x">07 / 10</span>
+        <div>
+          <span class="slide-tag-x">LUẬT AN NINH MẠNG 2018</span>
+          <h2 class="title-x">Luật An ninh mạng &amp; các hành vi cần tránh</h2>
+          <div class="card-list-x">
+            <div class="card-item-x"><div class="badge-x">01</div><span><b>Năm 2018, Quốc hội ban hành Luật An ninh mạng</b> bảo vệ an ninh quốc gia trên không gian mạng.</span></div>
+            <div class="card-item-x"><div class="badge-x">02</div><span><b>Không xem xét kĩ mà chia sẻ thông tin chưa kiểm chứng</b> — hành vi vi phạm pháp luật.</span></div>
+            <div class="card-item-x"><div class="badge-x">03</div><span><b>Bình luận sai trái, bịa đặt</b> gây hoang mang dư luận xã hội.</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Slide 8 -->
+      <div class="slide-x">
+        <span class="slide-num-x">08 / 10</span>
+        <div style="text-align:center;">
+          <span class="slide-tag-x" style="align-self:center;">MINH HOẠ TRỰC QUAN</span>
+          <h2 class="title-x" style="text-align:center;">Kịch bản lừa đảo trực tuyến điển hình</h2>
+          <div style="background:rgba(10,14,39,0.9); border:1px solid rgba(143,167,255,0.25); border-radius:16px; padding:35px; margin-top:20px; text-align:center;">
+            <p style="font-size:22px; color:#f9d423; font-weight:700; margin-bottom:15px;">"TRÚNG THƯỞNG 50 TRIỆU! Chuyển phí 2 triệu để nhận thưởng"</p>
+            <p style="font-size:18px; color:#ff4e50; font-weight:700;">Cảnh báo: Tuyệt đối không chuyển tiền qua mạng cho các đối tượng lạ!</p>
+          </div>
+        </div>
+      </div>
+      <!-- Slide 9 -->
+      <div class="slide-x">
+        <span class="slide-num-x">09 / 10</span>
+        <div>
+          <span class="slide-tag-x">TRÁCH NHIỆM CÔNG DÂN SỐ</span>
+          <h2 class="title-x">Quyền nhân thân, tài sản &amp; trách nhiệm</h2>
+          <div class="card-list-x">
+            <div class="card-item-x"><div class="badge-x">01</div><span><b>Vi phạm quyền nhân thân:</b> đăng hình ảnh, địa chỉ, thông tin cá nhân khi chưa phép.</span></div>
+            <div class="card-item-x"><div class="badge-x">02</div><span><b>Vi phạm sở hữu trí tuệ:</b> sao chép, phát tán phần mềm, tài liệu có bản quyền trái phép.</span></div>
+            <div class="card-item-x"><div class="badge-x">03</div><span><b>Trách nhiệm:</b> chủ động trang bị kiến thức, kiểm chứng thông tin trước khi chia sẻ.</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Slide 10 -->
+      <div class="slide-x" style="justify-content:center; align-items:center; text-align:center;">
+        <div style="font-size:34px; background:linear-gradient(135deg, #f9d423 0%, #ff4e50 50%, #6a11cb 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:25px; line-height:1.4; font-weight:900;">
+          "Hãy là người sử dụng Internet văn minh,<br>an toàn và tuân thủ pháp luật!"
+        </div>
+        <div style="font-size:22px; color:#fff; font-weight:700; margin-bottom:18px;">Cảm ơn thầy cô và các bạn đã chú ý lắng nghe</div>
+        <div style="display:inline-block; padding:12px 35px; border-radius:50px; background:linear-gradient(135deg, rgba(102,126,234,0.25), rgba(118,75,162,0.25)); border:1px solid rgba(143,167,255,0.4); color:#8fa7ff; font-size:20px; font-weight:800; letter-spacing:6px;">Q &amp; A</div>
+      </div>
+    </div>
   </div>
 
-  <!-- Frame 2: 10 slide, click để chém / mở -->
+  <!-- Frame 1: START -->
+  <div id="start">
+    <button id="startBtn" class="start-btn" type="button">LOADING...</button>
+  </div>
+
+  <!-- Frame 2: Danh sách 10 slide -->
   <div id="grid">
     <canvas id="deco"></canvas>
     <div class="frame"></div>
@@ -201,7 +337,7 @@
     <div class="ticker"><div id="ticker-track" class="ticker-track"></div></div>
   </div>
 
-  <!-- Thông tin của slide đang xem -->
+  <!-- Chi tiết slide -->
   <div id="detail" class="detail">
     <div class="info">
       <div id="info-num" class="info-num"></div>
@@ -211,7 +347,7 @@
     </div>
   </div>
 
-  <!-- Bảng chọn slide cầm kiếm khi bị Sans chặn -->
+  <!-- Bảng chọn kiếm khi bị Sans chặn -->
   <div id="choose">
     <h3>SANS BLOCKED THE SLASH</h3>
     <p>PICK A SLIDE TO WIELD THE SWORD</p>
@@ -219,66 +355,64 @@
   </div>
 
   <script>
-    // ================= CẤU HÌNH HTML2CANVAS & DỮ LIỆU SLIDE =================
-    const XW = 1280, XH = 720;
-    const XS = [
-      { sub: "TIN HỌC 9 • CHỦ ĐỀ D • BÀI 4", title: "Sử dụng dịch vụ Internet đúng luật", desc: "Trang bị kiến thức số để trở thành công dân số văn minh và tuân thủ pháp luật trong môi trường số." },
-      { sub: "THÀNH VIÊN NHÓM", title: "Nhóm báo cáo", desc: "Huỳnh Nghĩa (Trưởng nhóm) • Hoàng My • Bảo Ngân • Ngọc Hân" },
-      { sub: "HÀNH VI PHỔ BIẾN", title: "Vi phạm trong môi trường số", desc: "01. Viết, đăng, chia sẻ nội dung sai sự thật.\n02. Làm lộ thông tin cá nhân, tổ chức.\n03. Gửi thư rác, tin nhắn rác, spam quấy rối." },
-      { sub: "CẢNH BÁO NGUY HIỂM", title: "Bắt nạt và lừa đảo mạng", desc: "01. Bắt nạt qua mạng (Cyberbullying)\n02. Lừa đảo qua mạng (Scam)\n03. Ứng xử thiếu văn hoá, kích động bạo lực." },
-      { sub: "TẦM QUAN TRỌNG", title: "Vì sao phải dùng Internet đúng luật?", desc: "Bảo vệ bản thân và cộng đồng khỏi những hậu quả pháp lý và tổn thương tâm lý trên không gian mạng." },
-      { sub: "QUY ĐỊNH PHÁP LUẬT", title: "Trách nhiệm pháp lý", desc: "Nắm vững các điều luật về quyền tác giả, bảo mật thông tin cá nhân và quy tắc ứng xử trên mạng xã hội." },
-      { sub: "TÌNH HUỐNG THỰC TẾ", title: "Phân tích tình huống", desc: "Thảo luận và đưa ra cách giải quyết đúng đắn khi gặp các hành vi sai trái trên mạng." },
-      { sub: "NGUYÊN TẮC VÀNG", title: "Nguyên tắc ứng xử thông minh", desc: "Suy nghĩ trước khi đăng • Tôn trọng người khác • Kiểm chứng nguồn thông tin." },
-      { sub: "TỔNG KẾT BÀI HỌC", title: "Ghi nhớ cốt lõi", desc: "Sử dụng Internet an toàn, văn minh, có trách nhiệm với từng cú click chuột." },
-      { sub: "KẾT THÚC", title: "Cảm ơn thầy cô và các bạn", desc: "Q&A • Mời thầy cô và các bạn đóng góp ý kiến cho bài thuyết trình của nhóm." }
+    const SLIDE_INFO = [
+      { title: 'Tiêu đề bài học', desc: 'Chủ đề D - Bài 4: Một số hành vi vi phạm pháp luật, trái đạo đức, thiếu văn hoá trong môi trường số.' },
+      { title: 'Thành viên nhóm', desc: 'Danh sách thành viên thực hiện bài thuyết trình báo cáo nhóm.' },
+      { title: 'Hành vi phổ biến', desc: 'Các hành vi vi phạm thường gặp như đăng thông tin sai sự thật, spam, lấy dữ liệu trái phép.' },
+      { title: 'Cảnh báo nguy hiểm', desc: 'Nhận diện bắt nạt qua mạng (Cyberbullying) và lừa đảo trực tuyến (Scam).' },
+      { title: 'Tầm quan trọng', desc: 'Sự cần thiết phải trang bị kiến thức pháp luật và đạo đức số qua các cấp học.' },
+      { title: 'Căn cứ pháp lý', desc: 'Hành lang pháp lý từ Luật CNTT 2006 đến Nghị định 72/2013/NĐ-CP.' },
+      { title: 'Luật An ninh mạng', desc: 'Các quy định cốt lõi của Luật An ninh mạng năm 2018 và trách nhiệm khi chia sẻ thông tin.' },
+      { title: 'Minh hoạ trực quan', desc: 'Mô phỏng kịch bản lừa đảo trúng thưởng trực tuyến thường xảy ra.' },
+      { title: 'Trách nhiệm công dân', desc: 'Bảo vệ quyền nhân thân, sở hữu trí tuệ và ứng xử có trách nhiệm trên không gian mạng.' },
+      { title: 'Tổng kết', desc: 'Lời kết và phần giao lưu Q&A.' }
     ];
 
-    const SLIDE_INFO = XS.map(s => ({ title: s.title, desc: s.desc }));
-    const slideImages = new Array(XS.length);
+    let slideImages = new Array(10).fill('');
 
-    const XCSS = `
-      * { box-sizing: border-box; margin: 0; padding: 0; }
-      .slide-render {
-        width: 1280px; height: 720px; background: #0f1626; color: #fff;
-        font-family: 'Courier New', Courier, monospace; display: flex; flex-direction: column;
-        justify-content: space-between; padding: 60px 80px; position: relative; overflow: hidden;
-        border: 4px solid #ff3344;
+    // Tự động render 10 slide gốc từ x sang ảnh chất lượng cao
+    async function renderXSlides() {
+      const slideElements = document.querySelectorAll('#x-slides-wrapper .slide-x');
+      const startBtn = document.getElementById('startBtn');
+
+      try {
+        for (let i = 0; i < slideElements.length; i++) {
+          const canvas = await html2canvas(slideElements[i], {
+            width: 1280,
+            height: 720,
+            scale: 1,
+            backgroundColor: '#0f1626'
+          });
+          slideImages[i] = canvas.toDataURL('image/jpeg', 0.92);
+        }
+      } catch (err) {
+        console.error('Lỗi render slide:', err);
       }
-      .slide-header { font-size: 16px; color: #ff3344; font-weight: bold; letter-spacing: 3px; text-transform: uppercase; }
-      .slide-body h1 { font-size: 44px; margin: 20px 0; line-height: 1.2; text-shadow: 3px 3px 0 #000; }
-      .slide-body p { font-size: 22px; color: rgba(255,255,255,0.8); line-height: 1.6; white-space: pre-line; }
-      .slide-footer { display: flex; justify-content: space-between; font-size: 16px; color: rgba(255,255,255,0.5); border-top: 2px solid rgba(255,255,255,0.1); padding-top: 20px; }
-    `;
 
-    function xHTML(d) {
-      return `
-        <div class="slide-render">
-          <div class="slide-header">${d.sub}</div>
-          <div class="slide-body">
-            <h1>${d.title}</h1>
-            <p>${d.desc}</p>
-          </div>
-          <div class="slide-footer">
-            <span>TIN HỌC 9 - BÀI 4</span>
-            <span>CHUYÊN ĐỀ SỐ</span>
-          </div>
-        </div>
-      `;
+      // Xóa vùng chứa ẩn sau khi xong
+      document.getElementById('x-source-container').remove();
+
+      // Cập nhật ảnh vào thẻ card
+      document.querySelectorAll('.card img').forEach((im, i) => {
+        if (slideImages[i]) im.src = slideImages[i];
+      });
+
+      slideImages.forEach(getTex);
+      window.slidesReady = true;
+      startBtn.textContent = 'START';
+      startBtn.disabled = false;
     }
 
-    const PX = 8;                      // kích thước 1 "pixel" của vệt chém và bụi
-    const BLOOD_PX = PX * 2.5;         // kích thước 1 "pixel" của vết máu
-    const SLIDE_W = 7.5, SLIDE_H = 4.2;
-    const TILES = [80, 45];            // số ô vỡ của slide (ngang x dọc)
-    const DISSOLVE_MS = 1500;          // thời gian slide tan xong
-    const BLOOD_TO_DISSOLVE_MS = 1000; // vết máu hiện xong, 1 giây sau mới chuyển
-    const BLOCK_CHANCE = 0.3;          // xác suất vệt chém bị xương của Sans chặn
-
+    const PX = 8;
+    const BLOOD_PX = PX * 2.5;
+    const SLIDE_W_3D = 7.5, SLIDE_H_3D = 4.2;
+    const TILES = [80, 45];
+    const DISSOLVE_MS = 1500;
+    const BLOOD_TO_DISSOLVE_MS = 1000;
+    const BLOCK_CHANCE = 0.3;
     const pad2 = (n) => String(n).padStart(2, '0');
 
-    // ================= SPRITE (vẽ sẵn từ ảnh tham chiếu) =================
-    // W = trắng, K = đen (viền), '.' = trong suốt
+    // Sprites Sans, Bone, Sword
     const SANS_ROWS = [
       "....................WWWWWWWWWWWW....................",
       ".................WWWWWWWWWWWWWWWWWW.................",
@@ -316,40 +450,18 @@
       "..W.......W......W..W.........W.W........W.......WW.",
       "..W.......W......W..W..WWWW...W.W.......WW........W.",
       ".W........W......WWWW..WWWWW.WWWW......WWW........WW",
-      ".W........WW.WWWWW..W..WWWWW.WW.W....WWW.W........WW",
-      "WW........WWW.....W..W.WWWWW.W..W..WWW...W.........W",
-      "WW........W.......W.WW.WWWWW.WWWW.W......WW........W",
-      "WW.......W........WW.W.WWWWW.W..W.W.......W........W",
-      ".WW......W........W..W.WWWWW.W..W.W.......W........W",
-      "..WW.....W........W.WW.WWWWW.WWW.W........W.......WW",
-      "...WW....W.........W.W.WWWWW.W.W.W........W......WW.",
-      "....WWW..W.........W.W.WWWWW.W.WW.........W.....WW..",
-      ".....WW..W.........W.W.......W.W.........WW....WW...",
-      "......W..WWW.......WWWWWWWWWWWWW........WWW.WWW.....",
-      "........WWWWW......WWWWW......WWWWWWWWWWWW..WW......",
-      "..........WWWWWWWWW.....................WW..........",
-      "....................................................",
-      ".................................WW......W..........",
-      "...........W..WW.................WW......W..........",
-      "..........W...WW.................WW.......W.........",
-      "..........W..WW..........W.......WW.......W.........",
-      "..........W..WW.........W.W......WW.......W.........",
-      "..........W..WW         W.W......WWW......W         ",
-      "..........W..WW         W.W      WWW       W        ",
-      ".........W..WW          W..W     WWW       W        ",
-      ".........W..WW         WW..W     WWW       W        ",
-      ".........W..WW         W...W      WW       W        ",
-      ".........W..WW         W...W      WW       W        ",
-      ".........W..WW         W...W      WW       W        ",
-      ".........WWWWW         W...W      WWW  WWWWW        ",
-      "..............WWWWWWWWW     WWWWWWWWWWW             ",
-      "................................................    ",
-      "................................W                   ",
-      "........WWWW..WWWW              WWWWWWW   WWW       ",
-      ".......WWWWWWW.WWW             WWWWWWW  WWWWWWW     ",
-      "......WWWWWWWWW.WW             WWWWWW.WWWWWWWWWW    ",
-      "......WWWWWWWWW                      WWWWWWWWWWW    ",
-      "......WWWWWWWWWW.WW           WWWWWW.WWWWWWWWWW     "
+      ".W........WW.WWWWW..W..WWWWW.WW.W    WWW.W        WW",
+      "WW........WWW.....W..W.WWWWW.W..W  WWW...W         W",
+      "WW........W.......W.WW.WWWWW.WWWW.W      WW        W",
+      "WW.......W........WW.W.WWWWW.W..W.W       W        W",
+      ".WW      W        W  W.WWWWW.W  W.W       W        W",
+      "  WW     W        W WW.WWWWW.WWW.W        W       WW",
+      "   WW    W         W.W.WWWWW.W.W.W        W      WW.",
+      "    WWW  W         W.W.WWWWW.W.WW         W     WW..",
+      "     WW  W         W.W       W.W         WW    WW...",
+      "      W  WWW       WWWWWWWWWWWWW        WWW.WWW.....",
+      "        WWWWW      WWWWW      WWWWWWWWWWWW  WW......",
+      "          WWWWWWWWW                     WW          "
     ];
     const BONE_ROWS = [
       "......................................WWWW..",
@@ -372,70 +484,26 @@
       "..WWW..................................WWW.."
     ];
     const SWORD_ROWS = [
-      "..........K..........",
-      ".........KDK.........",
-      ".........KDK.........",
-      "........KKDKK........",
-      ".......KKDWWKK.......",
-      ".......KDDWhWK.......",
-      "......KKDDWhWKK......",
-      "......KDDRWhHWK......",
-      "......KDDRWhhWK......",
-      "......KDDRWhHWK......",
-      "......KDDRRhhWK......",
-      "......KDDRRhHWK......",
-      "......KDDRWhHHK......",
-      "......KDDRRhHHK......",
-      "......KDDRWhHWK......",
-      "......KDRRWhhHK......",
-      "......KDRRWhhHK......",
-      "......KDDRWhhHK......",
-      "......KDDRWhHHK......",
-      "......KDRRWhhHK......",
-      "......KDRRRhhHK......",
-      "......KDRRRhHHK......",
-      "......KDDRhhHHK......",
-      "......KDRRWhhHK......",
-      "......KDDRRhhHK......",
-      "......KDRRRhHHK......",
-      "......KDRRRhhHK......",
-      "......KDrRRhHHK......",
-      "......KDDRRhhHK......",
-      "......KDDRRhHHK......",
-      "......KDDRRhHHK......",
-      "......KDRRRhHHK......",
-      "......KDDRRhHHK......",
-      "......KDrRRhHHK......",
-      "......KDRRRhHHK......",
-      "......KDRRRhHHK......",
-      "......KDDRDhgHK......",
-      ".KKKKKKKDDDggKKKKKKK.",
-      "KKHHKggKKKDKKKggKHHKK",
-      "KgGGKKgggKKKggKKGgGgK",
-      "KgggggKKgKhKgKKgggggK",
-      "KgKKKKggKKRKKggKKKKgK",
-      "KgK..KKKgKDKgKKK..KgK",
-      "KgK....KKKKKKK....KgK",
-      "KKK....KQQQQQK....KKK",
-      ".......KKKKKKK.......",
-      ".......KQQQQQK.......",
-      ".......KKKKKKK.......",
-      ".......KKDDDKK.......",
-      ".......KKKKKKK.......",
-      ".......KgWGWgK.......",
-      ".......KKKKKKK.......",
-      ".......KgggggK.......",
-      ".......KKWGWKK.......",
-      "........KKKKK........",
-      ".........KgK.........",
-      ".........KKK........."
+      "..........K..........", ".........KDK.........", ".........KDK.........", "........KKDKK........",
+      ".......KKDWWKK.......", ".......KDDWhWK.......", "......KKDDWhWKK......", "......KDDRWhHWK......",
+      "......KDDRWhhWK......", "......KDDRWhHWK......", "......KDDRRhhWK......", "......KDDRRhHWK......",
+      "......KDDRWhHHK......", "......KDDRRhHHK......", "......KDDRWhHWK......", "......KDRRWhhHK......",
+      "......KDRRWhhHK......", "......KDDRWhhHK......", "......KDDRWhHHK......", "......KDRRWhhHK......",
+      "......KDRRRhhHK......", "......KDRRRhHHK......", "......KDDRhhHHK......", "......KDRRWhhHK......",
+      "......KDDRRhhHK......", "......KDRRRhHHK......", "......KDRRRhhHK......", "......KDrRRhHHK......",
+      "......KDDRRhhHK......", "......KDDRRhHHK......", "......KDDRRhHHK......", "......KDRRRhHHK......",
+      "......KDDRRhHHK......", "......KDrRRhHHK......", "......KDRRRhHHK......", "......KDRRRhHHK......",
+      "......KDDRDhgHK......", ".KKKKKKKDDDggKKKKKKK.", "KKHHKggKKKDKKKggKHHKK", "KgGGKKgggKKKggKKGgGgK",
+      "KgggggKKgKhKgKKgggggK", "KgKKKKggKKRKKggKKKKgK", "KgK..KKKgKDKgKKK..KgK", "KgK....KKKKKKK....KgK",
+      "KKK    KQQQQQK    KKK", "       KKKKKKK       ", "       KQQQQQK       ", "       KKKKKKK       ",
+      "       KKDDDKK       ", "       KKKKKKK       ", "       KgWGWgK       ", "       KKKKKKK       ",
+      "       KgggggK       ", "       KKWGWKK       ", "        KKKKK        ", "         KgK         ", "         KKK         "
     ];
     const SWORD_COLORS = {
       K: '#000000', D: '#6c0c00', R: '#e4240c', r: '#d82400', h: '#fc7860',
       H: '#fcd8cc', W: '#fcfcfc', G: '#fcd848', g: '#786c30', Q: '#302424'
     };
 
-    // Chuyển bitmap thành canvas sẵn để vẽ mỗi frame nhanh
     function makeSprite(rows, colorOf, cell) {
       const w = Math.max(...rows.map(r => r.length));
       const c = document.createElement('canvas');
@@ -455,7 +523,7 @@
     const BONE_IMG = makeSprite(BONE_ROWS, (ch) => ({ W: '#f2f2f2', K: '#0b0b0b' }[ch] || null), 5);
     const SWORD_IMG = makeSprite(SWORD_ROWS, (ch) => SWORD_COLORS[ch] || null, 6);
 
-    // ================= THREE.JS =================
+    // Three.js setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
     camera.position.z = 5.2;
@@ -466,7 +534,6 @@
     document.getElementById('canvas-container').appendChild(renderer.domElement);
     scene.add(new THREE.AmbientLight(0xffffff, 1.3));
 
-    // Cache texture: mỗi ảnh chỉ load 1 lần
     const texCache = {};
     function getTex(path) {
       if (!texCache[path]) {
@@ -478,9 +545,8 @@
       return texCache[path];
     }
 
-    // Geometry dùng chung cho mọi slide
     const SLIDE_GEO = (() => {
-      const base = new THREE.PlaneGeometry(SLIDE_W, SLIDE_H, TILES[0], TILES[1]).toNonIndexed();
+      const base = new THREE.PlaneGeometry(SLIDE_W_3D, SLIDE_H_3D, TILES[0], TILES[1]).toNonIndexed();
       const pos = base.attributes.position, uv = base.attributes.uv;
       const cell = new Float32Array(pos.count * 2);
       for (let t = 0; t < pos.count; t += 3) {
@@ -511,7 +577,7 @@
         float local = clamp((uProgress - t0) / 0.3, 0.0, 1.0);
         vLocal = local;
         vec3 p = position;
-        vec2 center = vec2((aCell.x - 0.5) * ${SLIDE_W.toFixed(2)}, (aCell.y - 0.5) * ${SLIDE_H.toFixed(2)});
+        vec2 center = vec2((aCell.x - 0.5) * ${SLIDE_W_3D.toFixed(2)}, (aCell.y - 0.5) * ${SLIDE_H_3D.toFixed(2)});
         float s = 1.0 - 0.7 * smoothstep(0.45, 1.0, local);
         float a = hash(idx + 7.7) * 6.2831853;
         vec2 dir = vec2(cos(a), sin(a));
@@ -568,9 +634,8 @@
     }
 
     let currentSlideObj = null;
-    let currentIndex = 0;
 
-    // ================= LỚP PIXEL (canvas 2D) =================
+    // FX Canvas 2D
     const fxCanvas = document.getElementById('fx');
     const fx = fxCanvas.getContext('2d');
     fx.imageSmoothingEnabled = false;
@@ -726,9 +791,9 @@
       fx.globalAlpha = e > c.dur ? 1 - (e - c.dur) / 220 : 1;
       const N = 48;
       const layers = [
-        { wf: 1.00, off: 0,                   col: '#6e0012' },
-        { wf: 0.78, off: -c.width * 0.06,     col: c.color },
-        { wf: 0.30, off: -c.width * 0.16,     col: '#ffd0d8' }
+        { wf: 1.00, off: 0, col: '#6e0012' },
+        { wf: 0.78, off: -c.width * 0.06, col: c.color },
+        { wf: 0.30, off: -c.width * 0.16, col: '#ffd0d8' }
       ];
       for (const Ly of layers) {
         const outer = [], inner = [];
@@ -752,7 +817,6 @@
       fx.globalAlpha = 1;
       return true;
     }
-
     function arcHits(c, r) {
       for (let k = 0; k <= 60; k++) {
         const [x, y] = arcPoint(c, -1 + 2 * k / 60);
@@ -821,7 +885,6 @@
       '6': ['111','100','111','101','111'], '7': ['111','001','010','010','010'],
       '8': ['111','101','111','101','111'], '9': ['111','101','111','001','111']
     };
-    
     function popDamage(px, py, num) {
       const cell = Math.max(4, Math.round(innerHeight / 160));
       const s = String(num);
@@ -886,22 +949,35 @@
     const tickerTrack = document.getElementById('ticker-track');
 
     const TICKER_LINE = [
-      "IT'S A BEAUTIFUL DAY OUTSIDE.", "SLASH A SLIDE, SEE WHAT'S INSIDE.", "ONE BONE. ONE SOUL.", "TEN SLIDES."
+      "TIN HỌC 9 - BÀI 4.", "SỬ DỤNG DỊCH VỤ INTERNET ĐÚNG LUẬT.", "CÔNG DÂN SỐ VĂN MINH.", "AN TOÀN TRÊN KHÔNG GIAN MẠNG."
     ].map(t => t + "   *   ").join('');
     tickerTrack.textContent = TICKER_LINE + TICKER_LINE;
 
-    let cards = [];
-    let picks = [];
+    // Khởi tạo 10 thẻ cards
+    const cards = new Array(10).fill(0).map((_, i) => {
+      const c = document.createElement('button');
+      c.type = 'button';
+      c.className = 'card';
+      c.innerHTML = '<img src="" alt="">' +
+        '<div class="card-meta"><span class="card-num">' + pad2(i + 1) + '</span><span class="card-title"></span></div>';
+      c.querySelector('.card-title').textContent = SLIDE_INFO[i].title;
+      c.addEventListener('click', () => chemFromCard(i));
+      cardsEl.appendChild(c);
+      return c;
+    });
 
-    // ----- Hạt trang trí nền -----
-    const HEART_SPR = [
-      ".XX.XX.",
-      "XXXXXXX",
-      "XXXXXXX",
-      ".XXXXX.",
-      "..XXX..",
-      "...X..."
-    ];
+    const picks = new Array(10).fill(0).map((_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pick';
+      b.textContent = pad2(i + 1);
+      b.addEventListener('click', (e) => { e.stopPropagation(); pickSword(i); });
+      picksEl.appendChild(b);
+      return b;
+    });
+
+    // Trang trí nền (Tim + Xương bay)
+    const HEART_SPR = [".XX.XX.", "XXXXXXX", "XXXXXXX", ".XXXXX.", "..XXX..", "...X..."];
     const decoCanvas = document.getElementById('deco');
     const dctx = decoCanvas.getContext('2d');
     function makeDeco(initial) {
@@ -992,7 +1068,6 @@
     }
 
     function openSlide(i) {
-      currentIndex = i;
       currentSlideObj = createSlide(slideImages[i], 0);
       scene.add(currentSlideObj.group);
       updateInfo(i);
@@ -1135,63 +1210,8 @@
       renderer.render(scene, camera);
     })();
 
-    // ================= TỰ ĐỘNG RENDER SLIDE BẰNG HTML2CANVAS =================
-    (async () => {
-      window.slidesReady = false;
-
-      const st = document.createElement('style'); 
-      st.textContent = XCSS; 
-      document.head.appendChild(st);
-
-      const host = document.createElement('div');
-      host.style.cssText = `position:fixed;left:-99999px;top:0;width:${XW}px;height:${XH}px;z-index:-1000;`;
-      document.body.appendChild(host);
-
-      try {
-        for (let i = 0; i < XS.length; i++) {
-          host.innerHTML = xHTML(XS[i]);
-          const cv = await html2canvas(host.firstElementChild, { 
-            width: XW, 
-            height: XH, 
-            scale: 1, 
-            backgroundColor: '#0f1626' 
-          });
-          slideImages[i] = cv.toDataURL('image/jpeg', 0.92);
-        }
-      } catch (err) { 
-        console.error('Lỗi khi render slide qua html2canvas:', err); 
-      }
-      host.remove();
-
-      // Tạo các card slide sau khi đã render xong ảnh
-      cardsEl.innerHTML = '';
-      cards = slideImages.map((src, i) => {
-        const c = document.createElement('button');
-        c.type = 'button';
-        c.className = 'card';
-        c.innerHTML = '<img src="' + src + '" alt="">' +
-          '<div class="card-meta"><span class="card-num">' + pad2(i + 1) + '</span><span class="card-title"></span></div>';
-        c.querySelector('.card-title').textContent = SLIDE_INFO[i].title;
-        c.addEventListener('click', () => chemFromCard(i));
-        cardsEl.appendChild(c);
-        return c;
-      });
-
-      // Tạo các nút chọn slide cầm kiếm
-      picksEl.innerHTML = '';
-      picks = slideImages.map((_, i) => {
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'pick';
-        b.textContent = pad2(i + 1);
-        b.addEventListener('click', (e) => { e.stopPropagation(); pickSword(i); });
-        picksEl.appendChild(b);
-        return b;
-      });
-
-      window.slidesReady = true;
-      startBtn.textContent = 'START'; 
-    })();
+    // Tự động render slide khi trang vừa tải xong
+    window.addEventListener('DOMContentLoaded', renderXSlides);
   </script>
 </body>
 </html>
