@@ -7,33 +7,29 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { overflow: hidden; background-color: #030303; font-family: 'Courier New', Courier, monospace; }
-    #canvas-container { width: 100vw; height: 100vh; position: relative; }
+    
     #fx {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      pointer-events: none; z-index: 10; image-rendering: pixelated;
+      pointer-events: none; z-index: 50; image-rendering: pixelated;
     }
     #overlay {
-      position: fixed; inset: 0; pointer-events: none; z-index: 25;
+      position: fixed; inset: 0; pointer-events: none; z-index: 45;
       background:
         radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.6) 100%),
         repeating-linear-gradient(0deg, rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 1px, transparent 1px, transparent 3px);
     }
     .dmg {
-      position: fixed; display: block; pointer-events: none; z-index: 22;
+      position: fixed; display: block; pointer-events: none; z-index: 52;
       image-rendering: pixelated; transform-origin: 50% 50%;
       filter: drop-shadow(4px 4px 0 #000);
     }
-    .fly {
-      position: fixed; z-index: 36; pointer-events: none;
-      background-size: 100% 100%; background-repeat: no-repeat;
-      box-shadow: 0 0 0 3px #000;
-    }
+
     @keyframes blink { to { visibility: hidden; } }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
     /* ===== Frame 1: START ===== */
     #start {
-      position: fixed; inset: 0; z-index: 40;
+      position: fixed; inset: 0; z-index: 60;
       display: flex; align-items: center; justify-content: center;
       background: #050205;
     }
@@ -47,9 +43,9 @@
     }
     .start-btn:hover { color: #ff3344; transform: scale(1.05); }
 
-    /* ===== Frame 2: DANH SÁCH 10 SLIDE ===== */
+    /* ===== Frame 2: DANH SÁCH 10 SLIDE (GRID) ===== */
     #grid {
-      position: fixed; inset: 0; z-index: 5; display: none; flex-direction: column;
+      position: fixed; inset: 0; z-index: 10; display: none; flex-direction: column;
       padding: 36px 48px 0; overflow: hidden;
       background: radial-gradient(ellipse at 50% 0%, #2a0810 0%, #0b0304 60%, #000 100%);
     }
@@ -91,10 +87,10 @@
       border: 3px solid #000; box-shadow: 0 6px 0 #000;
       transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
     }
-    .card img { flex: 1; min-height: 0; width: 100%; object-fit: cover; display: block; }
+    .card-preview { flex: 1; min-height: 0; position: relative; overflow: hidden; background: #0f1626; pointer-events: none; }
     .card-meta {
       flex: 0 0 auto; display: flex; align-items: center; gap: 10px;
-      padding: 10px 12px; background: #0a0a0a; border-top: 3px solid #000;
+      padding: 10px 12px; background: #0a0a0a; border-top: 3px solid #000; z-index: 2;
     }
     .card-num { font-family: 'Press Start 2P', monospace; font-size: 10px; color: #ff3344; }
     .card-title { font-size: 12px; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -109,29 +105,61 @@
     }
     @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* ===== Chi tiết slide ===== */
-    .detail {
-      position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; pointer-events: none;
-      padding: 90px 48px 40px; color: #fff;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.6) 55%, transparent 100%);
-      opacity: 0; transform: translateY(30px); transition: opacity 0.5s ease, transform 0.5s ease;
+    /* ===== KHU VỰC HIỂN THỊ SLIDE SỐNG (LIVE DOM) ===== */
+    #live-slide-container {
+      position: fixed; inset: 0; z-index: 30; pointer-events: none;
+      opacity: 0; transform: scale(0.95); transition: opacity 0.4s ease, transform 0.4s ease;
+      display: flex; align-items: center; justify-content: center;
     }
-    .detail.show { opacity: 1; transform: none; }
-    .info { max-width: 720px; text-shadow: 3px 3px 0 #000; }
-    .info-num { font-family: 'Press Start 2P', monospace; font-size: 11px; letter-spacing: 2px; color: #ff3344; }
-    .info h2 {
-      font-family: 'Press Start 2P', monospace; font-weight: 400; font-size: clamp(16px, 2.5vw, 26px);
-      line-height: 1.3; margin: 14px 0 12px;
+    #live-slide-container.show {
+      opacity: 1; transform: scale(1); pointer-events: auto;
     }
-    .info p { font-size: 14px; line-height: 1.6; color: rgba(255, 255, 255, 0.75); }
-    .info-hint {
-      margin-top: 18px; font-family: 'Press Start 2P', monospace; font-size: 9px;
-      letter-spacing: 1px; color: rgba(255, 255, 255, 0.4);
+
+    /* CSS GỐC 100% CỦA FILE X CHO SLIDE */
+    .slide-x-live {
+      position: absolute; width: 1280px; height: 720px;
+      display: flex; flex-direction: column; padding: 70px 90px; overflow: hidden;
+      background: radial-gradient(circle at 15% 15%, rgba(102,126,234,0.12), transparent 45%),
+                  radial-gradient(circle at 85% 85%, rgba(118,75,162,0.12), transparent 45%),
+                  linear-gradient(135deg, #0f1626, #1a1f3a);
+      color: #fff; font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      transform-origin: center;
+      display: none; /* Mặc định ẩn, chỉ bật slide nào được chọn */
     }
+    .slide-x-live.active { display: flex; }
+    .slide-x-live::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(143,167,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(143,167,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px; pointer-events: none;
+    }
+    .slide-num-x { position: absolute; top: 35px; right: 50px; font-size: 0.95rem; color: #6a7ba0; font-weight: 700; letter-spacing: 3px; z-index: 5; }
+    .slide-tag-x { display: inline-block; padding: 7px 18px; border-radius: 20px; background: rgba(102,126,234,0.15); border: 1px solid rgba(143,167,255,0.3); color: #8fa7ff; font-size: 0.8rem; font-weight: 700; letter-spacing: 3px; margin-bottom: 20px; align-self: flex-start; }
+    h2.title-x { font-size: 2.1rem; line-height: 1.35; margin-bottom: 35px; background: linear-gradient(135deg, #fff 0%, #8fa7ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+    .content-x { flex: 1; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2; }
+    .card-list-x { display: flex; flex-direction: column; gap: 16px; max-width: 1100px; }
+    .card-item-x { background: rgba(255,255,255,0.04); border: 1px solid rgba(143,167,255,0.18); border-left: 4px solid #667eea; border-radius: 14px; padding: 18px 26px; display: flex; align-items: center; gap: 20px; font-size: 1.05rem; line-height: 1.5; backdrop-filter: blur(10px); }
+    .badge-x { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 0.95rem; font-weight: 800; color: #fff; flex-shrink: 0; box-shadow: 0 6px 16px rgba(102,126,234,0.45); }
+    .team-grid-x { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; max-width: 900px; margin: 0 auto; width: 100%; }
+    .member-x { background: linear-gradient(135deg, rgba(102,126,234,0.18), rgba(118,75,162,0.18)); border: 1px solid rgba(143,167,255,0.3); border-radius: 22px; padding: 36px 30px; text-align: center; }
+    .avatar-x { width: 88px; height: 88px; margin: 0 auto 18px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; color: #fff; }
+    .timeline-x { display: flex; flex-direction: column; gap: 35px; max-width: 1000px; position: relative; padding-left: 20px; }
+    .timeline-item-x { display: flex; gap: 30px; align-items: flex-start; }
+    .timeline-year-x { font-size: 1.8rem; font-weight: 900; background: linear-gradient(135deg, #f9d423, #ff4e50); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: right; width: 90px; }
+    .timeline-content-x { flex: 1; background: rgba(255,255,255,0.04); border-left: 3px solid #667eea; border-radius: 0 14px 14px 0; padding: 22px 28px; font-size: 1.02rem; line-height: 1.7; }
+
+    /* Thanh hướng dẫn thoát slide */
+    .detail-hint {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 35;
+      font-family: 'Press Start 2P', monospace; font-size: 10px; color: rgba(255,255,255,0.6);
+      background: rgba(0,0,0,0.8); padding: 12px 24px; border: 2px solid #ff3344; box-shadow: 0 4px 0 #000;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .detail-hint.show { opacity: 1; pointer-events: auto; }
 
     /* ===== Bảng chọn kiếm khi bị Sans chặn ===== */
     #choose {
-      position: fixed; top: 36px; left: 50%; z-index: 32; text-align: center;
+      position: fixed; top: 36px; left: 50%; z-index: 70; text-align: center;
       transform: translate(-50%, -20px); opacity: 0; pointer-events: none;
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
@@ -158,302 +186,20 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
-  <div id="canvas-container"></div>
   <canvas id="fx"></canvas>
   <div id="overlay"></div>
-
-  <!-- NƠI CHỨA NGUYÊN BẢN 10 SLIDE VÀ CSS CỦA FILE X ĐỂ RENDER CHÍNH XÁC 100% -->
-  <div id="x-source-container" style="position:fixed; left:-99999px; top:0; width:1280px; height:720px; overflow:hidden; pointer-events:none; z-index:-999;">
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body {
-        width: 1280px; height: 720px; overflow: hidden;
-        font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
-        background: #0a0e27; color: #fff;
-      }
-      .slide {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column;
-        width: 1280px; height: 720px;
-        padding: 70px 90px; overflow: hidden;
-        background:
-          radial-gradient(circle at 15% 15%, rgba(102,126,234,0.12), transparent 45%),
-          radial-gradient(circle at 85% 85%, rgba(118,75,162,0.12), transparent 45%),
-          linear-gradient(135deg, #0f1626, #1a1f3a);
-      }
-      .slide::before {
-        content: ''; position: absolute; inset: 0;
-        background-image:
-          linear-gradient(rgba(143,167,255,0.04) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(143,167,255,0.04) 1px, transparent 1px);
-        background-size: 60px 60px; pointer-events: none;
-      }
-      .slide-num {
-        position: absolute; top: 35px; right: 50px;
-        font-size: 0.95rem; color: #6a7ba0; font-weight: 700;
-        letter-spacing: 3px; z-index: 5;
-      }
-      .slide-tag {
-        display: inline-block; padding: 7px 18px; border-radius: 20px;
-        background: rgba(102,126,234,0.15);
-        border: 1px solid rgba(143,167,255,0.3);
-        color: #8fa7ff; font-size: 0.8rem; font-weight: 700;
-        letter-spacing: 3px; margin-bottom: 20px; align-self: flex-start;
-      }
-      h2.slide-title {
-        font-size: clamp(1.4rem, 2.4vw, 2.1rem);
-        line-height: 1.35; margin-bottom: 35px;
-        background: linear-gradient(135deg, #fff 0%, #8fa7ff 100%);
-        -webkit-background-clip: text; background-clip: text;
-        -webkit-text-fill-color: transparent; font-weight: 800;
-      }
-      .content { flex: 1; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2; }
-      
-      .card-list { display: flex; flex-direction: column; gap: 16px; max-width: 1100px; }
-      .card {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(143,167,255,0.18);
-        border-left: 4px solid #667eea;
-        border-radius: 14px; padding: 18px 26px;
-        display: flex; align-items: center; gap: 20px;
-        font-size: 1.05rem; line-height: 1.5; backdrop-filter: blur(10px);
-      }
-      .card .badge {
-        width: 44px; height: 44px; border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 0.95rem; font-weight: 800; color: #fff; flex-shrink: 0;
-        box-shadow: 0 6px 16px rgba(102,126,234,0.45), inset 0 0 0 2px rgba(255,255,255,0.12);
-      }
-
-      .team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; max-width: 900px; margin: 0 auto; width: 100%; }
-      .member {
-        background: linear-gradient(135deg, rgba(102,126,234,0.18), rgba(118,75,162,0.18));
-        border: 1px solid rgba(143,167,255,0.3);
-        border-radius: 22px; padding: 36px 30px; text-align: center;
-        backdrop-filter: blur(12px); position: relative; overflow: hidden;
-      }
-      .member .avatar {
-        width: 88px; height: 88px; margin: 0 auto 18px; border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 2rem; font-weight: 900; color: #fff;
-        box-shadow: 0 12px 30px rgba(102,126,234,0.5), inset 0 0 0 2px rgba(255,255,255,0.15);
-      }
-      .member .name { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 5px; }
-      .member .role { font-size: 0.9rem; color: #8fa7ff; letter-spacing: 1px; }
-
-      .timeline { display: flex; flex-direction: column; gap: 35px; max-width: 1000px; position: relative; padding-left: 20px; }
-      .timeline-item { display: flex; gap: 30px; align-items: flex-start; position: relative; }
-      .timeline-year {
-        flex-shrink: 0; width: 90px; font-size: 1.8rem; font-weight: 900;
-        background: linear-gradient(135deg, #f9d423, #ff4e50);
-        -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-align: right; padding-top: 5px;
-      }
-      .timeline-content {
-        flex: 1; background: rgba(255,255,255,0.04);
-        border-left: 3px solid #667eea; border-radius: 0 14px 14px 0;
-        padding: 22px 28px; font-size: 1.02rem; line-height: 1.7; backdrop-filter: blur(10px);
-      }
-
-      .scam-scene {
-        width: 100%; max-width: 1100px; margin: 0 auto; border-radius: 20px; overflow: hidden;
-        background: radial-gradient(circle at 20% 30%, rgba(102,126,234,0.15), transparent 60%), linear-gradient(135deg, #0a0e27, #1a1f3a);
-        border: 1px solid rgba(143,167,255,0.25); position: relative;
-      }
-      .svg-label { font-family: 'Segoe UI', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: 3px; }
-      .svg-bubble-text { font-family: 'Segoe UI', sans-serif; font-weight: 700; }
-      .scene-caption { padding: 16px 24px; background: rgba(0,0,0,0.35); border-top: 1px solid rgba(143,167,255,0.2); text-align: center; color: #a0a8c0; font-size: 0.95rem; }
-
-      .quote { font-size: 2.8rem; background: linear-gradient(135deg, #f9d423 0%, #ff4e50 50%, #6a11cb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 40px; line-height: 1.35; font-weight: 900; max-width: 1100px; }
-      .thanks { font-size: 1.6rem; color: #fff; font-weight: 700; margin-bottom: 25px; }
-      .qa { display: inline-block; padding: 16px 45px; border-radius: 50px; background: linear-gradient(135deg, rgba(102,126,234,0.25), rgba(118,75,162,0.25)); border: 1px solid rgba(143,167,255,0.4); color: #8fa7ff; font-size: 1.3rem; font-weight: 800; letter-spacing: 6px; }
-    </style>
-
-    <div id="x-slides-wrapper">
-      <!-- SLIDE 1 -->
-      <div class="slide">
-        <span class="slide-num">01 / 10</span>
-        <div class="content" style="justify-content:center; text-align:center; align-items:center;">
-          <span class="slide-tag" style="align-self:center;">CHỦ ĐỀ D — BÀI 4</span>
-          <h2 class="slide-title" style="font-size:2.9rem; text-align:center; max-width:1200px;">
-            MỘT SỐ HÀNH VI VI PHẠM PHÁP LUẬT,<br>TRÁI ĐẠO ĐỨC, THIẾU VĂN HOÁ<br>TRONG MÔI TRƯỜNG SỐ
-          </h2>
-          <p style="color:#a0a8c0; font-size:1.15rem; margin-top:25px; letter-spacing:1px;">
-            Môn Tin học 9 — Sử dụng dịch vụ Internet đúng luật
-          </p>
-        </div>
-      </div>
-
-      <!-- SLIDE 2 -->
-      <div class="slide">
-        <span class="slide-num">02 / 10</span>
-        <div class="content">
-          <span class="slide-tag">THÀNH VIÊN NHÓM BÁO CÁO</span>
-          <h2 class="slide-title">Nhóm của chúng em</h2>
-          <div class="team-grid">
-            <div class="member"><div class="avatar">HN</div><div class="name">Huỳnh Nghĩa</div><div class="role">TRƯỞNG NHÓM</div></div>
-            <div class="member"><div class="avatar">HM</div><div class="name">Hoàng My</div><div class="role">THÀNH VIÊN</div></div>
-            <div class="member"><div class="avatar">BN</div><div class="name">Bảo Ngân</div><div class="role">THÀNH VIÊN</div></div>
-            <div class="member"><div class="avatar">NH</div><div class="name">Ngọc Hân</div><div class="role">THÀNH VIÊN</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 3 -->
-      <div class="slide">
-        <span class="slide-num">03 / 10</span>
-        <div class="content">
-          <span class="slide-tag">HÀNH VI PHỔ BIẾN</span>
-          <h2 class="slide-title">Các hành vi vi phạm phổ biến<br>trong môi trường số</h2>
-          <div class="card-list">
-            <div class="card"><span class="badge">01</span><span>Viết, đăng, chia sẻ nội dung <b style="color:#f9d423">sai sự thật</b>, không phù hợp.</span></div>
-            <div class="card"><span class="badge">02</span><span>Làm lộ thông tin cá nhân, tổ chức gây ảnh hưởng xấu.</span></div>
-            <div class="card"><span class="badge">03</span><span>Gửi <b style="color:#f9d423">thư rác</b>, tin nhắn rác, spam quấy rối.</span></div>
-            <div class="card"><span class="badge">04</span><span>Sử dụng dữ liệu của người khác <b style="color:#f9d423">không xin phép</b>.</span></div>
-            <div class="card"><span class="badge">05</span><span>Sử dụng phần mềm <b style="color:#f9d423">không có bản quyền</b>.</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 4 -->
-      <div class="slide">
-        <span class="slide-num">04 / 10</span>
-        <div class="content">
-          <span class="slide-tag">CẢNH BÁO NGUY HIỂM</span>
-          <h2 class="slide-title">Bắt nạt, lừa đảo<br>và thiếu văn hoá số</h2>
-          <div class="card-list">
-            <div class="card"><span class="badge">01</span><span><b>Bắt nạt qua mạng (Cyberbullying):</b> đe doạ, bôi nhọ, cô lập nạn nhân trên không gian mạng.</span></div>
-            <div class="card"><span class="badge">02</span><span><b>Lừa đảo qua mạng (Scam):</b> giả danh, dụ dỗ chuyển tiền, đánh cắp tài khoản.</span></div>
-            <div class="card"><span class="badge">03</span><span><b>Ứng xử thiếu văn hoá:</b> chửi bới, xúc phạm, kích động bạo lực trong bình luận.</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 5 -->
-      <div class="slide">
-        <span class="slide-num">05 / 10</span>
-        <div class="content">
-          <span class="slide-tag">TẦM QUAN TRỌNG</span>
-          <h2 class="slide-title">Vì sao phải sử dụng Internet đúng luật?</h2>
-          <div class="card-list">
-            <div class="card"><span class="badge">01</span><span><b>Lớp 7:</b> Đã biết chỉ ra ví dụ truy cập không hợp lệ vào các nguồn thông tin.</span></div>
-            <div class="card"><span class="badge">02</span><span><b>Lớp 8:</b> Đã biết cách bảo đảm sản phẩm số do mình tạo ra thể hiện đạo đức, văn hoá và không vi phạm pháp luật.</span></div>
-            <div class="card"><span class="badge">03</span><span>Người dùng Internet, mạng xã hội <b style="color:#f9d423">phải trang bị kiến thức cần thiết</b> để sử dụng không gian mạng có trách nhiệm.</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 6 -->
-      <div class="slide">
-        <span class="slide-num">06 / 10</span>
-        <div class="content">
-          <span class="slide-tag">CĂN CỨ PHÁP LÝ</span>
-          <h2 class="slide-title">Hành lang pháp lý Việt Nam (2006 – 2013)</h2>
-          <div class="timeline">
-            <div class="timeline-item">
-              <div class="timeline-year">2006</div>
-              <div class="timeline-content">
-                <b>Luật Công nghệ thông tin</b> số <b>67/2006/QH11</b> do Quốc hội ban hành — quy định chi tiết về quyền và trách nhiệm của tổ chức, cá nhân tham gia ứng dụng và phát triển CNTT.
-              </div>
-            </div>
-            <div class="timeline-item">
-              <div class="timeline-year">2013</div>
-              <div class="timeline-content">
-                <b>Nghị định số 72/2013/NĐ-CP</b> do Chính phủ ban hành — quy định chi tiết việc quản lí, cung cấp, sử dụng dịch vụ Internet, thông tin trên mạng, trò chơi điện tử trên mạng.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 7 -->
-      <div class="slide">
-        <span class="slide-num">07 / 10</span>
-        <div class="content">
-          <span class="slide-tag">LUẬT AN NINH MẠNG 2018</span>
-          <h2 class="slide-title">Luật An ninh mạng &amp;<br>các hành vi cần tránh</h2>
-          <div class="card-list">
-            <div class="card"><span class="badge">01</span><span><b>Năm 2018, Quốc hội ban hành Luật An ninh mạng</b> — quy định về hoạt động bảo vệ an ninh quốc gia và bảo đảm trật tự, an toàn xã hội.</span></div>
-            <div class="card"><span class="badge">02</span><span><b>Không xem xét kĩ mà đã chia sẻ, phát tán thông tin chưa kiểm chứng</b> — hành vi vi phạm pháp luật.</span></div>
-            <div class="card"><span class="badge">03</span><span><b>Bình luận sai trái, chi tiết bịa đặt</b> — gây hoang mang dư luận, ảnh hưởng nghiêm trọng đến xã hội.</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 8 -->
-      <div class="slide">
-        <span class="slide-num">08 / 10</span>
-        <div class="content" style="justify-content:center; align-items:center;">
-          <span class="slide-tag" style="align-self:center;">MINH HOẠ TRỰC QUAN</span>
-          <h2 class="slide-title" style="text-align:center; margin-bottom:20px;">
-            Kịch bản lừa đảo trực tuyến điển hình
-          </h2>
-          <div class="scam-scene">
-            <svg class="scam-svg" viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg">
-              <text x="250" y="45" text-anchor="middle" class="svg-label" fill="#8fa7ff">NẠN NHÂN</text>
-              <text x="750" y="45" text-anchor="middle" class="svg-label" fill="#ff6b6b">KẺ LỪA ĐẢO</text>
-              <g transform="translate(250, 220)">
-                <circle cx="0" cy="0" r="28" fill="rgba(143,167,255,0.08)" stroke="#8fa7ff" stroke-width="3"/>
-                <line x1="0" y1="28" x2="0" y2="95" stroke="#8fa7ff" stroke-width="3.5" stroke-linecap="round"/>
-              </g>
-              <g transform="translate(750, 220)">
-                <circle cx="0" cy="0" r="28" fill="rgba(255,107,107,0.08)" stroke="#ff6b6b" stroke-width="3"/>
-                <line x1="0" y1="28" x2="0" y2="95" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round"/>
-              </g>
-              <g transform="translate(500, 130)">
-                <rect x="-220" y="-35" width="440" height="70" rx="14" fill="#141a30" stroke="#f9d423" stroke-width="2.5"/>
-                <text x="0" y="-8" text-anchor="middle" class="svg-bubble-text" font-size="18" fill="#f9d423">TRÚNG THƯỞNG 50 TRIỆU!</text>
-                <text x="0" y="18" text-anchor="middle" class="svg-bubble-text" font-size="14" fill="#8fa7ff">Chuyển phí 2 triệu để nhận thưởng</text>
-              </g>
-            </svg>
-            <div class="scene-caption">
-              <b>Cảnh báo:</b> Tuyệt đối không chuyển tiền, không cung cấp thông tin cá nhân cho bất kỳ ai qua tin nhắn "trúng thưởng".
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 9 -->
-      <div class="slide">
-        <span class="slide-num">09 / 10</span>
-        <div class="content">
-          <span class="slide-tag">TRÁCH NHIỆM CÔNG DÂN SỐ</span>
-          <h2 class="slide-title">Quyền nhân thân, tài sản<br>&amp; trách nhiệm của công dân</h2>
-          <div class="card-list">
-            <div class="card"><span class="badge">01</span><span><b>Vi phạm quyền nhân thân, uy tín:</b> đăng hình ảnh, địa chỉ nhà, biển số xe… của người khác khi chưa có sự đồng ý.</span></div>
-            <div class="card"><span class="badge">02</span><span><b>Vi phạm sở hữu trí tuệ, tài sản:</b> sao chép, phát tán nội dung có bản quyền không xin phép.</span></div>
-            <div class="card"><span class="badge">03</span><span><b>Trách nhiệm:</b> chủ động trang bị kiến thức, <b style="color:#f9d423">kiểm chứng thông tin trước khi chia sẻ</b>, ứng xử văn minh.</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 10 -->
-      <div class="slide" style="align-items:center; justify-content:center; text-align:center;">
-        <span class="slide-num">10 / 10</span>
-        <div class="content" style="align-items:center; justify-content:center; text-align:center;">
-          <div class="quote">
-            "Hãy là người sử dụng Internet văn minh,<br>an toàn và tuân thủ pháp luật!"
-          </div>
-          <div class="thanks">Cảm ơn thầy cô và các bạn đã chú ý lắng nghe</div>
-          <div class="qa">Q &amp; A</div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Frame 1: START -->
   <div id="start">
     <button id="startBtn" class="start-btn" type="button">LOADING...</button>
   </div>
 
-  <!-- Frame 2: Danh sách 10 slide -->
+  <!-- Frame 2: Danh sách 10 slide (GRID) -->
   <div id="grid">
     <canvas id="deco"></canvas>
     <div class="frame"></div>
@@ -467,15 +213,142 @@
     <div class="ticker"><div id="ticker-track" class="ticker-track"></div></div>
   </div>
 
-  <!-- Chi tiết slide -->
-  <div id="detail" class="detail">
-    <div class="info">
-      <div id="info-num" class="info-num"></div>
-      <h2 id="info-title"></h2>
-      <p id="info-desc"></p>
-      <div class="info-hint">BACKSPACE · BACK TO LIST</div>
+  <!-- KHU VỰC 10 SLIDE SỐNG (LIVE DOM) TỪ X -->
+  <div id="live-slide-container">
+    <!-- Slide 1 -->
+    <div class="slide-x-live" data-index="0">
+      <span class="slide-num-x">01 / 10</span>
+      <div class="content-x" style="justify-content:center; text-align:center; align-items:center;">
+        <span class="slide-tag-x" style="align-self:center;">CHỦ ĐỀ D — BÀI 4</span>
+        <h2 class="title-x" style="font-size:2.8rem; text-align:center;">MỘT SỐ HÀNH VI VI PHẠM PHÁP LUẬT,<br>TRÁI ĐẠO ĐỨC, THIẾU VĂN HOÁ<br>TRONG MÔI TRƯỜNG SỐ</h2>
+        <p style="color:#a0a8c0; font-size:1.15rem; margin-top:25px;">Môn Tin học 9 — Sử dụng dịch vụ Internet đúng luật</p>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide-x-live" data-index="1">
+      <span class="slide-num-x">02 / 10</span>
+      <div class="content-x">
+        <span class="slide-tag-x">THÀNH VIÊN NHÓM BÁO CÁO</span>
+        <h2 class="title-x">Nhóm của chúng em</h2>
+        <div class="team-grid-x">
+          <div class="member-x"><div class="avatar-x">HN</div><div style="font-size:1.5rem; font-weight:800;">Huỳnh Nghĩa</div><div style="color:#8fa7ff;">TRƯỞNG NHÓM</div></div>
+          <div class="member-x"><div class="avatar-x">HM</div><div style="font-size:1.5rem; font-weight:800;">Hoàng My</div><div style="color:#8fa7ff;">THÀNH VIÊN</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide-x-live" data-index="2">
+      <span class="slide-num-x">03 / 10</span>
+      <div class="content-x">
+        <span class="slide-tag-x">HÀNH VI PHỔ BIẾN</span>
+        <h2 class="title-x">Các hành vi vi phạm phổ biến trong môi trường số</h2>
+        <div class="card-list-x">
+          <div class="card-item-x"><div class="badge-x">01</div><span>Viết, đăng, chia sẻ nội dung <b style="color:#f9d423">sai sự thật</b>, không phù hợp.</span></div>
+          <div class="card-item-x"><div class="badge-x">02</div><span>Làm lộ thông tin cá nhân, tổ chức gây ảnh hưởng xấu.</span></div>
+          <div class="card-item-x"><div class="badge-x">03</div><span>Gửi <b style="color:#f9d423">thư rác</b>, tin nhắn rác, spam quấy rối.</span></div>
+          <div class="card-item-x"><div class="badge-x">04</div><span>Sử dụng dữ liệu của người khác <b style="color:#f9d423">không xin phép</b>.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="slide-x-live" data-index="3">
+      <span class="slide-num-x">04 / 10</span>
+      <div class="content-x">
+        <span class="slide-tag-x">CẢNH BÁO NGUY HIỂM</span>
+        <h2 class="title-x">Bắt nạt, lừa đảo và thiếu văn hoá số</h2>
+        <div class="card-list-x">
+          <div class="card-item-x"><div class="badge-x">01</div><span><b>Bắt nạt qua mạng (Cyberbullying):</b> đe doạ, bôi nhọ, cô lập nạn nhân.</span></div>
+          <div class="card-item-x"><div class="badge-x">02</div><span><b>Lừa đảo qua mạng (Scam):</b> giả danh, dụ dỗ chuyển tiền, đánh cắp tài khoản.</span></div>
+          <div class="card-item-x"><div class="badge-x">03</div><span><b>Ứng xử thiếu văn hoá:</b> chửi bới, xúc phạm, kích động bạo lực trong bình luận.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="slide-x-live" data-index="4">
+      <span class="slide-num-x">05 / 10</span>
+      <div class="content-x">
+        <span class="slide-tag-x">TẦM QUAN TRỌNG</span>
+        <h2 class="title-x">Vì sao phải sử dụng Internet đúng luật?</h2>
+        <div class="card-list-x">
+          <div class="card-item-x"><div class="badge-x">01</div><span><b>Lớp 7:</b> Đã biết chỉ ra ví dụ truy cập không hợp lệ vào các nguồn thông tin.</span></div>
+          <div class="card-item-x"><div class="badge-x">02</div><span><b>Lớp 8:</b> Đã biết cách bảo đảm sản phẩm số do mình tạo ra thể hiện đạo đức, văn hoá.</span></div>
+          <div class="card-item-x"><div class="badge-x">03</div><span>Người dùng Internet <b style="color:#f9d423">phải trang bị kiến thức cần thiết</b> để sử dụng không gian mạng có trách nhiệm.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6 -->
+    <div class="slide-x-live" data-index="5">
+      <span class="slide-num-x">06 / 10</span>
+      <div class="content-x">
+        <span class="slide-tag-x">CĂN CỨ PHÁP LÝ</span>
+        <h2 class="title-x">Hành lang pháp lý Việt Nam (2006 – 2013)</h2>
+        <div class="timeline-x">
+          <div class="timeline-item-x"><div class="timeline-year-x">2006</div><div class="timeline-content-x"><b>Luật Công nghệ thông tin</b> số <b>67/2006/QH11</b> quy định chi tiết về quyền và trách nhiệm.</div></div>
+          <div class="timeline-item-x"><div class="timeline-year-x">2013</div><div class="timeline-content-x"><b>Nghị định số 72/2013/NĐ-CP</b> quản lí, cung cấp, sử dụng dịch vụ Internet và thông tin trên mạng.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7 -->
+    <div class="slide-x-live" data-index="6">
+      <span class="slide-num-x">07 / 10</span>
+      <div class="content-x">
+        <span class="slide-tag-x">LUẬT AN NINH MẠNG 2018</span>
+        <h2 class="title-x">Luật An ninh mạng &amp; các hành vi cần tránh</h2>
+        <div class="card-list-x">
+          <div class="card-item-x"><div class="badge-x">01</div><span><b>Năm 2018, Quốc hội ban hành Luật An ninh mạng</b> bảo vệ an ninh quốc gia.</span></div>
+          <div class="card-item-x"><div class="badge-x">02</div><span><b>Không xem xét kĩ mà chia sẻ thông tin chưa kiểm chứng</b> — hành vi vi phạm pháp luật.</span></div>
+          <div class="card-item-x"><div class="badge-x">03</div><span><b>Bình luận sai trái, bịa đặt</b> gây hoang mang dư luận xã hội.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8 -->
+    <div class="slide-x-live" data-index="7">
+      <span class="slide-num-x">08 / 10</span>
+      <div class="content-x" style="text-align:center;">
+        <span class="slide-tag-x" style="align-self:center;">MINH HOẠ TRỰC QUAN</span>
+        <h2 class="title-x" style="text-align:center;">Kịch bản lừa đảo trực tuyến điển hình</h2>
+        <div style="background:rgba(10,14,39,0.9); border:1px solid rgba(143,167,255,0.25); border-radius:16px; padding:35px; margin-top:20px; text-align:center;">
+          <p style="font-size:22px; color:#f9d423; font-weight:700; margin-bottom:15px;">"TRÚNG THƯỞNG 50 TRIỆU! Chuyển phí 2 triệu để nhận thưởng"</p>
+          <p style="font-size:18px; color:#ff4e50; font-weight:700;">Cảnh báo: Tuyệt đối không chuyển tiền qua mạng cho các đối tượng lạ!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9 -->
+    <div class="slide-x-live" data-index="8">
+      <span class="slide-num-x">09 / 10</span>
+      <div class="content-x">
+        <span class="slide-tag-x">TRÁCH NHIỆM CÔNG DÂN SỐ</span>
+        <h2 class="title-x">Quyền nhân thân, tài sản &amp; trách nhiệm</h2>
+        <div class="card-list-x">
+          <div class="card-item-x"><div class="badge-x">01</div><span><b>Vi phạm quyền nhân thân:</b> đăng hình ảnh, địa chỉ, thông tin cá nhân khi chưa phép.</span></div>
+          <div class="card-item-x"><div class="badge-x">02</div><span><b>Vi phạm sở hữu trí tuệ:</b> sao chép, phát tán phần mềm, tài liệu có bản quyền trái phép.</span></div>
+          <div class="card-item-x"><div class="badge-x">03</div><span><b>Trách nhiệm:</b> chủ động trang bị kiến thức, kiểm chứng thông tin trước khi chia sẻ.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10 -->
+    <div class="slide-x-live" data-index="9" style="justify-content:center; align-items:center; text-align:center;">
+      <span class="slide-num-x">10 / 10</span>
+      <div class="content-x" style="align-items:center; justify-content:center; text-align:center;">
+        <div style="font-size:32px; background:linear-gradient(135deg, #f9d423 0%, #ff4e50 50%, #6a11cb 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:25px; line-height:1.4; font-weight:900;">
+          "Hãy là người sử dụng Internet văn minh,<br>an toàn và tuân thủ pháp luật!"
+        </div>
+        <div style="font-size:20px; color:#fff; font-weight:700; margin-bottom:18px;">Cảm ơn thầy cô và các bạn đã chú ý lắng nghe</div>
+        <div style="display:inline-block; padding:12px 35px; border-radius:50px; background:linear-gradient(135deg, rgba(102,126,234,0.25), rgba(118,75,162,0.25)); border:1px solid rgba(143,167,255,0.4); color:#8fa7ff; font-size:18px; font-weight:800; letter-spacing:6px;">Q &amp; A</div>
+      </div>
     </div>
   </div>
+
+  <div id="detail-hint" class="detail-hint">PRESS BACKSPACE · BACK TO LIST</div>
 
   <!-- Bảng chọn kiếm khi bị Sans chặn -->
   <div id="choose">
@@ -485,60 +358,16 @@
   </div>
 
   <script>
-    const SLIDE_INFO = [
-      { title: 'Tiêu đề bài học', desc: 'Chủ đề D - Bài 4: Một số hành vi vi phạm pháp luật, trái đạo đức, thiếu văn hoá trong môi trường số.' },
-      { title: 'Thành viên nhóm', desc: 'Danh sách thành viên thực hiện bài thuyết trình báo cáo nhóm.' },
-      { title: 'Hành vi phổ biến', desc: 'Các hành vi vi phạm thường gặp như đăng thông tin sai sự thật, spam, lấy dữ liệu trái phép.' },
-      { title: 'Cảnh báo nguy hiểm', desc: 'Nhận diện bắt nạt qua mạng (Cyberbullying) và lừa đảo trực tuyến (Scam).' },
-      { title: 'Tầm quan trọng', desc: 'Sự cần thiết phải trang bị kiến thức pháp luật và đạo đức số qua các cấp học.' },
-      { title: 'Căn cứ pháp lý', desc: 'Hành lang pháp lý từ Luật CNTT 2006 đến Nghị định 72/2013/NĐ-CP.' },
-      { title: 'Luật An ninh mạng', desc: 'Các quy định cốt lõi của Luật An ninh mạng năm 2018 và trách nhiệm khi chia sẻ thông tin.' },
-      { title: 'Minh hoạ trực quan', desc: 'Mô phỏng kịch bản lừa đảo trúng thưởng trực tuyến thường xảy ra.' },
-      { title: 'Trách nhiệm công dân', desc: 'Bảo vệ quyền nhân thân, sở hữu trí tuệ và ứng xử có trách nhiệm trên không gian mạng.' },
-      { title: 'Tổng kết', desc: 'Lời kết và phần giao lưu Q&A.' }
+    const SLIDE_TITLES = [
+      "Tiêu đề bài học", "Thành viên nhóm", "Hành vi phổ biến", "Cảnh báo nguy hiểm",
+      "Tầm quan trọng", "Căn cứ pháp lý", "Luật An ninh mạng", "Minh hoạ trực quan",
+      "Trách nhiệm công dân", "Tổng kết & Q&A"
     ];
 
     let slideImages = new Array(10).fill('');
 
-    // Tự động render 10 slide gốc nguyên bản từ x sang ảnh chất lượng cao
-    async function renderXSlides() {
-      const slideElements = document.querySelectorAll('#x-slides-wrapper .slide');
-      const startBtn = document.getElementById('startBtn');
-
-      try {
-        for (let i = 0; i < slideElements.length; i++) {
-          const canvas = await html2canvas(slideElements[i], {
-            width: 1280,
-            height: 720,
-            scale: 1,
-            backgroundColor: '#0f1626'
-          });
-          slideImages[i] = canvas.toDataURL('image/jpeg', 0.92);
-        }
-      } catch (err) {
-        console.error('Lỗi render slide:', err);
-      }
-
-      // Xóa vùng chứa ẩn sau khi xong
-      document.getElementById('x-source-container').remove();
-
-      // Cập nhật ảnh vào thẻ card
-      document.querySelectorAll('.card img').forEach((im, i) => {
-        if (slideImages[i]) im.src = slideImages[i];
-      });
-
-      slideImages.forEach(getTex);
-      window.slidesReady = true;
-      startBtn.textContent = 'START';
-      startBtn.disabled = false;
-    }
-
     const PX = 8;
     const BLOOD_PX = PX * 2.5;
-    const SLIDE_W_3D = 7.5, SLIDE_H_3D = 4.2;
-    const TILES = [80, 45];
-    const DISSOLVE_MS = 1500;
-    const BLOOD_TO_DISSOLVE_MS = 1000;
     const BLOCK_CHANCE = 0.3;
     const pad2 = (n) => String(n).padStart(2, '0');
 
@@ -653,117 +482,6 @@
     const BONE_IMG = makeSprite(BONE_ROWS, (ch) => ({ W: '#f2f2f2', K: '#0b0b0b' }[ch] || null), 5);
     const SWORD_IMG = makeSprite(SWORD_ROWS, (ch) => SWORD_COLORS[ch] || null, 6);
 
-    // Three.js setup
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
-    camera.position.z = 5.2;
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(innerWidth, innerHeight);
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    document.getElementById('canvas-container').appendChild(renderer.domElement);
-    scene.add(new THREE.AmbientLight(0xffffff, 1.3));
-
-    const texCache = {};
-    function getTex(path) {
-      if (!texCache[path]) {
-        const t = new THREE.TextureLoader().load(path);
-        t.minFilter = THREE.LinearFilter;
-        t.anisotropy = renderer.capabilities.getMaxAnisotropy();
-        texCache[path] = t;
-      }
-      return texCache[path];
-    }
-
-    const SLIDE_GEO = (() => {
-      const base = new THREE.PlaneGeometry(SLIDE_W_3D, SLIDE_H_3D, TILES[0], TILES[1]).toNonIndexed();
-      const pos = base.attributes.position, uv = base.attributes.uv;
-      const cell = new Float32Array(pos.count * 2);
-      for (let t = 0; t < pos.count; t += 3) {
-        const cu = (uv.getX(t) + uv.getX(t + 1) + uv.getX(t + 2)) / 3;
-        const cv = (uv.getY(t) + uv.getY(t + 1) + uv.getY(t + 2)) / 3;
-        const ci = Math.min(TILES[0] - 1, Math.floor(cu * TILES[0]));
-        const cj = Math.min(TILES[1] - 1, Math.floor(cv * TILES[1]));
-        const ccu = (ci + 0.5) / TILES[0], ccv = (cj + 0.5) / TILES[1];
-        for (let k = 0; k < 3; k++) {
-          cell[(t + k) * 2] = ccu;
-          cell[(t + k) * 2 + 1] = ccv;
-        }
-      }
-      base.setAttribute('aCell', new THREE.BufferAttribute(cell, 2));
-      return base;
-    })();
-
-    const DISSOLVE_VERT = `
-      uniform float uProgress;
-      attribute vec2 aCell;
-      varying vec2 vUv;
-      varying float vLocal;
-      float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-      void main() {
-        vUv = uv;
-        vec2 idx = floor(aCell * vec2(${TILES[0]}.0, ${TILES[1]}.0));
-        float t0 = hash(idx) * 0.7;
-        float local = clamp((uProgress - t0) / 0.3, 0.0, 1.0);
-        vLocal = local;
-        vec3 p = position;
-        vec2 center = vec2((aCell.x - 0.5) * ${SLIDE_W_3D.toFixed(2)}, (aCell.y - 0.5) * ${SLIDE_H_3D.toFixed(2)});
-        float s = 1.0 - 0.7 * smoothstep(0.45, 1.0, local);
-        float a = hash(idx + 7.7) * 6.2831853;
-        vec2 dir = vec2(cos(a), sin(a));
-        float disp = (0.15 + hash(idx + 3.1) * 0.45) * local;
-        p.xy = center + (p.xy - center) * s + dir * disp;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
-      }`;
-
-    const DISSOLVE_FRAG = `
-      uniform sampler2D map;
-      varying vec2 vUv;
-      varying float vLocal;
-      float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-      void main() {
-        if (vLocal >= 1.0) discard;
-        vec4 c = texture2D(map, vUv);
-        if (vLocal > 0.2 && vLocal < 0.45) {
-          float bw = step(0.5, hash(floor(vUv * vec2(${TILES[0]}.0, ${TILES[1]}.0)) + 3.3));
-          gl_FragColor = vec4(vec3(bw), 1.0);
-          return;
-        }
-        float a = vLocal <= 0.45 ? 1.0 : 1.0 - (vLocal - 0.45) / 0.55;
-        if (c.a < 0.01 || a < 0.01) discard;
-        gl_FragColor = vec4(c.rgb, c.a * a);
-      }`;
-
-    function makeDissolveMat(tex) {
-      return new THREE.ShaderMaterial({
-        uniforms: { map: { value: tex }, uProgress: { value: 0 } },
-        vertexShader: DISSOLVE_VERT,
-        fragmentShader: DISSOLVE_FRAG,
-        transparent: true,
-        depthWrite: false,
-        side: THREE.DoubleSide
-      });
-    }
-
-    function createSlide(texturePath, zIndex) {
-      const group = new THREE.Group();
-      group.position.z = zIndex;
-      const mesh = new THREE.Mesh(SLIDE_GEO, makeDissolveMat(getTex(texturePath)));
-      group.add(mesh);
-      return { group, mesh };
-    }
-
-    function tweenProgress(obj, to, dur, ease, onComplete) {
-      return gsap.to(obj.mesh.material.uniforms.uProgress, { value: to, duration: dur, ease: ease, onComplete: onComplete });
-    }
-
-    function disposeSlide(obj) {
-      obj.mesh.material.dispose();
-      scene.remove(obj.group);
-    }
-
-    let currentSlideObj = null;
-
     // FX Canvas 2D
     const fxCanvas = document.getElementById('fx');
     const fx = fxCanvas.getContext('2d');
@@ -854,21 +572,6 @@
     }
 
     const particles = [];
-    let dustUntil = 0;
-    function spawnDust(n) {
-      for (let i = 0; i < n && particles.length < 500; i++) {
-        const r = Math.random();
-        particles.push({
-          x: innerWidth * (0.1 + Math.random() * 0.8),
-          y: innerHeight * (0.1 + Math.random() * 0.8),
-          vx: (Math.random() - 0.5) * 1.6, vy: (Math.random() - 0.5) * 1.6,
-          life: 50 + Math.random() * 50, age: 0,
-          c: r < 0.12 ? '#ff3344' : (r < 0.56 ? '#e8dcc4' : '#7a6a52'),
-          s: Math.random() < 0.5 ? PX * 0.5 : PX * 0.35
-        });
-      }
-    }
-
     function shatterRect(r, colors) {
       const cols = colors || ['#e8dcc4', '#7a6a52', '#ff3344', '#f2f2f2'];
       for (let i = 0; i < 70 && particles.length < 500; i++) {
@@ -983,7 +686,6 @@
       if (block) drawBlock(now);
       cuts = cuts.filter(c => drawCut(c, now));
       if (sword) drawSword(now);
-      if (now < dustUntil) spawnDust(6);
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
         p.age++; p.x += p.vx; p.y += p.vy;
@@ -998,11 +700,11 @@
     requestAnimationFrame(fxLoop);
 
     function shake() {
-      gsap.fromTo('#canvas-container', { x: 0, y: 0 }, {
+      gsap.fromTo('body', { x: 0, y: 0 }, {
         x: () => (Math.random() - 0.5) * 16,
         y: () => (Math.random() - 0.5) * 10,
         duration: 0.05, repeat: 5, yoyo: true, ease: 'none',
-        onComplete: () => gsap.set('#canvas-container', { x: 0, y: 0 })
+        onComplete: () => gsap.set('body', { x: 0, y: 0 })
       });
     }
 
@@ -1050,14 +752,27 @@
       const r = cards[i].getBoundingClientRect();
       const el = document.createElement('div');
       el.className = 'fly';
-      el.style.backgroundImage = 'url("' + slideImages[i] + '")';
+      el.style.position = 'fixed';
+      el.style.zIndex = '36';
+      el.style.pointerEvents = 'none';
+      el.style.boxShadow = '0 0 0 3px #000';
+      el.style.background = '#0f1626';
       el.style.left = r.left + 'px';
       el.style.top = r.top + 'px';
       el.style.width = r.width + 'px';
       el.style.height = r.height + 'px';
+      
+      // Lấy nội dung slide live nhúng vào hiệu ứng bay
+      const liveSource = document.querySelector(`.slide-x-live[data-index="${i}"]`).cloneNode(true);
+      liveSource.style.cssText = "position:absolute; inset:0; width:1280px; height:720px; display:flex; transform-origin: top left; transform: scale(" + (r.width / 1280) + ");";
+      el.appendChild(liveSource);
       document.body.appendChild(el);
+
       gsap.to(el, {
         left: 0, top: 0, width: innerWidth, height: innerHeight, duration: 0.7, ease: 'power3.inOut',
+        onStart: () => {
+          gsap.to(liveSource, { transform: "scale(" + (innerWidth / 1280) + ")", duration: 0.7, ease: 'power3.inOut' });
+        },
         onComplete: () => { done(); el.remove(); }
       });
     }
@@ -1068,12 +783,11 @@
     const startBtn = document.getElementById('startBtn');
     const gridEl = document.getElementById('grid');
     const cardsEl = document.getElementById('cards');
-    const detailEl = document.getElementById('detail');
+    const liveContainer = document.getElementById('live-slide-container');
+    const liveSlides = document.querySelectorAll('.slide-x-live');
+    const detailHint = document.getElementById('detail-hint');
     const chooseEl = document.getElementById('choose');
     const picksEl = document.getElementById('picks');
-    const infoNum = document.getElementById('info-num');
-    const infoTitle = document.getElementById('info-title');
-    const infoDesc = document.getElementById('info-desc');
     const tickerTrack = document.getElementById('ticker-track');
 
     const TICKER_LINE = [
@@ -1081,13 +795,14 @@
     ].map(t => t + "   *   ").join('');
     tickerTrack.textContent = TICKER_LINE + TICKER_LINE;
 
+    // Tạo thumbnail cho các card bằng cách chụp nhanh html2canvas ngầm khi khởi động
     const cards = new Array(10).fill(0).map((_, i) => {
       const c = document.createElement('button');
       c.type = 'button';
       c.className = 'card';
-      c.innerHTML = '<img src="" alt="">' +
+      c.innerHTML = '<div class="card-preview" id="prev-' + i + '"></div>' +
         '<div class="card-meta"><span class="card-num">' + pad2(i + 1) + '</span><span class="card-title"></span></div>';
-      c.querySelector('.card-title').textContent = SLIDE_INFO[i].title;
+      c.querySelector('.card-title').textContent = SLIDE_TITLES[i];
       c.addEventListener('click', () => chemFromCard(i));
       cardsEl.appendChild(c);
       return c;
@@ -1103,7 +818,7 @@
       return b;
     });
 
-    // Trang trí nền
+    // Trang trí nền (Tim + Xương bay)
     const HEART_SPR = [".XX.XX.", "XXXXXXX", "XXXXXXX", ".XXXXX.", "..XXX..", "...X..."];
     const decoCanvas = document.getElementById('deco');
     const dctx = decoCanvas.getContext('2d');
@@ -1188,18 +903,30 @@
       });
     }
 
-    function updateInfo(i) {
-      infoNum.textContent = 'SLIDE ' + pad2(i + 1) + ' / ' + pad2(slideImages.length);
-      infoTitle.textContent = SLIDE_INFO[i].title;
-      infoDesc.textContent = SLIDE_INFO[i].desc;
+    let activeSlideIndex = null;
+    function openSlide(i) {
+      activeSlideIndex = i;
+      liveSlides.forEach((s, idx) => {
+        if (idx === i) s.classList.add('active');
+        else s.classList.remove('active');
+      });
+      liveContainer.classList.add('show');
+      detailHint.classList.add('show');
+      view = 'detail';
     }
 
-    function openSlide(i) {
-      currentSlideObj = createSlide(slideImages[i], 0);
-      scene.add(currentSlideObj.group);
-      updateInfo(i);
-      detailEl.classList.add('show');
-      view = 'detail';
+    function closeDetail() {
+      if (view !== 'detail') return;
+      view = 'busy';
+      liveContainer.classList.remove('show');
+      detailHint.classList.remove('show');
+      setTimeout(() => {
+        if (activeSlideIndex !== null) {
+          liveSlides[activeSlideIndex].classList.remove('active');
+          activeSlideIndex = null;
+        }
+        showGrid();
+      }, 400);
     }
 
     function killCard(j, withDmg) {
@@ -1234,12 +961,10 @@
         popDamage(cx, cy, 1 + Math.floor(Math.random() * 100));
       }, 320);
       setTimeout(() => {
-        dustUntil = performance.now() + DISSOLVE_MS;
-        gsap.to(bloodFade, { a: 0, duration: DISSOLVE_MS / 1000, ease: 'none', onComplete: () => { splat = null; } });
         cards.forEach((_, k) => { if (k !== i) killCard(k, false); });
         flyTo(i, () => openSlide(i));
         hideGrid(() => {});
-      }, 320 + BLOOD_TO_DISSOLVE_MS);
+      }, 1320);
     }
 
     function showChoose() {
@@ -1257,6 +982,7 @@
       setTimeout(swordRound, 500);
     }
 
+    let sword = null;
     function swordRound() {
       if (!sword || sword.endAt) return;
       const alive = cards.map((_, k) => k).filter(k => k !== sword.holder && !dead.has(k));
@@ -1298,18 +1024,6 @@
       hideGrid(() => {});
     }
 
-    function closeDetail() {
-      if (view !== 'detail') return;
-      view = 'busy';
-      detailEl.classList.remove('show');
-      const cur = currentSlideObj;
-      tweenProgress(cur, 1.0, DISSOLVE_MS / 1000, 'none', () => {
-        disposeSlide(cur);
-        currentSlideObj = null;
-        showGrid();
-      });
-    }
-
     startBtn.addEventListener('click', (e) => { e.stopPropagation(); enterGrid(); });
 
     window.addEventListener('keydown', (e) => {
@@ -1325,44 +1039,18 @@
       }
     });
 
-    window.addEventListener('resize', () => {
-      camera.aspect = innerWidth / innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth, innerHeight);
-      resizeFx();
-    });
-
-    (function animate() {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    })();
-
-    // Tự động render 10 slide nguyên bản ngay khi tải trang
+    // Tự động render thumbnail nhỏ cho các card khi khởi động
     window.addEventListener('DOMContentLoaded', async () => {
-      const slideElements = document.querySelectorAll('#x-slides-wrapper .slide');
-      const startBtn = document.getElementById('startBtn');
-
-      try {
-        for (let i = 0; i < slideElements.length; i++) {
-          const canvas = await html2canvas(slideElements[i], {
-            width: 1280,
-            height: 720,
-            scale: 1,
-            backgroundColor: '#0a0e27'
-          });
-          slideImages[i] = canvas.toDataURL('image/jpeg', 0.95);
-        }
-      } catch (err) {
-        console.error('Lỗi khi render slide:', err);
+      const liveElements = document.querySelectorAll('.slide-x-live');
+      for (let i = 0; i < liveElements.length; i++) {
+        liveElements[i].style.display = 'flex';
+        try {
+          const canvas = await html2canvas(liveElements[i], { width: 1280, height: 720, scale: 0.25 });
+          canvas.style.cssText = "width:100%; height:100%; object-fit:cover; display:block;";
+          document.getElementById('prev-' + i).appendChild(canvas);
+        } catch(e) {}
+        liveElements[i].style.display = '';
       }
-
-      document.getElementById('x-source-container').remove();
-
-      document.querySelectorAll('.card img').forEach((im, i) => {
-        if (slideImages[i]) im.src = slideImages[i];
-      });
-
-      slideImages.forEach(getTex);
       window.slidesReady = true;
       startBtn.textContent = 'START';
       startBtn.disabled = false;
