@@ -65,7 +65,7 @@
   .start-btn:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 20px 60px rgba(102,126,234,0.75); }
   .start-btn:active { transform: translateY(-1px) scale(0.99); }
 
-  #presentation { position: fixed; inset: 0; display: none; overflow: hidden; }
+  #presentation { position: fixed; inset: 0; display: none; }
   #presentation.active { display: block; }
 
   .slide {
@@ -108,24 +108,41 @@
   }
   .content { flex: 1; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2; }
 
+  /* ===== CARDS với badge số ===== */
   .card-list { display: flex; flex-direction: column; gap: 16px; max-width: 1100px; }
   .card {
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(143,167,255,0.18);
     border-left: 4px solid #667eea;
-    border-radius: 14px; padding: 20px 26px;
+    border-radius: 14px; padding: 18px 26px;
     display: flex; align-items: center; gap: 20px;
     font-size: 1.05rem; line-height: 1.5;
     transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
     backdrop-filter: blur(10px);
   }
   .card:hover { background: rgba(102,126,234,0.12); transform: translateX(10px); border-left-color: #f9d423; }
+  .card .badge {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem; font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 6px 16px rgba(102,126,234,0.45), inset 0 0 0 2px rgba(255,255,255,0.12);
+    letter-spacing: 0.5px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .card:nth-child(2n) .badge { background: linear-gradient(135deg, #f9d423, #ff6b6b); box-shadow: 0 6px 16px rgba(249,212,35,0.45), inset 0 0 0 2px rgba(255,255,255,0.12); }
+  .card:nth-child(3n) .badge { background: linear-gradient(135deg, #11998e, #38ef7d); box-shadow: 0 6px 16px rgba(17,153,142,0.45), inset 0 0 0 2px rgba(255,255,255,0.12); }
+  .card:nth-child(5n) .badge { background: linear-gradient(135deg, #ff4e50, #f9d423); box-shadow: 0 6px 16px rgba(255,78,80,0.45), inset 0 0 0 2px rgba(255,255,255,0.12); }
 
+  /* ===== TEAM ===== */
   .team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; max-width: 900px; margin: 0 auto; width: 100%; }
   .member {
     background: linear-gradient(135deg, rgba(102,126,234,0.18), rgba(118,75,162,0.18));
     border: 1px solid rgba(143,167,255,0.3);
-    border-radius: 22px; padding: 40px 30px; text-align: center;
+    border-radius: 22px; padding: 36px 30px; text-align: center;
     backdrop-filter: blur(12px); transition: all 0.35s ease;
     position: relative; overflow: hidden;
   }
@@ -134,9 +151,23 @@
     background: linear-gradient(90deg, #667eea, #f9d423, #764ba2);
   }
   .member:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(102,126,234,0.3); }
+  .member .avatar {
+    width: 88px; height: 88px; margin: 0 auto 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; font-weight: 900; color: #fff;
+    letter-spacing: 1px;
+    box-shadow: 0 12px 30px rgba(102,126,234,0.5), inset 0 0 0 2px rgba(255,255,255,0.15);
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .member:nth-child(2) .avatar { background: linear-gradient(135deg, #f9d423, #ff6b6b); }
+  .member:nth-child(3) .avatar { background: linear-gradient(135deg, #11998e, #38ef7d); }
+  .member:nth-child(4) .avatar { background: linear-gradient(135deg, #ff4e50, #f9d423); }
   .member .name { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 5px; }
   .member .role { font-size: 0.9rem; color: #8fa7ff; letter-spacing: 1px; }
 
+  /* ===== TIMELINE ===== */
   .timeline { display: flex; flex-direction: column; gap: 35px; max-width: 1000px; position: relative; padding-left: 20px; }
   .timeline::before {
     content: ''; position: absolute; left: 100px; top: 20px; bottom: 20px;
@@ -156,37 +187,64 @@
     backdrop-filter: blur(10px);
   }
 
+  /* ===== SCAM SCENE ===== */
   .scam-scene {
-    width: 100%; max-width: 1100px; margin: 0 auto;
-    border-radius: 20px; overflow: hidden;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
     background:
       radial-gradient(circle at 20% 30%, rgba(102,126,234,0.15), transparent 60%),
       radial-gradient(circle at 80% 70%, rgba(255,107,107,0.15), transparent 60%),
       linear-gradient(135deg, #0a0e27, #1a1f3a);
     border: 1px solid rgba(143,167,255,0.25);
-    box-shadow: 0 25px 70px rgba(0,0,0,0.6);
+    box-shadow: 0 25px 70px rgba(0,0,0,0.6), 0 0 0 1px rgba(143,167,255,0.1);
     position: relative;
   }
-  .scam-svg { display: block; width: 100%; height: auto; }
+  .scam-scene::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(143,167,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(143,167,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none;
+  }
+  .scam-svg { display: block; width: 100%; height: auto; position: relative; z-index: 2; }
   .svg-label { font-family: 'Segoe UI', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: 3px; }
   .svg-bubble-text { font-family: 'Segoe UI', sans-serif; font-weight: 700; }
 
   .scene-caption {
-    padding: 16px 24px; background: rgba(0,0,0,0.35);
+    padding: 16px 24px;
+    background: rgba(0,0,0,0.35);
     border-top: 1px solid rgba(143,167,255,0.2);
-    text-align: center; color: #a0a8c0; font-size: 0.95rem;
+    text-align: center;
+    color: #a0a8c0;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 2;
   }
   .scene-caption b { color: #f9d423; }
 
   .replay-btn {
-    position: absolute; top: 16px; right: 16px; padding: 8px 16px;
-    border-radius: 20px; background: rgba(102,126,234,0.2);
-    border: 1px solid rgba(143,167,255,0.4); color: #8fa7ff;
-    font-size: 0.8rem; font-weight: 700; cursor: pointer; letter-spacing: 1px;
-    z-index: 5; transition: all 0.3s;
+    position: absolute;
+    top: 16px; right: 16px;
+    padding: 8px 18px;
+    border-radius: 20px;
+    background: rgba(102,126,234,0.2);
+    border: 1px solid rgba(143,167,255,0.4);
+    color: #8fa7ff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 2px;
+    z-index: 5;
+    transition: all 0.3s;
+    font-family: inherit;
   }
   .replay-btn:hover { background: rgba(102,126,234,0.4); color: #fff; }
 
+  /* ===== FINAL ===== */
   .final { align-items: center; justify-content: center; text-align: center; }
   .final .quote {
     font-size: clamp(1.8rem, 4vw, 3.4rem);
@@ -195,7 +253,7 @@
     -webkit-text-fill-color: transparent;
     margin-bottom: 40px; line-height: 1.35; font-weight: 900; max-width: 1100px;
   }
-  .final .thanks { font-size: 1.6rem; color: #fff; font-weight: 700; margin-bottom: 25px; }
+  .final .thanks { font-size: 1.6rem; color: #fff; font-weight: 700; margin-bottom: 25px; letter-spacing: 1px; }
   .final .qa {
     display: inline-block; padding: 16px 45px; border-radius: 50px;
     background: linear-gradient(135deg, rgba(102,126,234,0.25), rgba(118,75,162,0.25));
@@ -203,6 +261,7 @@
     color: #8fa7ff; font-size: 1.3rem; font-weight: 800; letter-spacing: 6px;
   }
 
+  /* ===== NAV ===== */
   .nav {
     position: fixed; bottom: 35px; right: 45px;
     display: flex; gap: 14px; z-index: 50;
@@ -210,15 +269,18 @@
   .nav button {
     width: 62px; height: 62px; border-radius: 50%;
     border: 1px solid rgba(143,167,255,0.4);
-    background: rgba(15,22,38,0.85); color: #8fa7ff;
-    font-size: 1.4rem; cursor: pointer;
+    background: rgba(15,22,38,0.85);
+    color: #8fa7ff; font-size: 1.4rem; cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
     backdrop-filter: blur(12px);
-    display: flex; align-items: center; justify-content: center; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; user-select: none;
   }
   .nav button:hover:not(:disabled) {
-    background: rgba(102,126,234,0.35); color: #fff; transform: scale(1.1);
+    background: rgba(102,126,234,0.35); color: #fff;
+    transform: scale(1.1); box-shadow: 0 10px 30px rgba(102,126,234,0.5);
   }
+  .nav button:active:not(:disabled) { transform: scale(0.95); }
   .nav button:disabled { opacity: 0.25; cursor: not-allowed; }
 
   .progress {
@@ -229,143 +291,158 @@
   }
   .progress-bar { width: 220px; height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
   .progress-fill {
-    height: 100%; background: linear-gradient(90deg, #667eea, #f9d423, #764ba2);
-    width: 10%; border-radius: 3px; transition: width 0.6s ease;
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #f9d423, #764ba2);
+    width: 10%; border-radius: 3px;
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0 12px rgba(102,126,234,0.7);
+  }
+
+  @media (max-width: 900px) {
+    .slide { padding: 50px 20px; }
+    .slide-num { top: 20px; right: 20px; }
+    .team-grid { grid-template-columns: 1fr; gap: 12px; }
+    .member { padding: 20px 16px; }
+    .member .avatar { width: 66px; height: 66px; font-size: 1.5rem; margin-bottom: 12px; }
+    .timeline::before { left: 60px; }
+    .timeline-year { width: 50px; font-size: 1.2rem; }
+    .timeline-content { padding: 14px 18px; font-size: 0.9rem; }
+    .progress { bottom: 20px; left: 15px; }
+    .progress-bar { width: 90px; }
+    .progress { font-size: 0.8rem; }
+    .nav { bottom: 20px; right: 15px; }
+    .nav button { width: 46px; height: 46px; font-size: 1rem; }
+    .card { padding: 12px 16px; font-size: 0.88rem; gap: 12px; }
+    .card .badge { width: 36px; height: 36px; font-size: 0.8rem; }
+    h2.slide-title { margin-bottom: 18px; }
   }
 </style>
 </head>
 <body>
 
 <div id="startScreen">
-  <div class="tag">TIN HOC 9 • CHU DE D • BAI 4</div>
-  <h1>Mot so hanh vi vi phap luat,<br>trai dao duc, thieu van hoa<br>trong moi truong so</h1>
-  <p class="subtitle">Su dung dich vu Internet dung luat — Trang bi kien thuc so de tro thanh cong dan so van minh.</p>
-  <button class="start-btn" id="startBtn">BAT DAU THUYET TRINH →</button>
+  <div class="tag">TIN HỌC 9 • CHỦ ĐỀ D • BÀI 4</div>
+  <h1>Một số hành vi vi phạm pháp luật,<br>trái đạo đức, thiếu văn hoá<br>trong môi trường số</h1>
+  <p class="subtitle">Sử dụng dịch vụ Internet đúng luật — Trang bị kiến thức số để trở thành công dân số văn minh.</p>
+  <button class="start-btn" id="startBtn">BẮT ĐẦU THUYẾT TRÌNH →</button>
 </div>
 
 <div id="presentation">
   <div id="slides">
 
-    <!-- SLIDE 1 -->
-    <div class="slide show" data-index="0">
+    <div class="slide" data-index="0">
       <span class="slide-num">01 / 10</span>
       <div class="content" style="justify-content:center; text-align:center; align-items:center;">
-        <span class="slide-tag" style="align-self:center;">CHU DE D — BAI 4</span>
+        <span class="slide-tag" style="align-self:center;">CHỦ ĐỀ D — BÀI 4</span>
         <h2 class="slide-title" style="font-size:clamp(1.6rem,3vw,2.9rem); text-align:center; max-width:1200px;">
-          MOT SO HANH VI VI PHAM PHAP LUAT,<br>TRAI DAO DUC, THIEU VAN HOA<br>TRONG MOI TRUONG SO
+          MỘT SỐ HÀNH VI VI PHẠM PHÁP LUẬT,<br>TRÁI ĐẠO ĐỨC, THIẾU VĂN HOÁ<br>TRONG MÔI TRƯỜNG SỐ
         </h2>
         <p style="color:#a0a8c0; font-size:1.15rem; margin-top:25px; letter-spacing:1px;">
-          Mon Tin hoc 9 — Su dung dich vu Internet dung luat
+          Môn Tin học 9 — Sử dụng dịch vụ Internet đúng luật
         </p>
       </div>
     </div>
 
-    <!-- SLIDE 2 -->
     <div class="slide" data-index="1">
       <span class="slide-num">02 / 10</span>
       <div class="content">
-        <span class="slide-tag">THANH VIEN NHOM BAO CAO</span>
-        <h2 class="slide-title">Nhom cua chung em</h2>
+        <span class="slide-tag">THÀNH VIÊN NHÓM BÁO CÁO</span>
+        <h2 class="slide-title">Nhóm của chúng em</h2>
         <div class="team-grid">
-          <div class="member"><div class="name">Huynh Nghia</div><div class="role">TRUONG NHOM</div></div>
-          <div class="member"><div class="name">Hoang My</div><div class="role">THANH VIEN</div></div>
-          <div class="member"><div class="name">Bao Ngan</div><div class="role">THANH VIEN</div></div>
-          <div class="member"><div class="name">Ngoc Han</div><div class="role">THANH VIEN</div></div>
+          <div class="member"><div class="avatar">HN</div><div class="name">Huỳnh Nghĩa</div><div class="role">TRƯỞNG NHÓM</div></div>
+          <div class="member"><div class="avatar">HM</div><div class="name">Hoàng My</div><div class="role">THÀNH VIÊN</div></div>
+          <div class="member"><div class="avatar">BN</div><div class="name">Bảo Ngân</div><div class="role">THÀNH VIÊN</div></div>
+          <div class="member"><div class="avatar">NH</div><div class="name">Ngọc Hân</div><div class="role">THÀNH VIÊN</div></div>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 3 -->
     <div class="slide" data-index="2">
       <span class="slide-num">03 / 10</span>
       <div class="content">
-        <span class="slide-tag">HANH VI PHO BIEN</span>
-        <h2 class="slide-title">Cac hanh vi vi pham pho bien<br>trong moi truong so</h2>
+        <span class="slide-tag">HÀNH VI PHỔ BIẾN</span>
+        <h2 class="slide-title">Các hành vi vi phạm phổ biến<br>trong môi trường số</h2>
         <div class="card-list">
-          <div class="card"> Viet, dang, chia se noi dung <b style="color:#f9d423">&nbsp;sai su that</b>, khong phu hop.</div>
-          <div class="card"> Lam lo thong tin ca nhan, to chuc gay anh huong xau.</div>
-          <div class="card"> Gui <b style="color:#f9d423">&nbsp;thu rac</b>, tin nhan rac, spam quay roi.</div>
-          <div class="card"> Su dung du lieu cua nguoi khac <b style="color:#f9d423">&nbsp;khong xin phep</b>.</div>
-          <div class="card"> Su dung phan mem <b style="color:#f9d423">&nbsp;khong co ban quyen</b>.</div>
+          <div class="card"><span class="badge">01</span><span>Viết, đăng, chia sẻ nội dung <b style="color:#f9d423">sai sự thật</b>, không phù hợp.</span></div>
+          <div class="card"><span class="badge">02</span><span>Làm lộ thông tin cá nhân, tổ chức gây ảnh hưởng xấu.</span></div>
+          <div class="card"><span class="badge">03</span><span>Gửi <b style="color:#f9d423">thư rác</b>, tin nhắn rác, spam quấy rối.</span></div>
+          <div class="card"><span class="badge">04</span><span>Sử dụng dữ liệu của người khác <b style="color:#f9d423">không xin phép</b>.</span></div>
+          <div class="card"><span class="badge">05</span><span>Sử dụng phần mềm <b style="color:#f9d423">không có bản quyền</b>.</span></div>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 4 -->
     <div class="slide" data-index="3">
       <span class="slide-num">04 / 10</span>
       <div class="content">
-        <span class="slide-tag">CANH BAO NGUY HIEM</span>
-        <h2 class="slide-title">Bat nat, lua dao<br>va thieu van hoa so</h2>
+        <span class="slide-tag">CẢNH BÁO NGUY HIỂM</span>
+        <h2 class="slide-title">Bắt nạt, lừa đảo<br>và thiếu văn hoá số</h2>
         <div class="card-list">
-          <div class="card"><b>Bat nat qua mang (Cyberbullying):</b> de doa, boi nho, co lap nan nhan tren khong gian mang.</div>
-          <div class="card"><b>Lua dao qua mang (Scam):</b> gia danh, du do chuyen tien, danh cap tai khoan.</div>
-          <div class="card"><b>Ung xu thieu van hoa:</b> chui boi, xuc pham, kich dong bao luc trong binh luan.</div>
+          <div class="card"><span class="badge">01</span><span><b>Bắt nạt qua mạng (Cyberbullying):</b> đe doạ, bôi nhọ, cô lập nạn nhân trên không gian mạng.</span></div>
+          <div class="card"><span class="badge">02</span><span><b>Lừa đảo qua mạng (Scam):</b> giả danh, dụ dỗ chuyển tiền, đánh cắp tài khoản.</span></div>
+          <div class="card"><span class="badge">03</span><span><b>Ứng xử thiếu văn hoá:</b> chửi bới, xúc phạm, kích động bạo lực trong bình luận.</span></div>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 5 -->
     <div class="slide" data-index="4">
       <span class="slide-num">05 / 10</span>
       <div class="content">
-        <span class="slide-tag">TAM QUAN TRONG</span>
-        <h2 class="slide-title">Vi sao phai su dung Internet dung luat?</h2>
+        <span class="slide-tag">TẦM QUAN TRỌNG</span>
+        <h2 class="slide-title">Vì sao phải sử dụng Internet đúng luật?</h2>
         <div class="card-list">
-          <div class="card"><b>Lop 7:</b> Da biet chi ra vi du truy cap khong hop le vao cac nguon thong tin.</div>
-          <div class="card"><b>Lop 8:</b> Da biet cach dam bao san pham so do minh tao ra the hien dao duc, van hoa va khong vi pham phap luat.</div>
-          <div class="card">Nguoi su dung Internet, mang xa hoi <b style="color:#f9d423">&nbsp;phai trang bi kien thuc can thiet</b> de su dung khong gian mang co trach nhiem.</div>
+          <div class="card"><span class="badge">01</span><span><b>Lớp 7:</b> Đã biết chỉ ra ví dụ truy cập không hợp lệ vào các nguồn thông tin.</span></div>
+          <div class="card"><span class="badge">02</span><span><b>Lớp 8:</b> Đã biết cách bảo đảm sản phẩm số do mình tạo ra thể hiện đạo đức, văn hoá và không vi phạm pháp luật.</span></div>
+          <div class="card"><span class="badge">03</span><span>Người dùng Internet, mạng xã hội <b style="color:#f9d423">phải trang bị kiến thức cần thiết</b> để sử dụng không gian mạng có trách nhiệm.</span></div>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 6 -->
     <div class="slide" data-index="5">
       <span class="slide-num">06 / 10</span>
       <div class="content">
-        <span class="slide-tag">CAN CU PHAP LY</span>
-        <h2 class="slide-title">Hanh lang phap ly Viet Nam (2006 – 2013)</h2>
+        <span class="slide-tag">CĂN CỨ PHÁP LÝ</span>
+        <h2 class="slide-title">Hành lang pháp lý Việt Nam (2006 – 2013)</h2>
         <div class="timeline">
           <div class="timeline-item">
             <div class="timeline-year">2006</div>
             <div class="timeline-content">
-              <b>Luat Cong nghe thong tin</b> so <b>67/2006/QH11</b> do Quoc hoi ban hanh — quy dinh chi tiet ve quyen va trach nhiem cua to chuc, ca nhan tham gia ung dung va phat trien CNTT, cung nhu cac hanh vi bi nghiem cam.
+              <b>Luật Công nghệ thông tin</b> số <b>67/2006/QH11</b> do Quốc hội ban hành — quy định chi tiết về quyền và trách nhiệm của tổ chức, cá nhân tham gia ứng dụng và phát triển CNTT, cũng như các hành vi bị nghiêm cấm.
             </div>
           </div>
           <div class="timeline-item">
             <div class="timeline-year">2013</div>
             <div class="timeline-content">
-              <b>Nghi dinh so 72/2013/NĐ-CP</b> do Chinh phu ban hanh — quy dinh chi tiet viec quan li, cung cap, su dung dich vu Internet, thong tin tren mang, tro choi dien tu tren mang; dam bao an toan thong tin va an ninh thong tin.
+              <b>Nghị định số 72/2013/NĐ-CP</b> do Chính phủ ban hành — quy định chi tiết việc quản lí, cung cấp, sử dụng dịch vụ Internet, thông tin trên mạng, trò chơi điện tử trên mạng; bảo đảm an toàn thông tin và an ninh thông tin.
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 7 -->
     <div class="slide" data-index="6">
       <span class="slide-num">07 / 10</span>
       <div class="content">
-        <span class="slide-tag">LUAT AN NINH MANG 2018</span>
-        <h2 class="slide-title">Luat An ninh mang &amp;<br>cac hanh vi can tranh</h2>
+        <span class="slide-tag">LUẬT AN NINH MẠNG 2018</span>
+        <h2 class="slide-title">Luật An ninh mạng &amp;<br>các hành vi cần tránh</h2>
         <div class="card-list">
-          <div class="card"><b>Nam 2018, Quoc hoi ban hanh Luat An ninh mang</b> — quy dinh ve hoat dong bao ve an ninh quoc gia va dam bao trat tu, an toan xa hoi tren khong gian mang.</div>
-          <div class="card"><b>Khong xem xet ki ma da chia se, phat tan thong tin chua kiem chung</b> — hanh vi vi pham phap luat ve an ninh quoc gia, trat tu xa hoi.</div>
-          <div class="card"><b>Binh luan sai trai, chi tiet bia dat</b> — gay hoang mang du luan, anh huong nghiem trong den xa hoi.</div>
+          <div class="card"><span class="badge">01</span><span><b>Năm 2018, Quốc hội ban hành Luật An ninh mạng</b> — quy định về hoạt động bảo vệ an ninh quốc gia và bảo đảm trật tự, an toàn xã hội trên không gian mạng.</span></div>
+          <div class="card"><span class="badge">02</span><span><b>Không xem xét kĩ mà đã chia sẻ, phát tán thông tin chưa kiểm chứng</b> — hành vi vi phạm pháp luật về an ninh quốc gia, trật tự xã hội.</span></div>
+          <div class="card"><span class="badge">03</span><span><b>Bình luận sai trái, chi tiết bịa đặt</b> — gây hoang mang dư luận, ảnh hưởng nghiêm trọng đến xã hội.</span></div>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 8 -->
     <div class="slide" data-index="7">
       <span class="slide-num">08 / 10</span>
       <div class="content" style="justify-content:center; align-items:center;">
-        <span class="slide-tag" style="align-self:center;">MINH HOA TRUC QUAN</span>
+        <span class="slide-tag" style="align-self:center;">MINH HOẠ TRỰC QUAN</span>
         <h2 class="slide-title" style="text-align:center; margin-bottom:20px;">
-          Kich ban lua dao truc tuyen dien hinh
+          Kịch bản lừa đảo trực tuyến điển hình
         </h2>
+
         <div class="scam-scene">
-          <button class="replay-btn" id="replayBtn">PHAT LAI</button>
+          <button class="replay-btn" id="replayBtn">PHÁT LẠI</button>
           <svg class="scam-svg" viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="coinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -373,84 +450,159 @@
                 <stop offset="50%" stop-color="#f9d423"/>
                 <stop offset="100%" stop-color="#ff9a00"/>
               </linearGradient>
+              <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="4" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <radialGradient id="puffGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ff6b6b" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#ff6b6b" stop-opacity="0"/>
+              </radialGradient>
             </defs>
-            <text x="250" y="55" text-anchor="middle" class="svg-label" fill="#8fa7ff">NAN NHAN</text>
-            <text x="750" y="55" text-anchor="middle" class="svg-label" fill="#ff6b6b">KE LUA DAO</text>
+
+            <text x="250" y="55" text-anchor="middle" class="svg-label" fill="#8fa7ff">NẠN NHÂN</text>
+            <text x="750" y="55" text-anchor="middle" class="svg-label" fill="#ff6b6b">KẺ LỪA ĐẢO</text>
+
             <line x1="60" y1="430" x2="940" y2="430" stroke="#3a4463" stroke-width="2" stroke-dasharray="10 8" opacity="0.6"/>
-            <!-- Victim -->
+
             <g transform="translate(250, 280)">
               <g id="victim">
-                <circle cx="0" cy="0" r="28" fill="rgba(143,167,255,0.08)" stroke="#8fa7ff" stroke-width="3"/>
-                <circle cx="-9" cy="-5" r="3" fill="#8fa7ff"/>
-                <circle cx="9" cy="-5" r="3" fill="#8fa7ff"/>
-                <path d="M-8 10 Q0 16 8 10" stroke="#8fa7ff" fill="none" stroke-width="2.5" stroke-linecap="round"/>
+                <g id="victim-head">
+                  <circle cx="0" cy="0" r="28" fill="rgba(143,167,255,0.08)" stroke="#8fa7ff" stroke-width="3"/>
+                  <circle cx="-9" cy="-5" r="3" fill="#8fa7ff"/>
+                  <circle cx="9" cy="-5" r="3" fill="#8fa7ff"/>
+                  <path d="M-8 10 Q0 16 8 10" stroke="#8fa7ff" fill="none" stroke-width="2.5" stroke-linecap="round"/>
+                </g>
                 <line x1="0" y1="28" x2="0" y2="105" stroke="#8fa7ff" stroke-width="3.5" stroke-linecap="round"/>
-                <line x1="0" y1="58" x2="-42" y2="90" stroke="#8fa7ff" stroke-width="3.5" stroke-linecap="round"/>
-                <g transform="translate(42, 90)">
-                  <rect x="-9" y="-14" width="18" height="30" rx="3" fill="#0a0e27" stroke="#8fa7ff" stroke-width="2"/>
+                <g id="victim-arm-l" transform="translate(0, 58)">
+                  <line x1="0" y1="0" x2="-42" y2="32" stroke="#8fa7ff" stroke-width="3.5" stroke-linecap="round"/>
+                </g>
+                <g id="victim-arm-r" transform="translate(0, 58)">
+                  <line x1="0" y1="0" x2="42" y2="32" stroke="#8fa7ff" stroke-width="3.5" stroke-linecap="round"/>
+                  <g transform="translate(42, 32)">
+                    <rect x="-9" y="-14" width="18" height="30" rx="3" fill="#0a0e27" stroke="#8fa7ff" stroke-width="2"/>
+                    <rect x="-6" y="-10" width="12" height="20" fill="#8fa7ff" opacity="0.3"/>
+                  </g>
                 </g>
                 <line x1="0" y1="105" x2="-30" y2="150" stroke="#8fa7ff" stroke-width="3.5" stroke-linecap="round"/>
                 <line x1="0" y1="105" x2="30" y2="150" stroke="#8fa7ff" stroke-width="3.5" stroke-linecap="round"/>
               </g>
             </g>
-            <!-- Scammer -->
+
             <g transform="translate(750, 280)">
               <g id="scammer">
-                <circle cx="0" cy="0" r="28" fill="rgba(255,107,107,0.08)" stroke="#ff6b6b" stroke-width="3"/>
-                <rect x="-18" y="-9" width="16" height="10" rx="2" fill="#ff6b6b"/>
-                <rect x="2" y="-9" width="16" height="10" rx="2" fill="#ff6b6b"/>
-                <path d="M-9 12 Q0 20 9 12" stroke="#ff6b6b" fill="none" stroke-width="2.5" stroke-linecap="round"/>
+                <g id="scammer-head">
+                  <circle cx="0" cy="0" r="28" fill="rgba(255,107,107,0.08)" stroke="#ff6b6b" stroke-width="3"/>
+                  <rect x="-18" y="-9" width="16" height="10" rx="2" fill="#ff6b6b"/>
+                  <rect x="2" y="-9" width="16" height="10" rx="2" fill="#ff6b6b"/>
+                  <line x1="-2" y1="-4" x2="2" y2="-4" stroke="#ff6b6b" stroke-width="2"/>
+                  <path d="M-9 12 Q0 20 9 12" stroke="#ff6b6b" fill="none" stroke-width="2.5" stroke-linecap="round"/>
+                </g>
                 <line x1="0" y1="28" x2="0" y2="105" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round"/>
-                <line x1="0" y1="58" x2="-42" y2="90" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round"/>
-                <line x1="0" y1="58" x2="42" y2="90" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round"/>
+                <g id="scammer-arm-l" transform="translate(0, 58)">
+                  <line x1="0" y1="0" x2="-42" y2="32" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round"/>
+                </g>
+                <g id="scammer-arm-r" transform="translate(0, 58)">
+                  <line x1="0" y1="0" x2="42" y2="32" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round"/>
+                </g>
+                <g transform="translate(35, 92)">
+                  <rect x="-3" y="-2" width="46" height="30" rx="3" fill="#1a1f3a" stroke="#ff6b6b" stroke-width="2"/>
+                  <rect x="3" y="3" width="34" height="20" fill="#ff6b6b" opacity="0.25"/>
+                  <text x="20" y="18" text-anchor="middle" font-size="10" fill="#ff6b6b" font-weight="700" font-family="monospace">$ $ $</text>
+                </g>
                 <line x1="0" y1="105" x2="-30" y2="150" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round"/>
                 <line x1="0" y1="105" x2="30" y2="150" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round"/>
               </g>
             </g>
-            <!-- Bubble -->
+
             <g id="bubble" opacity="0" transform="translate(750, 150)">
-              <rect x="-180" y="-58" width="360" height="100" rx="18" fill="#141a30" stroke="#f9d423" stroke-width="2.5"/>
-              <text x="0" y="-22" text-anchor="middle" class="svg-bubble-text" font-size="20" fill="#f9d423">TRUNG THUONG 50 TRIEU!</text>
-              <text x="0" y="8" text-anchor="middle" class="svg-bubble-text" font-size="15" fill="#8fa7ff">Chuyen phi 2 trieu de nhan thuong</text>
+              <rect x="-180" y="-58" width="360" height="100" rx="18" fill="#141a30" stroke="#f9d423" stroke-width="2.5" filter="url(#softGlow)"/>
+              <path d="M-25 42 L0 70 L25 42 Z" fill="#141a30" stroke="#f9d423" stroke-width="2.5"/>
+              <line x1="-25" y1="42" x2="25" y2="42" stroke="#141a30" stroke-width="3"/>
+              <text x="0" y="-22" text-anchor="middle" class="svg-bubble-text" font-size="20" fill="#f9d423">
+                TRÚNG THƯỞNG 50 TRIỆU!
+              </text>
+              <text x="0" y="8" text-anchor="middle" class="svg-bubble-text" font-size="15" fill="#8fa7ff">
+                Chuyển phí 2 triệu để nhận thưởng
+              </text>
+              <text x="0" y="30" text-anchor="middle" class="svg-bubble-text" font-size="12" fill="#6a7ba0">
+                (Bấm vào link bên dưới ngay!)
+              </text>
             </g>
-            <!-- Shock & Text -->
+
+            <g transform="translate(345, 330)"><g class="coin" opacity="0">
+              <circle r="14" fill="url(#coinGrad)" stroke="#ff9a00" stroke-width="2"/>
+              <text text-anchor="middle" y="5" font-size="16" fill="#7a4a00" font-weight="900" font-family="sans-serif">$</text>
+            </g></g>
+            <g transform="translate(350, 355)"><g class="coin" opacity="0">
+              <circle r="12" fill="url(#coinGrad)" stroke="#ff9a00" stroke-width="2"/>
+              <text text-anchor="middle" y="4" font-size="14" fill="#7a4a00" font-weight="900" font-family="sans-serif">$</text>
+            </g></g>
+            <g transform="translate(340, 375)"><g class="coin" opacity="0">
+              <circle r="14" fill="url(#coinGrad)" stroke="#ff9a00" stroke-width="2"/>
+              <text text-anchor="middle" y="5" font-size="16" fill="#7a4a00" font-weight="900" font-family="sans-serif">$</text>
+            </g></g>
+            <g transform="translate(360, 345)"><g class="coin" opacity="0">
+              <circle r="11" fill="url(#coinGrad)" stroke="#ff9a00" stroke-width="2"/>
+              <text text-anchor="middle" y="4" font-size="13" fill="#7a4a00" font-weight="900" font-family="sans-serif">$</text>
+            </g></g>
+            <g transform="translate(330, 360)"><g class="coin" opacity="0">
+              <circle r="13" fill="url(#coinGrad)" stroke="#ff9a00" stroke-width="2"/>
+              <text text-anchor="middle" y="5" font-size="15" fill="#7a4a00" font-weight="900" font-family="sans-serif">$</text>
+            </g></g>
+
+            <g id="puffs" transform="translate(750, 300)" opacity="0">
+              <circle class="puff" r="10" fill="url(#puffGrad)" data-dx="80"  data-dy="-90"/>
+              <circle class="puff" r="14" fill="url(#puffGrad)" data-dx="-85" data-dy="-60"/>
+              <circle class="puff" r="12" fill="url(#puffGrad)" data-dx="100" data-dy="10"/>
+              <circle class="puff" r="16" fill="url(#puffGrad)" data-dx="-70" data-dy="50"/>
+              <circle class="puff" r="11" fill="url(#puffGrad)" data-dx="60"  data-dy="-110"/>
+              <circle class="puff" r="13" fill="url(#puffGrad)" data-dx="-40" data-dy="-110"/>
+              <circle class="puff" r="15" fill="url(#puffGrad)" data-dx="110" data-dy="-40"/>
+              <circle class="puff" r="10" fill="url(#puffGrad)" data-dx="-110" data-dy="-10"/>
+            </g>
+
             <g id="shock" opacity="0" transform="translate(250, 200)">
-              <text text-anchor="middle" font-size="90" font-weight="900" fill="#ff4e50" font-family="sans-serif">!</text>
+              <text text-anchor="middle" font-size="90" font-weight="900" fill="#ff4e50" font-family="sans-serif"
+                    style="filter:drop-shadow(0 0 15px #ff4e50)">!</text>
+              <text x="55" y="-15" text-anchor="middle" font-size="55" font-weight="900" fill="#ff4e50" font-family="sans-serif"
+                    style="filter:drop-shadow(0 0 10px #ff4e50)">!</text>
             </g>
+
             <g id="scam-text" opacity="0" transform="translate(500, 200)">
-              <rect x="-230" y="-50" width="460" height="100" rx="20" fill="rgba(255,78,80,0.15)" stroke="#ff4e50" stroke-width="3"/>
-              <text text-anchor="middle" y="15" font-size="52" font-weight="900" fill="#ff4e50" font-family="sans-serif">DA BI LUA!</text>
+              <rect x="-230" y="-50" width="460" height="100" rx="20" fill="rgba(255,78,80,0.15)" stroke="#ff4e50" stroke-width="3" filter="url(#softGlow)"/>
+              <text text-anchor="middle" y="15" font-size="52" font-weight="900" fill="#ff4e50" font-family="sans-serif" letter-spacing="4"
+                    style="filter:drop-shadow(0 0 20px #ff4e50)">ĐÃ BỊ LỪA!</text>
             </g>
           </svg>
+
           <div class="scene-caption">
-            <b>Canh bao:</b> Tuyet doi khong chuyen tien, khong cung cap thong tin ca nhan cho bat ky ai qua tin nhan trung thuong.
+            <b>Cảnh báo:</b> Tuyệt đối không chuyển tiền, không cung cấp thông tin cá nhân cho bất kỳ ai qua tin nhắn "trúng thưởng".
           </div>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 9 -->
     <div class="slide" data-index="8">
       <span class="slide-num">09 / 10</span>
       <div class="content">
-        <span class="slide-tag">TRACH NHIEM CONG DAN SO</span>
-        <h2 class="slide-title">Quyen nhan than, tai san<br>&amp; trach nhiem cua cong dan</h2>
+        <span class="slide-tag">TRÁCH NHIỆM CÔNG DÂN SỐ</span>
+        <h2 class="slide-title">Quyền nhân thân, tài sản<br>&amp; trách nhiệm của công dân</h2>
         <div class="card-list">
-          <div class="card"><b>Vi pham quyen nhan than, uy tin:</b> dang hinh anh, dia chi nha, bien so xe… cua nguoi khac khi chua co su dong y.</div>
-          <div class="card"><b>Vi pham so huu tri tue, tai san:</b> sao chep, phat tan noi dung co ban quyen khong xin phep; danh bac truc tuyen…</div>
-          <div class="card"><b>Trach nhiem:</b> chu dong trang bi kien thuc, <b style="color:#f9d423">&nbsp;kiem chung thong tin truoc khi chia se</b>, ung xu van minh tren khong gian mang.</div>
+          <div class="card"><span class="badge">01</span><span><b>Vi phạm quyền nhân thân, uy tín:</b> đăng hình ảnh, địa chỉ nhà, biển số xe… của người khác khi chưa có sự đồng ý.</span></div>
+          <div class="card"><span class="badge">02</span><span><b>Vi phạm sở hữu trí tuệ, tài sản:</b> sao chép, phát tán nội dung có bản quyền không xin phép; đánh bạc trực tuyến…</span></div>
+          <div class="card"><span class="badge">03</span><span><b>Trách nhiệm:</b> chủ động trang bị kiến thức, <b style="color:#f9d423">kiểm chứng thông tin trước khi chia sẻ</b>, ứng xử văn minh trên không gian mạng.</span></div>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 10 -->
     <div class="slide final" data-index="9">
       <span class="slide-num">10 / 10</span>
       <div class="content" style="align-items:center; justify-content:center; text-align:center;">
         <div class="quote">
-          "Hay la nguoi su dung Internet van minh,<br>an toan va tuan thu phap luat!"
+          "Hãy là người sử dụng Internet văn minh,<br>an toàn và tuân thủ pháp luật!"
         </div>
-        <div class="thanks">Cam on thay co va cac ban da chu y lang nghe</div>
+        <div class="thanks">Cảm ơn thầy cô và các bạn đã chú ý lắng nghe</div>
         <div class="qa">Q &amp; A</div>
       </div>
     </div>
@@ -459,8 +611,8 @@
 </div>
 
 <div class="nav" id="nav" style="display:none;">
-  <button id="prevBtn" title="Quay lai">←</button>
-  <button id="nextBtn" title="Tiep theo">→</button>
+  <button id="prevBtn" title="Quay lại (←)">←</button>
+  <button id="nextBtn" title="Tiếp theo (→)">→</button>
 </div>
 <div class="progress" id="progress" style="display:none;">
   <span id="progressText">1 / 10</span>
@@ -469,17 +621,17 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
-const slides = Array.from(document.querySelectorAll('.slide'));
-const startScreen = document.getElementById('startScreen');
-const startBtn = document.getElementById('startBtn');
+const slides       = Array.from(document.querySelectorAll('.slide'));
+const startScreen  = document.getElementById('startScreen');
+const startBtn     = document.getElementById('startBtn');
 const presentation = document.getElementById('presentation');
-const navEl = document.getElementById('nav');
-const progressEl = document.getElementById('progress');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
+const navEl        = document.getElementById('nav');
+const progressEl   = document.getElementById('progress');
+const prevBtn      = document.getElementById('prevBtn');
+const nextBtn      = document.getElementById('nextBtn');
 const progressText = document.getElementById('progressText');
 const progressFill = document.getElementById('progressFill');
-const replayBtn = document.getElementById('replayBtn');
+const replayBtn    = document.getElementById('replayBtn');
 
 let current = 0;
 let isAnimating = false;
@@ -494,103 +646,258 @@ function updateUI() {
 
 function playScamScene() {
   if (scamTl) { scamTl.kill(); scamTl = null; }
-  gsap.set('#bubble', { opacity: 0, y: -20, scale: 0.6 });
-  gsap.set('#shock', { opacity: 0, scale: 0.3 });
-  gsap.set('#scam-text', { opacity: 0, scale: 0.5 });
 
-  scamTl = gsap.timeline();
-  scamTl.to('#bubble', { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'back.out(1.7)' })
-        .to('#shock', { opacity: 1, scale: 1, duration: 0.4, ease: 'elastic.out(1, 0.5)' }, '+=0.8')
-        .to('#scam-text', { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)' }, '+=0.3');
+  gsap.set('#victim-head',     { rotation: 0, transformOrigin: '50% 90%' });
+  gsap.set('#victim-arm-r',    { rotation: 0, transformOrigin: '0% 0%' });
+  gsap.set('#scammer',         { x: 0, y: 0, rotation: 0, opacity: 1, scale: 1 });
+  gsap.set('#scammer-arm-r',   { rotation: 0, transformOrigin: '0% 0%' });
+  gsap.set('#scammer-arm-l',   { rotation: 0, transformOrigin: '0% 0%' });
+  gsap.set('#bubble',          { opacity: 0, y: -30, scale: 0.6, transformOrigin: '50% 100%' });
+  gsap.set('.coin',            { x: 0, y: 0, opacity: 0, scale: 1 });
+  gsap.set('#shock',           { opacity: 0, scale: 0.3, transformOrigin: '50% 50%' });
+  gsap.set('#scam-text',       { opacity: 0, scale: 0.5, transformOrigin: '50% 50%' });
+  gsap.set('#puffs',           { opacity: 0 });
+  gsap.set('.puff',            { x: 0, y: 0, scale: 1, opacity: 1 });
+
+  const tl = gsap.timeline({ repeat: -1, repeatDelay: 2 });
+  scamTl = tl;
+
+  tl.to('#scammer-arm-r', { rotation: 18, duration: 0.1, yoyo: true, repeat: 7,
+      transformOrigin: '0% 0%', ease: 'power1.inOut' });
+
+  tl.to('#bubble', { opacity: 1, y: 0, scale: 1, duration: 0.55,
+      ease: 'back.out(2.2)' }, '+=0.2');
+  tl.to({}, { duration: 2.4 });
+  tl.to('#bubble', { opacity: 0, y: -30, scale: 0.6, duration: 0.4,
+      ease: 'power2.in' });
+
+  tl.to('#victim-head', { rotation: 14, duration: 0.45, ease: 'power2.out' }, '-=0.3');
+
+  tl.to('.coin', { opacity: 1, duration: 0.2, stagger: 0.08 }, '+=0.2');
+  tl.to('.coin', {
+      x: 400, y: -170, duration: 1.0, ease: 'power2.inOut', stagger: 0.1
+    }, '<0.15');
+  tl.to('.coin', { opacity: 0, scale: 0.4, duration: 0.35, stagger: 0.08 }, '-=0.45');
+
+  tl.to('#scammer-arm-l', { rotation: -75, duration: 0.28, yoyo: true, repeat: 1,
+      transformOrigin: '0% 0%', ease: 'power2.out' }, '+=0.1');
+  tl.to('#scammer-arm-r', { rotation: 75, duration: 0.28, yoyo: true, repeat: 1,
+      transformOrigin: '0% 0%', ease: 'power2.out' }, '<');
+
+  tl.to('#puffs', { opacity: 1, duration: 0.15 }, '+=0.1');
+  tl.to('.puff', {
+      x: (i) => parseFloat(document.querySelectorAll('.puff')[i].dataset.dx),
+      y: (i) => parseFloat(document.querySelectorAll('.puff')[i].dataset.dy),
+      scale: 3, opacity: 0, duration: 0.9, ease: 'power2.out'
+    }, '<');
+  tl.to('#scammer', {
+      x: -30, y: -30, rotation: 720, scale: 0.2, opacity: 0,
+      duration: 0.7, ease: 'power2.in'
+    }, '<');
+  tl.to('#puffs', { opacity: 0, duration: 0.2 }, '-=0.2');
+
+  tl.to('#shock', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(3)' }, '-=0.3');
+  tl.to('#victim-head', { rotation: -14, duration: 0.25, yoyo: true, repeat: 5,
+      ease: 'power1.inOut' });
+
+  tl.to('#scam-text', { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.8)' }, '-=0.6');
+  tl.to('#scam-text', { opacity: 0.4, duration: 0.35, yoyo: true, repeat: 5,
+      ease: 'power1.inOut' });
+  tl.to({}, { duration: 1.2 });
+
+  tl.to('#scam-text', { opacity: 0, scale: 0.5, duration: 0.4 });
+  tl.to('#shock',     { opacity: 0, scale: 0.3, duration: 0.3 }, '<');
+  tl.to('#victim-head', { rotation: 0, duration: 0.3 }, '<');
+  tl.to('#scammer', { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1,
+      duration: 0.55, ease: 'power2.out' }, '<');
 }
+
+function waveNext(from, to, done) {
+  const wave = document.createElement('div');
+  wave.style.cssText = `position:fixed; inset:-20%; z-index:200; pointer-events:none;
+    background: linear-gradient(90deg, transparent, #667eea, #f9d423, #764ba2, transparent);
+    transform: translateX(-120%) skewX(-15deg);`;
+  document.body.appendChild(wave);
+  gsap.to(wave, { x: '120%', duration: 0.9, ease: 'power2.inOut',
+    onComplete: () => wave.remove() });
+  gsap.to(from, { x: -80, opacity: 0, filter: 'blur(12px)', duration: 0.7, ease: 'power2.in' });
+  gsap.fromTo(to, { x: 100, opacity: 0, filter: 'blur(12px)' },
+    { x: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, delay: 0.35,
+      ease: 'power3.out', onComplete: done, clearProps: 'filter' });
+}
+
+function bounceDropNext(from, to, done) {
+  gsap.to(from, { y: -60, opacity: 0, duration: 0.4, ease: 'power2.in' });
+  gsap.fromTo(to,
+    { y: -window.innerHeight, opacity: 0 },
+    { y: 0, opacity: 1, duration: 1.1, ease: 'bounce.out', onComplete: done });
+}
+
+function lightningNext(from, to, done) {
+  const flash = document.createElement('div');
+  flash.style.cssText = `position:fixed; inset:0; z-index:200; background:#fff; opacity:0; pointer-events:none;`;
+  document.body.appendChild(flash);
+  const tl = gsap.timeline({ onComplete: () => flash.remove() });
+  tl.to(flash, { opacity: 0.9, duration: 0.06 })
+    .to(flash, { opacity: 0, duration: 0.06 })
+    .to(flash, { opacity: 0.6, duration: 0.05 })
+    .to(flash, { opacity: 0, duration: 0.06 });
+  gsap.to(from, { scale: 1.05, filter: 'blur(20px) brightness(2)', opacity: 0, duration: 0.55, ease: 'power2.in' });
+  gsap.fromTo(to, { opacity: 0, scale: 0.9 },
+    { opacity: 1, scale: 1, duration: 0.7, delay: 0.4, ease: 'power3.out',
+      onComplete: done, clearProps: 'filter' });
+}
+
+function shatterNext(from, to, done) {
+  gsap.to(from, { scale: 1.1, opacity: 0, rotation: 3, filter: 'blur(15px)', duration: 0.6, ease: 'power2.in' });
+  gsap.fromTo(to, { opacity: 0, scale: 0.85, rotation: -3 },
+    { opacity: 1, scale: 1, rotation: 0, duration: 0.75, delay: 0.35,
+      ease: 'back.out(1.3)', onComplete: done, clearProps: 'filter' });
+}
+
+function vortexNext(from, to, done) {
+  gsap.to(from, { scale: 0.05, rotation: 720, opacity: 0, filter: 'blur(20px)', duration: 0.85, ease: 'power2.in' });
+  gsap.fromTo(to, { scale: 3, opacity: 0, rotation: -180, filter: 'blur(20px)' },
+    { scale: 1, opacity: 1, rotation: 0, filter: 'blur(0px)',
+      duration: 0.9, delay: 0.35, ease: 'power3.out',
+      onComplete: done, clearProps: 'filter' });
+}
+
+function cameraZoomNext(from, to, done) {
+  gsap.to(from, { scale: 1.8, opacity: 0, filter: 'blur(25px)', duration: 0.65, ease: 'power2.in' });
+  gsap.fromTo(to, { scale: 0.5, opacity: 0, filter: 'blur(25px)' },
+    { scale: 1, opacity: 1, filter: 'blur(0px)',
+      duration: 0.85, delay: 0.3, ease: 'power3.out',
+      onComplete: done, clearProps: 'filter' });
+}
+
+function glitchNext(from, to, done) {
+  const tl = gsap.timeline();
+  for (let i = 0; i < 5; i++) {
+    tl.to(from, {
+      x: (Math.random() - 0.5) * 40,
+      y: (Math.random() - 0.5) * 20,
+      opacity: 0.4 + Math.random() * 0.4,
+      filter: `hue-rotate(${Math.random() * 360}deg) blur(${Math.random() * 8}px)`,
+      duration: 0.06
+    });
+  }
+  tl.to(from, { opacity: 0, scale: 1.1, duration: 0.3, ease: 'power2.in',
+    onComplete: () => { gsap.set(from, { x: 0, y: 0, filter: 'none' }); } });
+  gsap.fromTo(to, { opacity: 0, x: -60, filter: 'blur(10px)' },
+    { opacity: 1, x: 0, filter: 'blur(0px)', duration: 0.8, delay: 0.5,
+      ease: 'power3.out', onComplete: done, clearProps: 'filter' });
+}
+
+function pageFlipNext(from, to, done) {
+  gsap.set(from, { transformPerspective: 1500, transformOrigin: 'left center' });
+  gsap.set(to,   { transformPerspective: 1500, transformOrigin: 'right center' });
+  gsap.to(from, { rotationY: -100, opacity: 0, duration: 0.8, ease: 'power2.inOut',
+    onComplete: () => { from.classList.remove('show'); gsap.set(from, { clearProps: 'all' }); } });
+  gsap.fromTo(to, { rotationY: 100, opacity: 0 },
+    { rotationY: 0, opacity: 1, duration: 0.85, delay: 0.4, ease: 'power3.out',
+      onComplete: () => { gsap.set(to, { clearProps: 'all' }); done(); } });
+}
+
+function centerExpandNext(from, to, done) {
+  gsap.to(from, { scale: 0.6, opacity: 0, filter: 'blur(15px)', duration: 0.55, ease: 'power2.in' });
+  gsap.fromTo(to, { scale: 0.6, opacity: 0, filter: 'blur(15px)' },
+    { scale: 1, opacity: 1, filter: 'blur(0px)',
+      duration: 0.85, delay: 0.3, ease: 'power3.out',
+      onComplete: done, clearProps: 'filter' });
+}
+
+const NEXT_EFFECTS = [
+  waveNext, bounceDropNext, lightningNext, shatterNext, vortexNext,
+  cameraZoomNext, glitchNext, pageFlipNext, centerExpandNext
+];
+
+function reverseGo(fromEl, toEl, done) {
+  gsap.set(toEl, { xPercent: -100, opacity: 1, zIndex: 20 });
+  toEl.classList.add('show');
+  const tl = gsap.timeline({ onComplete: done });
+  tl.to(toEl,  { xPercent: 0, duration: 0.75, ease: 'power3.out' }, 0)
+    .to(fromEl, { xPercent: 100, opacity: 0, duration: 0.75, ease: 'power3.in',
+      onComplete: () => { fromEl.classList.remove('show'); gsap.set(fromEl, { clearProps: 'all' }); }
+    }, 0);
+}
+
+function goToSlide(index) {
+  if (isAnimating) return;
+  if (index < 0 || index >= slides.length) return;
+  if (index === current && slides[current].classList.contains('show')) return;
+
+  isAnimating = true;
+  const fromEl = slides[current];
+  const toEl   = slides[index];
+  const goingForward = index > current;
+
+  if (current === 7 && scamTl) { scamTl.kill(); scamTl = null; }
+
+  if (goingForward) {
+    toEl.classList.add('show');
+    gsap.set(toEl, { opacity: 0 });
+    const fx = NEXT_EFFECTS[current] || centerExpandNext;
+    fx(fromEl, toEl, () => {
+      fromEl.classList.remove('show');
+      gsap.set(fromEl, { clearProps: 'all' });
+      gsap.set(toEl, { clearProps: 'all', opacity: 1 });
+      isAnimating = false;
+      if (index === 7) setTimeout(playScamScene, 300);
+    });
+  } else {
+    reverseGo(fromEl, toEl, () => {
+      gsap.set(toEl, { clearProps: 'all' });
+      isAnimating = false;
+      if (index === 7) setTimeout(playScamScene, 300);
+    });
+  }
+
+  current = index;
+  updateUI();
+}
+
+function nextSlide() { goToSlide(current + 1); }
+function prevSlide() { goToSlide(current - 1); }
 
 startBtn.addEventListener('click', () => {
-  gsap.to(startScreen, {
-    opacity: 0, scale: 1.05, duration: 0.6, ease: 'power2.inOut',
-    onComplete: () => {
-      startScreen.style.display = 'none';
-      presentation.classList.add('active');
-      navEl.style.display = 'flex';
-      progressEl.style.display = 'flex';
-      updateUI();
-      // Animate entry of first slide elements
-      gsap.from(slides[0].querySelectorAll('h2, p, span, div'), {
-        y: 30, opacity: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out'
-      });
-      playScamScene();
-    }
-  });
+  startScreen.classList.add('hide');
+  setTimeout(() => { startScreen.style.display = 'none'; }, 600);
+  presentation.classList.add('active');
+  navEl.style.display = 'flex';
+  progressEl.style.display = 'flex';
+  current = 0;
+  const first = slides[0];
+  first.classList.add('show');
+  gsap.fromTo(first,
+    { opacity: 0, scale: 1.1, filter: 'blur(20px)' },
+    { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.1,
+      ease: 'power3.out', clearProps: 'filter' });
+  updateUI();
 });
 
-replayBtn.addEventListener('click', playScamScene);
+nextBtn.addEventListener('click', nextSlide);
+prevBtn.addEventListener('click', prevSlide);
 
-// HIEU UNG CHUYEN CANH DOC DAO BANG GSAP (Custom Slide Transitions)
-function goToSlide(targetIndex, direction) {
-  if (isAnimating || targetIndex === current || targetIndex < 0 || targetIndex >= slides.length) return;
-  isAnimating = true;
-
-  const currentSlide = slides[current];
-  const nextSlide = slides[targetIndex];
-
-  nextSlide.classList.add('show');
-
-  // Tuy bien cac hieu ung chuyen canh sinh dong
-  if (direction === 'next') {
-    // Chuyen canh tien: Su dung hieu ung xoay lat 3D + truot mo
-    gsap.fromTo(nextSlide, 
-      { opacity: 0, scale: 0.9, rotationY: 15, x: '100%' },
-      { opacity: 1, scale: 1, rotationY: 0, x: '0%', duration: 0.8, ease: 'power4.inOut',
-        onStart: () => {
-          gsap.to(currentSlide, { opacity: 0, scale: 0.9, x: '-30%', duration: 0.8, ease: 'power4.inOut' });
-        },
-        onComplete: () => {
-          currentSlide.classList.remove('show');
-          gsap.set(currentSlide, { clearProps: 'all' });
-          gsap.set(nextSlide, { clearProps: 'all' });
-          current = targetIndex;
-          updateUI();
-          isAnimating = false;
-          if (current === 7) playScamScene();
-        }
-      }
-    );
-  } else {
-    // Chuyen canh lui: Slide hieu ung truot day ra tu trai sang phai nhu yeu cau
-    gsap.fromTo(nextSlide,
-      { opacity: 0, scale: 0.95, x: '-100%' },
-      { opacity: 1, scale: 1, x: '0%', duration: 0.8, ease: 'power4.inOut',
-        onStart: () => {
-          gsap.to(currentSlide, { opacity: 0, x: '100%', duration: 0.8, ease: 'power4.inOut' });
-        },
-        onComplete: () => {
-          currentSlide.classList.remove('show');
-          gsap.set(currentSlide, { clearProps: 'all' });
-          gsap.set(nextSlide, { clearProps: 'all' });
-          current = targetIndex;
-          updateUI();
-          isAnimating = false;
-          if (current === 7) playScamScene();
-        }
-      }
-    );
-  }
-}
-
-nextBtn.addEventListener('click', () => {
-  if (current < slides.length - 1) goToSlide(current + 1, 'next');
+document.addEventListener('keydown', (e) => {
+  if (presentation.style.display === 'none') return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
 });
 
-prevBtn.addEventListener('click', () => {
-  if (current > 0) goToSlide(current - 1, 'prev');
+replayBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  playScamScene();
 });
 
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowRight' || e.key === 'PageDown') {
-    if (current < slides.length - 1 && presentation.classList.contains('active')) goToSlide(current + 1, 'next');
-  } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-    if (current > 0 && presentation.classList.contains('active')) goToSlide(current - 1, 'prev');
-  }
+let touchStartX = 0;
+document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) { dx < 0 ? nextSlide() : prevSlide(); }
 });
+
+updateUI();
 </script>
 </body>
 </html>
