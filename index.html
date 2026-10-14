@@ -105,7 +105,7 @@
     }
     @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* ===== KHU VỰC 10 SLIDE SỐNG (LIVE DOM) TỪ X (GIỮ NGUYÊN 100% CSS GỐC) ===== */
+    /* ===== KHU VỰC 10 SLIDE SỐNG (LIVE DOM) TỪ X ===== */
     #live-slide-container {
       position: fixed; inset: 0; z-index: 30; pointer-events: none;
       opacity: 0; transform: scale(0.95); transition: opacity 0.4s ease, transform 0.4s ease;
@@ -141,9 +141,9 @@
     .card-item-x { background: rgba(255,255,255,0.04); border: 1px solid rgba(143,167,255,0.18); border-left: 4px solid #667eea; border-radius: 14px; padding: 18px 26px; display: flex; align-items: center; gap: 20px; font-size: 1.05rem; line-height: 1.5; backdrop-filter: blur(10px); }
     .badge-x { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 0.95rem; font-weight: 800; color: #fff; flex-shrink: 0; box-shadow: 0 6px 16px rgba(102,126,234,0.45); }
     
-    .team-grid-x { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; max-width: 900px; margin: 0 auto; width: 100%; }
-    .member-x { background: linear-gradient(135deg, rgba(102,126,234,0.18), rgba(118,75,162,0.18)); border: 1px solid rgba(143,167,255,0.3); border-radius: 22px; padding: 36px 30px; text-align: center; }
-    .avatar-x { width: 88px; height: 88px; margin: 0 auto 18px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; color: #fff; }
+    .team-grid-x { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1100px; margin: 0 auto; width: 100%; }
+    .member-x { background: linear-gradient(135deg, rgba(102,126,234,0.18), rgba(118,75,162,0.18)); border: 1px solid rgba(143,167,255,0.3); border-radius: 22px; padding: 26px 20px; text-align: center; }
+    .avatar-x { width: 75px; height: 75px; margin: 0 auto 15px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 900; color: #fff; }
     
     .timeline-x { display: flex; flex-direction: column; gap: 35px; max-width: 1000px; position: relative; padding-left: 20px; }
     .timeline-item-x { display: flex; gap: 30px; align-items: flex-start; }
@@ -160,7 +160,7 @@
     .replay-btn { position: absolute; top: 16px; right: 16px; padding: 8px 18px; border-radius: 20px; background: rgba(102,126,234,0.2); border: 1px solid rgba(143,167,255,0.4); color: #8fa7ff; font-size: 0.8rem; font-weight: 700; cursor: pointer; letter-spacing: 2px; z-index: 5; font-family: inherit; }
     .replay-btn:hover { background: rgba(102,126,234,0.4); color: #fff; }
 
-    /* Thanh hướng dẫn thoát slide */
+    /* Detail Hint & Choose */
     .detail-hint {
       position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 35;
       font-family: 'Press Start 2P', monospace; font-size: 10px; color: rgba(255,255,255,0.6);
@@ -169,7 +169,6 @@
     }
     .detail-hint.show { opacity: 1; pointer-events: auto; }
 
-    /* Bảng chọn kiếm khi bị Sans chặn */
     #choose {
       position: fixed; top: 36px; left: 50%; z-index: 70; text-align: center;
       transform: translate(-50%, -20px); opacity: 0; pointer-events: none;
@@ -193,6 +192,7 @@
     @media (max-width: 760px) {
       #grid { padding: 24px 16px 0; overflow-y: auto; }
       .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 180px; }
+      .team-grid-x { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 
@@ -225,7 +225,7 @@
     <div class="ticker"><div id="ticker-track" class="ticker-track"></div></div>
   </div>
 
-  <!-- KHU VỰC 10 SLIDE SỐNG (LIVE DOM) TỪ X (ĐẦY ĐỦ 4 THÀNH VIÊN VÀ SVG SCAM) -->
+  <!-- KHU VỰC 10 SLIDE SỐNG (LIVE DOM) ĐẦY ĐỦ -->
   <div id="live-slide-container">
     <!-- Slide 1 -->
     <div class="slide-x-live" data-index="0">
@@ -243,11 +243,11 @@
       <div class="content-x">
         <span class="slide-tag-x">THÀNH VIÊN NHÓM BÁO CÁO</span>
         <h2 class="title-x">Nhóm của chúng em</h2>
-        <div class="team-grid-x" style="grid-template-columns: repeat(4, 1fr);">
-          <div class="member-x"><div class="avatar-x">HN</div><div style="font-size:1.2rem; font-weight:800;">Huỳnh Nghĩa</div><div style="color:#8fa7ff; font-size:0.8rem;">TRƯỞNG NHÓM</div></div>
-          <div class="member-x"><div class="avatar-x">HM</div><div style="font-size:1.2rem; font-weight:800;">Hoàng My</div><div style="color:#8fa7ff; font-size:0.8rem;">THÀNH VIÊN</div></div>
-          <div class="member-x"><div class="avatar-x">BN</div><div style="font-size:1.2rem; font-weight:800;">Bảo Ngân</div><div style="color:#8fa7ff; font-size:0.8rem;">THÀNH VIÊN</div></div>
-          <div class="member-x"><div class="avatar-x">NH</div><div style="font-size:1.2rem; font-weight:800;">Ngọc Hân</div><div style="color:#8fa7ff; font-size:0.8rem;">THÀNH VIÊN</div></div>
+        <div class="team-grid-x">
+          <div class="member-x"><div class="avatar-x">HN</div><div style="font-size:1.1rem; font-weight:800;">Huỳnh Nghĩa</div><div style="color:#8fa7ff; font-size:0.8rem;">TRƯỞNG NHÓM</div></div>
+          <div class="member-x"><div class="avatar-x">HM</div><div style="font-size:1.1rem; font-weight:800;">Hoàng My</div><div style="color:#8fa7ff; font-size:0.8rem;">THÀNH VIÊN</div></div>
+          <div class="member-x"><div class="avatar-x">BN</div><div style="font-size:1.1rem; font-weight:800;">Bảo Ngân</div><div style="color:#8fa7ff; font-size:0.8rem;">THÀNH VIÊN</div></div>
+          <div class="member-x"><div class="avatar-x">NH</div><div style="font-size:1.1rem; font-weight:800;">Ngọc Hân</div><div style="color:#8fa7ff; font-size:0.8rem;">THÀNH VIÊN</div></div>
         </div>
       </div>
     </div>
@@ -323,7 +323,7 @@
       </div>
     </div>
 
-    <!-- Slide 8 (Full SVG Scam Animation from X) -->
+    <!-- Slide 8: FULL SVG SCAM ANIMATION -->
     <div class="slide-x-live" data-index="7">
       <span class="slide-num-x">08 / 10</span>
       <div class="content-x" style="justify-content:center; align-items:center;">
@@ -396,9 +396,9 @@
         <span class="slide-tag-x">TRÁCH NHIỆM CÔNG DÂN SỐ</span>
         <h2 class="title-x">Quyền nhân thân, tài sản &amp; trách nhiệm</h2>
         <div class="card-list-x">
-          <div class="card-item-x"><div class="badge-x">01</div><span><b>Vi phạm quyền nhân thân:</b> đăng hình ảnh, địa chỉ, thông tin cá nhân khi chưa phép.</span></div>
-          <div class="card-item-x"><div class="badge-x">02</div><span><b>Vi phạm sở hữu trí tuệ:</b> sao chép, phát tán phần mềm, tài liệu có bản quyền trái phép.</span></div>
-          <div class="card-item-x"><div class="badge-x">03</div><span><b>Trách nhiệm:</b> chủ động trang bị kiến thức, kiểm chứng thông tin trước khi chia sẻ.</span></div>
+          <div class="card-item-x"><div class="badge-x">01</div><span><b>Vi phạm quyền nhân thân, uy tín:</b> đăng hình ảnh, địa chỉ nhà, biển số xe… của người khác khi chưa có sự đồng ý.</span></div>
+          <div class="card-item-x"><div class="badge-x">02</div><span><b>Vi phạm sở hữu trí tuệ, tài sản:</b> sao chép, phát tán nội dung có bản quyền không xin phép; đánh bạc trực tuyến…</span></div>
+          <div class="card-item-x"><div class="badge-x">03</div><span><b>Trách nhiệm:</b> chủ động trang bị kiến thức, <b style="color:#f9d423">kiểm chứng thông tin trước khi chia sẻ</b>, ứng xử văn minh trên không gian mạng.</span></div>
         </div>
       </div>
     </div>
@@ -1121,7 +1121,6 @@
       }
     });
 
-    // Sự kiện nút phát lại scam ở slide 8
     document.addEventListener('click', (e) => {
       if (e.target && e.target.id === 'replayBtn') {
         e.stopPropagation();
