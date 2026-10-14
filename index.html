@@ -1,7 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tin học 9 - Bài 4: Sử dụng dịch vụ Internet đúng luật</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%; overflow: hidden;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    background: #0a0e27; color: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============ PARTICLE BACKGROUND ============ */
+  #particles {
+    position: fixed; inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0.55;
+  }
+
+  /* ============ CONFETTI ============ */
+  .confetti {
+    position: fixed;
+    top: -20px;
+    width: 10px; height: 10px;
+    z-index: 9998;
+    pointer-events: none;
+    animation: confettiFall linear forwards;
+    border-radius: 2px;
+  }
+  @keyframes confettiFall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+  }
+
+  #startScreen {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(102,126,234,0.25), transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(118,75,162,0.25), transparent 50%),
+      #0a0e27;
+    z-index: 100; text-align: center; padding: 40px 20px;
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  #startScreen.hide { opacity: 0; transform: scale(1.1); pointer-events: none; }
+  #startScreen::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(143,167,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(143,167,255,0.06) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(circle at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 75%);
+    pointer-events: none;
+  }
+  #startScreen .tag {
+    display: inline-block; padding: 8px 20px; border-radius: 30px;
+    background: rgba(102,126,234,0.15);
+    border: 1px solid rgba(143,167,255,0.3);
+    color: #8fa7ff; font-size: 0.9rem; font-weight: 600;
+    letter-spacing: 3px; margin-bottom: 30px;
+    animation: tagPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes tagPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(143,167,255,0.4); }
+    50%      { box-shadow: 0 0 30px 6px rgba(143,167,255,0.05); }
+  }
+  #startScreen h1 {
+    font-size: clamp(1.5rem, 3.5vw, 3rem);
+    max-width: 1000px; line-height: 1.3; margin-bottom: 25px;
+    background: linear-gradient(135deg, #fff 0%, #8fa7ff 50%, #f9d423 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+    animation: gradientShift 6s ease infinite;
+  }
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+  #startScreen .subtitle {
+    color: #a0a8c0; margin-bottom: 50px; font-size: 1.15rem;
+    max-width: 700px; line-height: 1.6;
+  }
+  .start-btn {
+    padding: 20px 60px; font-size: 1.15rem; border: none; border-radius: 60px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white; cursor: pointer; font-weight: 700;
+    box-shadow: 0 15px 50px rgba(102,126,234,0.5);
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    letter-spacing: 1.5px;
+    position: relative; overflow: hidden;
+  }
+  .start-btn::before {
+    content: ''; position: absolute; inset: -50%;
+    background: conic-gradient(from 0deg, transparent, #f9d423, transparent 30%);
+    animation: spinBorder 3s linear infinite;
+    z-index: -1;
+  }
+  .start-btn::after {
+    content: ''; position: absolute; inset: 2px; border-radius: 58px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    z-index: -1;
+  }
+  @keyframes spinBorder { to { transform: rotate(360deg); } }
+  .start-btn:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 20px 60px rgba(102,126,234,0.75); }
+  .start-btn:active { transform: translateY(-1px) scale(0.99); }
+
+  #presentation { position: fixed; inset: 0; display: none; }
+  #presentation.active { display: block; }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: none; flex-direction: column;
+    padding: 70px 90px; overflow: hidden;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(102,126,234,0.12), transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(118,75,162,0.12), transparent 45%),
+      linear-gradient(135deg, #0f1626, #1a1f3a);
+    will-change: transform, opacity;
+  }
+  .slide::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(143,167,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(143,167,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px; pointer-events: none;
+  }
+  /* Animated glow blobs on each slide */
+  .slide::after {
+    content: ''; position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(102,126,234,0.18), transparent 70%);
+    top: -180px; right: -180px;
+    animation: blobFloat 12s ease-in-out infinite;
+    pointer-events: none;
+    filter: blur(20px);
+  }
+  @keyframes blobFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%      { transform: translate(-80px, 60px) scale(1.15); }
+    66%      { transform: translate(60px, -40px) scale(0.9); }
+  }
+  .slide.show { display: flex; }
+
+  .slide-num {
+    position: absolute; top: 35px; right: 50px;
+    font-size: 0.95rem; color: #6a7ba0; font-weight: 700;
+    letter-spacing: 3px; z-index: 5;
+  }
+  .slide-tag {
+    display: inline-block; padding: 7px 18px; border-radius: 20px;
+    background: rgba(102,126,234,0.15);
+    border: 1px solid rgba(143,167,255,0.3);
+    color: #8fa7ff; font-size: 0.8rem; font-weight: 700;
+    letter-spacing: 3px; margin-bottom: 20px; align-self: flex-start;
+    position: relative;
+  }
+  .slide-tag::before {
+    content: ''; position: absolute; inset: -3px;
+    border-radius: 22px;
+    border: 1px solid rgba(143,167,255,0.5);
+    animation: tagRing 2s ease-out infinite;
+    pointer-events: none;
+  }
+  @keyframes tagRing {
+    0%   { opacity: 0.8; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.25); }
+  }
+  h2.slide-title {
+    font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+    line-height: 1.35; margin-bottom: 35px;
+    background: linear-gradient(135deg, #fff 0%, #8fa7ff 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; font-weight: 800;
+  }
+  .content { flex: 1; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2; will-change: transform; }
+
+  .card-list { display: flex; flex-direction: column; gap: 16px; max-width: 1100px; }
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(143,167,255,0.18);
+    border-left: 4px solid #667eea;
+    border-radius: 14px; padding: 18px 26px;
+    display: flex; align-items: center; gap: 20px;
+    font-size: 1.05rem; line-height: 1.5;
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    backdrop-filter: blur(10px);
+    position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(143,167,255,0.08), transparent);
+    transition: left 0.7s;
+  }
+  .card:hover::before { left: 100%; }
+  .card:hover { background: rgba(102,126,234,0.12); transform: translateX(10px); border-left-color: #f9d423; }
+  .card .badge {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem; font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 6px 16px rgba(102,126,234,0.45), inset 0 0 0 2px rgba(255,255,255,0.12);
+    letter-spacing: 0.5px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .card:nth-child(2n) .badge { background: linear-gradient(135deg, #f9d423, #ff6b6b); box-shadow: 0 6px 16px rgba(249,212,35,0.45), inset 0 0 0 2px rgba(255,255,255,0.12); }
+  .card:nth-child(3n) .badge { background: linear-gradient(135deg, #11998e, #38ef7d); box-shadow: 0 6px 16px rgba(17,153,142,0.45), inset 0 0 0 2px rgba(255,255,255,0.12); }
+  .card:nth-child(5n) .badge { background: linear-gradient(135deg, #ff4e50, #f9d423); box-shadow: 0 6px 16px rgba(255,78,80,0.45), inset 0 0 0 2px rgba(255,255,255,0.12); }
+
+  .team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; max-width: 900px; margin: 0 auto; width: 100%; }
+  .member {
+    background: linear-gradient(135deg, rgba(102,126,234,0.18), rgba(118,75,162,0.18));
+    border: 1px solid rgba(143,167,255,0.3);
+    border-radius: 22px; padding: 36px 30px; text-align: center;
+    backdrop-filter: blur(12px); transition: all 0.35s ease;
+    position: relative; overflow: hidden;
   }
   .member::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
     background: linear-gradient(90deg, #667eea, #f9d423, #764ba2);
+    background-size: 200% 100%;
+    animation: borderFlow 3s linear infinite;
+  }
+  @keyframes borderFlow {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
   }
   .member:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(102,126,234,0.3); }
   .member .avatar {
@@ -13,6 +248,17 @@
     letter-spacing: 1px;
     box-shadow: 0 12px 30px rgba(102,126,234,0.5), inset 0 0 0 2px rgba(255,255,255,0.15);
     font-family: 'Segoe UI', sans-serif;
+    position: relative;
+  }
+  .member .avatar::after {
+    content: ''; position: absolute; inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(143,167,255,0.4);
+    animation: avatarRing 2.5s ease-out infinite;
+  }
+  @keyframes avatarRing {
+    0%   { opacity: 0.9; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.3); }
   }
   .member:nth-child(2) .avatar { background: linear-gradient(135deg, #f9d423, #ff6b6b); }
   .member:nth-child(3) .avatar { background: linear-gradient(135deg, #11998e, #38ef7d); }
@@ -20,11 +266,21 @@
   .member .name { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 5px; }
   .member .role { font-size: 0.9rem; color: #8fa7ff; letter-spacing: 1px; }
 
-  /* ===== TIMELINE ===== */
   .timeline { display: flex; flex-direction: column; gap: 35px; max-width: 1000px; position: relative; padding-left: 20px; }
   .timeline::before {
     content: ''; position: absolute; left: 100px; top: 20px; bottom: 20px;
     width: 2px; background: linear-gradient(180deg, #667eea, #764ba2);
+  }
+  .timeline::after {
+    content: ''; position: absolute; left: 96px; top: 20px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #f9d423;
+    box-shadow: 0 0 15px #f9d423;
+    animation: timelineDot 4s ease-in-out infinite;
+  }
+  @keyframes timelineDot {
+    0%, 100% { top: 20px; }
+    50%      { top: calc(100% - 40px); }
   }
   .timeline-item { display: flex; gap: 30px; align-items: flex-start; position: relative; }
   .timeline-year {
@@ -38,15 +294,17 @@
     border-left: 3px solid #667eea; border-radius: 0 14px 14px 0;
     padding: 22px 28px; font-size: 1.02rem; line-height: 1.7;
     backdrop-filter: blur(10px);
+    transition: all 0.3s;
+  }
+  .timeline-content:hover {
+    background: rgba(102,126,234,0.1);
+    border-left-color: #f9d423;
+    transform: translateX(8px);
   }
 
-  /* ===== SCAM SCENE ===== */
   .scam-scene {
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-    border-radius: 20px;
-    overflow: hidden;
+    width: 100%; max-width: 1100px; margin: 0 auto;
+    border-radius: 20px; overflow: hidden;
     background:
       radial-gradient(circle at 20% 30%, rgba(102,126,234,0.15), transparent 60%),
       radial-gradient(circle at 80% 70%, rgba(255,107,107,0.15), transparent 60%),
@@ -67,44 +325,34 @@
   .svg-bubble-text { font-family: 'Segoe UI', sans-serif; font-weight: 700; }
 
   .scene-caption {
-    padding: 16px 24px;
-    background: rgba(0,0,0,0.35);
+    padding: 16px 24px; background: rgba(0,0,0,0.35);
     border-top: 1px solid rgba(143,167,255,0.2);
-    text-align: center;
-    color: #a0a8c0;
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
-    position: relative;
-    z-index: 2;
+    text-align: center; color: #a0a8c0;
+    font-size: 0.95rem; letter-spacing: 0.5px;
+    position: relative; z-index: 2;
   }
   .scene-caption b { color: #f9d423; }
 
   .replay-btn {
-    position: absolute;
-    top: 16px; right: 16px;
-    padding: 8px 18px;
-    border-radius: 20px;
+    position: absolute; top: 16px; right: 16px;
+    padding: 8px 18px; border-radius: 20px;
     background: rgba(102,126,234,0.2);
     border: 1px solid rgba(143,167,255,0.4);
-    color: #8fa7ff;
-    font-size: 0.8rem;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 2px;
-    z-index: 5;
-    transition: all 0.3s;
-    font-family: inherit;
+    color: #8fa7ff; font-size: 0.8rem; font-weight: 700;
+    cursor: pointer; letter-spacing: 2px; z-index: 5;
+    transition: all 0.3s; font-family: inherit;
   }
-  .replay-btn:hover { background: rgba(102,126,234,0.4); color: #fff; }
+  .replay-btn:hover { background: rgba(102,126,234,0.4); color: #fff; transform: scale(1.05); }
 
-  /* ===== FINAL ===== */
   .final { align-items: center; justify-content: center; text-align: center; }
   .final .quote {
     font-size: clamp(1.8rem, 4vw, 3.4rem);
     background: linear-gradient(135deg, #f9d423 0%, #ff4e50 50%, #6a11cb 100%);
+    background-size: 200% 200%;
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 40px; line-height: 1.35; font-weight: 900; max-width: 1100px;
+    animation: gradientShift 5s ease infinite;
   }
   .final .thanks { font-size: 1.6rem; color: #fff; font-weight: 700; margin-bottom: 25px; letter-spacing: 1px; }
   .final .qa {
@@ -112,9 +360,14 @@
     background: linear-gradient(135deg, rgba(102,126,234,0.25), rgba(118,75,162,0.25));
     border: 1px solid rgba(143,167,255,0.4);
     color: #8fa7ff; font-size: 1.3rem; font-weight: 800; letter-spacing: 6px;
+    position: relative;
+    animation: qaPulse 2s ease-in-out infinite;
+  }
+  @keyframes qaPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(143,167,255,0.4); }
+    50%      { box-shadow: 0 0 40px 8px rgba(143,167,255,0.15); }
   }
 
-  /* ===== NAV ===== */
   .nav {
     position: fixed; bottom: 35px; right: 45px;
     display: flex; gap: 14px; z-index: 50;
@@ -128,6 +381,7 @@
     backdrop-filter: blur(12px);
     display: flex; align-items: center; justify-content: center;
     font-weight: 700; user-select: none;
+    position: relative; overflow: hidden;
   }
   .nav button:hover:not(:disabled) {
     background: rgba(102,126,234,0.35); color: #fff;
@@ -135,6 +389,17 @@
   }
   .nav button:active:not(:disabled) { transform: scale(0.95); }
   .nav button:disabled { opacity: 0.25; cursor: not-allowed; }
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    transform: scale(0);
+    animation: rippleAnim 0.6s ease-out;
+    pointer-events: none;
+  }
+  @keyframes rippleAnim {
+    to { transform: scale(4); opacity: 0; }
+  }
 
   .progress {
     position: fixed; bottom: 45px; left: 50px;
@@ -146,9 +411,15 @@
   .progress-fill {
     height: 100%;
     background: linear-gradient(90deg, #667eea, #f9d423, #764ba2);
+    background-size: 200% 100%;
     width: 10%; border-radius: 3px;
     transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
     box-shadow: 0 0 12px rgba(102,126,234,0.7);
+    animation: progressFlow 3s linear infinite;
+  }
+  @keyframes progressFlow {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
   }
 
   @media (max-width: 900px) {
@@ -158,6 +429,7 @@
     .member { padding: 20px 16px; }
     .member .avatar { width: 66px; height: 66px; font-size: 1.5rem; margin-bottom: 12px; }
     .timeline::before { left: 60px; }
+    .timeline::after { left: 56px; }
     .timeline-year { width: 50px; font-size: 1.2rem; }
     .timeline-content { padding: 14px 18px; font-size: 0.9rem; }
     .progress { bottom: 20px; left: 15px; }
@@ -173,6 +445,8 @@
 </head>
 <body>
 
+<canvas id="particles"></canvas>
+
 <div id="startScreen">
   <div class="tag">TIN HỌC 9 • CHỦ ĐỀ D • BÀI 4</div>
   <h1>Một số hành vi vi phạm pháp luật,<br>trái đạo đức, thiếu văn hoá<br>trong môi trường số</h1>
@@ -187,7 +461,7 @@
       <span class="slide-num">01 / 10</span>
       <div class="content" style="justify-content:center; text-align:center; align-items:center;">
         <span class="slide-tag" style="align-self:center;">CHỦ ĐỀ D — BÀI 4</span>
-        <h2 class="slide-title" style="font-size:clamp(1.6rem,3vw,2.9rem); text-align:center; max-width:1200px;">
+        <h2 class="slide-title" id="mainTitle" style="font-size:clamp(1.6rem,3vw,2.9rem); text-align:center; max-width:1200px;">
           MỘT SỐ HÀNH VI VI PHẠM PHÁP LUẬT,<br>TRÁI ĐẠO ĐỨC, THIẾU VĂN HOÁ<br>TRONG MÔI TRƯỜNG SỐ
         </h2>
         <p style="color:#a0a8c0; font-size:1.15rem; margin-top:25px; letter-spacing:1px;">
@@ -474,6 +748,61 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
+/* ============================================================
+   PARTICLE NETWORK BACKGROUND
+   ============================================================ */
+const pCanvas = document.getElementById('particles');
+const pCtx = pCanvas.getContext('2d');
+let particlesArr = [];
+function initParticles() {
+  pCanvas.width = window.innerWidth;
+  pCanvas.height = window.innerHeight;
+  particlesArr = [];
+  const count = Math.min(70, Math.floor(window.innerWidth / 22));
+  for (let i = 0; i < count; i++) {
+    particlesArr.push({
+      x: Math.random() * pCanvas.width,
+      y: Math.random() * pCanvas.height,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      r: Math.random() * 1.8 + 0.6
+    });
+  }
+}
+function drawParticles() {
+  pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+  for (let i = 0; i < particlesArr.length; i++) {
+    const p = particlesArr[i];
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > pCanvas.width) p.vx *= -1;
+    if (p.y < 0 || p.y > pCanvas.height) p.vy *= -1;
+    pCtx.beginPath();
+    pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    pCtx.fillStyle = 'rgba(143, 167, 255, 0.7)';
+    pCtx.fill();
+    for (let j = i + 1; j < particlesArr.length; j++) {
+      const q = particlesArr[j];
+      const dx = p.x - q.x, dy = p.y - q.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 130) {
+        pCtx.beginPath();
+        pCtx.moveTo(p.x, p.y);
+        pCtx.lineTo(q.x, q.y);
+        pCtx.strokeStyle = `rgba(102, 126, 234, ${0.18 * (1 - dist/130)})`;
+        pCtx.lineWidth = 1;
+        pCtx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+initParticles();
+drawParticles();
+window.addEventListener('resize', initParticles);
+
+/* ============================================================
+   BIẾN TOÀN CỤC
+   ============================================================ */
 const slides       = Array.from(document.querySelectorAll('.slide'));
 const startScreen  = document.getElementById('startScreen');
 const startBtn     = document.getElementById('startBtn');
@@ -489,14 +818,78 @@ const replayBtn    = document.getElementById('replayBtn');
 let current = 0;
 let isAnimating = false;
 let scamTl = null;
+let parallaxEnabled = true;
 
-function updateUI() {
-  progressText.textContent = `${current + 1} / ${slides.length}`;
-  progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
-  prevBtn.disabled = current === 0;
-  nextBtn.disabled = current === slides.length - 1;
+/* ============================================================
+   MOUSE PARALLAX
+   ============================================================ */
+let targetX = 0, targetY = 0, curX = 0, curY = 0;
+document.addEventListener('mousemove', (e) => {
+  targetX = (e.clientX / window.innerWidth - 0.5) * 14;
+  targetY = (e.clientY / window.innerHeight - 0.5) * 10;
+});
+function parallaxLoop() {
+  curX += (targetX - curX) * 0.07;
+  curY += (targetY - curY) * 0.07;
+  const curSlide = slides[current];
+  if (curSlide && curSlide.classList.contains('show') && parallaxEnabled) {
+    const content = curSlide.querySelector('.content');
+    if (content) content.style.transform = `translate(${curX}px, ${curY}px)`;
+  }
+  requestAnimationFrame(parallaxLoop);
+}
+parallaxLoop();
+
+/* ============================================================
+   STAGGER REVEAL KHI SLIDE XUẤT HIỆN
+   ============================================================ */
+function animateSlideContent(slideEl) {
+  const tag = slideEl.querySelector('.slide-tag');
+  const title = slideEl.querySelector('.slide-title');
+  const cards = slideEl.querySelectorAll('.card');
+  const members = slideEl.querySelectorAll('.member');
+  const timelineItems = slideEl.querySelectorAll('.timeline-item');
+  const finalQuote = slideEl.querySelector('.final .quote');
+  const finalThanks = slideEl.querySelector('.final .thanks');
+  const finalQa = slideEl.querySelector('.final .qa');
+  const scamScene = slideEl.querySelector('.scam-scene');
+  const captionP = slideEl.querySelector('.slide-title + p');
+
+  if (tag) gsap.fromTo(tag, { opacity: 0, y: -25 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', clearProps: 'transform' });
+  if (title) gsap.fromTo(title, { opacity: 0, y: 35, filter: 'blur(10px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.75, delay: 0.1, ease: 'power3.out', clearProps: 'filter,transform' });
+  if (captionP) gsap.fromTo(captionP, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.35, ease: 'power2.out', clearProps: 'transform' });
+  if (cards.length) gsap.fromTo(cards, { opacity: 0, x: -50, scale: 0.95 }, { opacity: 1, x: 0, scale: 1, duration: 0.55, stagger: 0.1, delay: 0.28, ease: 'back.out(1.4)', clearProps: 'transform' });
+  if (members.length) gsap.fromTo(members, { opacity: 0, y: 70, scale: 0.75, rotation: -6 }, { opacity: 1, y: 0, scale: 1, rotation: 0, duration: 0.75, stagger: 0.15, delay: 0.25, ease: 'back.out(1.5)', clearProps: 'transform' });
+  if (timelineItems.length) gsap.fromTo(timelineItems, { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.75, stagger: 0.22, delay: 0.28, ease: 'power3.out', clearProps: 'transform' });
+  if (scamScene) gsap.fromTo(scamScene, { opacity: 0, scale: 0.92, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.85, delay: 0.35, ease: 'back.out(1.2)', clearProps: 'transform' });
+  if (finalQuote) gsap.fromTo(finalQuote, { opacity: 0, scale: 0.85, filter: 'blur(15px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.9, delay: 0.15, ease: 'power3.out', clearProps: 'filter,transform' });
+  if (finalThanks) gsap.fromTo(finalThanks, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, delay: 0.55, ease: 'power3.out', clearProps: 'transform' });
+  if (finalQa) gsap.fromTo(finalQa, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.8, delay: 0.85, ease: 'back.out(2)', clearProps: 'transform' });
 }
 
+/* ============================================================
+   CONFETTI CHO SLIDE CUỐI
+   ============================================================ */
+function launchConfetti() {
+  const colors = ['#667eea', '#764ba2', '#f9d423', '#ff4e50', '#38ef7d', '#ff9a00', '#8fa7ff'];
+  for (let i = 0; i < 80; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + '%';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.width = (Math.random() * 8 + 6) + 'px';
+    c.style.height = (Math.random() * 12 + 8) + 'px';
+    c.style.animationDelay = (Math.random() * 0.8) + 's';
+    c.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+    if (Math.random() > 0.5) c.style.borderRadius = '50%';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 6000);
+  }
+}
+
+/* ============================================================
+   HOẠT CẢNH LỪA ĐẢO (SLIDE 8)
+   ============================================================ */
 function playScamScene() {
   if (scamTl) { scamTl.kill(); scamTl = null; }
 
@@ -565,6 +958,9 @@ function playScamScene() {
       duration: 0.55, ease: 'power2.out' }, '<');
 }
 
+/* ============================================================
+   HIỆU ỨNG CHUYỂN CẢNH
+   ============================================================ */
 function waveNext(from, to, done) {
   const wave = document.createElement('div');
   wave.style.cssText = `position:fixed; inset:-20%; z-index:200; pointer-events:none;
@@ -675,6 +1071,16 @@ function reverseGo(fromEl, toEl, done) {
     }, 0);
 }
 
+/* ============================================================
+   ĐIỀU HƯỚNG
+   ============================================================ */
+function updateUI() {
+  progressText.textContent = `${current + 1} / ${slides.length}`;
+  progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = current === slides.length - 1;
+}
+
 function goToSlide(index) {
   if (isAnimating) return;
   if (index < 0 || index >= slides.length) return;
@@ -685,6 +1091,8 @@ function goToSlide(index) {
   const toEl   = slides[index];
   const goingForward = index > current;
 
+  // Tắt parallax + scam scene khi rời slide
+  parallaxEnabled = false;
   if (current === 7 && scamTl) { scamTl.kill(); scamTl = null; }
 
   if (goingForward) {
@@ -696,13 +1104,19 @@ function goToSlide(index) {
       gsap.set(fromEl, { clearProps: 'all' });
       gsap.set(toEl, { clearProps: 'all', opacity: 1 });
       isAnimating = false;
-      if (index === 7) setTimeout(playScamScene, 300);
+      parallaxEnabled = true;
+      animateSlideContent(toEl);
+      if (index === 7) setTimeout(playScamScene, 400);
+      if (index === 9) setTimeout(launchConfetti, 600);
     });
   } else {
     reverseGo(fromEl, toEl, () => {
       gsap.set(toEl, { clearProps: 'all' });
       isAnimating = false;
-      if (index === 7) setTimeout(playScamScene, 300);
+      parallaxEnabled = true;
+      animateSlideContent(toEl);
+      if (index === 7) setTimeout(playScamScene, 400);
+      if (index === 9) setTimeout(launchConfetti, 600);
     });
   }
 
@@ -713,6 +1127,9 @@ function goToSlide(index) {
 function nextSlide() { goToSlide(current + 1); }
 function prevSlide() { goToSlide(current - 1); }
 
+/* ============================================================
+   SỰ KIỆN
+   ============================================================ */
 startBtn.addEventListener('click', () => {
   startScreen.classList.add('hide');
   setTimeout(() => { startScreen.style.display = 'none'; }, 600);
@@ -725,7 +1142,9 @@ startBtn.addEventListener('click', () => {
   gsap.fromTo(first,
     { opacity: 0, scale: 1.1, filter: 'blur(20px)' },
     { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.1,
-      ease: 'power3.out', clearProps: 'filter' });
+      ease: 'power3.out', clearProps: 'filter',
+      onComplete: () => { animateSlideContent(first); }
+    });
   updateUI();
 });
 
@@ -743,6 +1162,22 @@ replayBtn.addEventListener('click', (e) => {
   playScamScene();
 });
 
+/* Ripple effect cho nav buttons */
+document.querySelectorAll('.nav button').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    const rect = this.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+    ripple.style.top  = (e.clientY - rect.top  - size/2) + 'px';
+    this.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 700);
+  });
+});
+
+/* Touch swipe */
 let touchStartX = 0;
 document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
 document.addEventListener('touchend', (e) => {
