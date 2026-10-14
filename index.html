@@ -87,7 +87,13 @@
       border: 3px solid #000; box-shadow: 0 6px 0 #000;
       transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
     }
-    .card-preview { flex: 1; min-height: 0; position: relative; overflow: hidden; background: #0f1626; pointer-events: none; }
+    .card-preview {
+      flex: 1; min-height: 0; position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #0f1626, #1a1f3a);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Press Start 2P', monospace; font-size: 11px; color: #8fa7ff;
+      pointer-events: none; letter-spacing: 1px;
+    }
     .card-meta {
       flex: 0 0 auto; display: flex; align-items: center; gap: 10px;
       padding: 10px 12px; background: #0a0a0a; border-top: 3px solid #000; z-index: 2;
@@ -105,7 +111,7 @@
     }
     @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* ===== KHU VỰC 10 SLIDE SỐNG (LIVE DOM) TỪ X ===== */
+    /* ===== KHU VỰC 10 SLIDE SỐNG (LIVE DOM) ===== */
     #live-slide-container {
       position: fixed; inset: 0; z-index: 30; pointer-events: none;
       opacity: 0; transform: scale(0.95); transition: opacity 0.4s ease, transform 0.4s ease;
@@ -199,7 +205,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -208,7 +213,7 @@
 
   <!-- Frame 1: START -->
   <div id="start">
-    <button id="startBtn" class="start-btn" type="button">LOADING...</button>
+    <button id="startBtn" class="start-btn" type="button">START</button>
   </div>
 
   <!-- Frame 2: Danh sách 10 slide (GRID) -->
@@ -225,7 +230,7 @@
     <div class="ticker"><div id="ticker-track" class="ticker-track"></div></div>
   </div>
 
-  <!-- KHU VỰC 10 SLIDE SỐNG (LIVE DOM) ĐẦY ĐỦ -->
+  <!-- KHU VỰC 10 SLIDE SỐNG (LIVE DOM) -->
   <div id="live-slide-container">
     <!-- Slide 1 -->
     <div class="slide-x-live" data-index="0">
@@ -541,7 +546,7 @@
       "......KDDRWhHHK......", "......KDDRRhHHK......", "......KDDRWhHWK......", "......KDRRWhhHK......",
       "......KDRRWhhHK......", "......KDDRWhhHK......", "......KDDRWhHHK......", "......KDRRWhhHK......",
       "......KDRRRhhHK......", "......KDRRRhHHK......", "......KDDRhhHHK......", "......KDRRWhhHK......",
-      "......KDDRRhhHK......", "......KDRRRhHHK......", "......KDRRRhhHK......", "......KDrRRhHHK......",
+      "......KDDRRhhHK......", "......KDRRRhHHK......", "......KDDRRhhHK......", "......KDrRRhHHK......",
       "......KDDRRhhHK......", "......KDDRRhHHK......", "......KDDRRhHHK......", "......KDRRRhHHK......",
       "......KDDRRhHHK......", "......KDrRRhHHK......", "......KDRRRhHHK......", "......KDRRRhHHK......",
       "......KDDRDhgHK......", ".KKKKKKKDDDggKKKKKKK.", "KKHHKggKKKDKKKggKHHKK", "KgGGKKgggKKKggKKGgGgK",
@@ -878,7 +883,7 @@
       const c = document.createElement('button');
       c.type = 'button';
       c.className = 'card';
-      c.innerHTML = '<div class="card-preview" id="prev-' + i + '"></div>' +
+      c.innerHTML = '<div class="card-preview" id="prev-' + i + '">SLIDE ' + pad2(i + 1) + '</div>' +
         '<div class="card-meta"><span class="card-num">' + pad2(i + 1) + '</span><span class="card-title"></span></div>';
       c.querySelector('.card-title').textContent = SLIDE_TITLES[i];
       c.addEventListener('click', () => chemFromCard(i));
@@ -958,7 +963,7 @@
     }
 
     function enterGrid() {
-      if (view !== 'start' || !window.slidesReady) return;
+      if (view !== 'start') return;
       view = 'busy';
       gsap.timeline()
         .to(startEl, { opacity: 0.15, duration: 0.06, repeat: 7, yoyo: true, ease: 'steps(1)' })
@@ -1126,22 +1131,6 @@
         e.stopPropagation();
         playScamScene();
       }
-    });
-
-    window.addEventListener('DOMContentLoaded', async () => {
-      const liveElements = document.querySelectorAll('.slide-x-live');
-      for (let i = 0; i < liveElements.length; i++) {
-        liveElements[i].style.display = 'flex';
-        try {
-          const canvas = await html2canvas(liveElements[i], { width: 1280, height: 720, scale: 0.25 });
-          canvas.style.cssText = "width:100%; height:100%; object-fit:cover; display:block;";
-          document.getElementById('prev-' + i).appendChild(canvas);
-        } catch(e) {}
-        liveElements[i].style.display = '';
-      }
-      window.slidesReady = true;
-      startBtn.textContent = 'START';
-      startBtn.disabled = false;
     });
   </script>
 </body>
