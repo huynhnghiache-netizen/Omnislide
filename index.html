@@ -836,33 +836,6 @@ function parallaxLoop() {
 parallaxLoop();
 
 /* ============================================================
-   STAGGER REVEAL KHI SLIDE XUẤT HIỆN
-   ============================================================ */
-function animateSlideContent(slideEl) {
-  const tag = slideEl.querySelector('.slide-tag');
-  const title = slideEl.querySelector('.slide-title');
-  const cards = slideEl.querySelectorAll('.card');
-  const members = slideEl.querySelectorAll('.member');
-  const timelineItems = slideEl.querySelectorAll('.timeline-item');
-  const finalQuote = slideEl.querySelector('.final .quote');
-  const finalThanks = slideEl.querySelector('.final .thanks');
-  const finalQa = slideEl.querySelector('.final .qa');
-  const scamScene = slideEl.querySelector('.scam-scene');
-  const captionP = slideEl.querySelector('.slide-title + p');
-
-  if (tag) gsap.fromTo(tag, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out', clearProps: 'transform' });
-  if (title) gsap.fromTo(title, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.1, ease: 'power3.out', clearProps: 'transform' });
-  if (captionP) gsap.fromTo(captionP, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.2, ease: 'power2.out', clearProps: 'transform' });
-  if (cards.length) gsap.fromTo(cards, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.45, stagger: 0.08, delay: 0.2, ease: 'power2.out', clearProps: 'transform' });
-  if (members.length) gsap.fromTo(members, { opacity: 0, y: 40, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.1, delay: 0.2, ease: 'back.out(1.2)', clearProps: 'transform' });
-  if (timelineItems.length) gsap.fromTo(timelineItems, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.5, stagger: 0.15, delay: 0.2, ease: 'power3.out', clearProps: 'transform' });
-  if (scamScene) gsap.fromTo(scamScene, { opacity: 0, scale: 0.95, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.6, delay: 0.2, ease: 'power2.out', clearProps: 'transform' });
-  if (finalQuote) gsap.fromTo(finalQuote, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.7, delay: 0.15, ease: 'power3.out', clearProps: 'transform' });
-  if (finalThanks) gsap.fromTo(finalThanks, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.3, ease: 'power3.out', clearProps: 'transform' });
-  if (finalQa) gsap.fromTo(finalQa, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.6, delay: 0.4, ease: 'back.out(1.5)', clearProps: 'transform' });
-}
-
-/* ============================================================
    CONFETTI CHO SLIDE CUỐI
    ============================================================ */
 function launchConfetti() {
@@ -938,64 +911,64 @@ function playScamScene() {
 }
 
 /* ============================================================
-   HIỆU ỨNG CHUYỂN CẢNH (ĐÃ TỐI ƯU KHÔNG DÙNG BLUR NẶNG)
+   HIỆU ỨNG CHUYỂN CẢNH (ĐÃ LÀM MƯỢT TOÀN DIỆN, KHÔNG GIẬT CỤC NỘI DUNG)
    ============================================================ */
 function waveNext(from, to, done) {
-  gsap.to(from, { x: -50, opacity: 0, duration: 0.4, ease: 'power2.in' });
+  gsap.to(from, { x: -50, opacity: 0, duration: 0.35, ease: 'power2.in' });
   gsap.fromTo(to, { x: 50, opacity: 0 },
-    { x: 0, opacity: 1, duration: 0.5, delay: 0.1, ease: 'power3.out', onComplete: done });
+    { x: 0, opacity: 1, duration: 0.4, delay: 0.05, ease: 'power3.out', onComplete: done });
 }
 
 function bounceDropNext(from, to, done) {
-  gsap.to(from, { y: -40, opacity: 0, duration: 0.3, ease: 'power2.in' });
+  gsap.to(from, { y: -30, opacity: 0, duration: 0.25, ease: 'power2.in' });
   gsap.fromTo(to, { y: -window.innerHeight, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', onComplete: done });
+    { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out', onComplete: done });
 }
 
 function lightningNext(from, to, done) {
-  gsap.to(from, { scale: 1.03, opacity: 0, duration: 0.35, ease: 'power2.in' });
-  gsap.fromTo(to, { opacity: 0, scale: 0.97 },
-    { opacity: 1, scale: 1, duration: 0.45, delay: 0.15, ease: 'power3.out', onComplete: done });
+  gsap.to(from, { opacity: 0, duration: 0.3, ease: 'power2.in' });
+  gsap.fromTo(to, { opacity: 0 },
+    { opacity: 1, duration: 0.4, delay: 0.05, ease: 'power3.out', onComplete: done });
 }
 
 function shatterNext(from, to, done) {
-  gsap.to(from, { scale: 1.05, opacity: 0, rotation: 2, duration: 0.35, ease: 'power2.in' });
-  gsap.fromTo(to, { opacity: 0, scale: 0.95, rotation: -2 },
-    { opacity: 1, scale: 1, rotation: 0, duration: 0.45, delay: 0.15, ease: 'power2.out', onComplete: done });
+  gsap.to(from, { scale: 1.03, opacity: 0, duration: 0.3, ease: 'power2.in' });
+  gsap.fromTo(to, { opacity: 0, scale: 0.97 },
+    { opacity: 1, scale: 1, duration: 0.4, delay: 0.05, ease: 'power2.out', onComplete: done });
 }
 
 function vortexNext(from, to, done) {
-  gsap.to(from, { scale: 0.2, rotation: 360, opacity: 0, duration: 0.4, ease: 'power2.in' });
-  gsap.fromTo(to, { scale: 1.8, opacity: 0, rotation: -90 },
-    { scale: 1, opacity: 1, rotation: 0, duration: 0.5, delay: 0.15, ease: 'power3.out', onComplete: done });
+  gsap.to(from, { scale: 0.5, opacity: 0, duration: 0.3, ease: 'power2.in' });
+  gsap.fromTo(to, { scale: 1.5, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 0.4, delay: 0.05, ease: 'power3.out', onComplete: done });
 }
 
 function cameraZoomNext(from, to, done) {
-  gsap.to(from, { scale: 1.3, opacity: 0, duration: 0.35, ease: 'power2.in' });
-  gsap.fromTo(to, { scale: 0.7, opacity: 0 },
-    { scale: 1, opacity: 1, duration: 0.5, delay: 0.15, ease: 'power3.out', onComplete: done });
+  gsap.to(from, { scale: 1.2, opacity: 0, duration: 0.3, ease: 'power2.in' });
+  gsap.fromTo(to, { scale: 0.8, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 0.4, delay: 0.05, ease: 'power3.out', onComplete: done });
 }
 
 function glitchNext(from, to, done) {
-  gsap.to(from, { opacity: 0, scale: 1.05, duration: 0.3, ease: 'power2.in' });
-  gsap.fromTo(to, { opacity: 0, x: -30 },
-    { opacity: 1, x: 0, duration: 0.5, delay: 0.2, ease: 'power3.out', onComplete: done });
+  gsap.to(from, { opacity: 0, duration: 0.25, ease: 'power2.in' });
+  gsap.fromTo(to, { opacity: 0, x: -20 },
+    { opacity: 1, x: 0, duration: 0.4, delay: 0.05, ease: 'power3.out', onComplete: done });
 }
 
 function pageFlipNext(from, to, done) {
   gsap.set(from, { transformPerspective: 1000, transformOrigin: 'left center' });
   gsap.set(to,   { transformPerspective: 1000, transformOrigin: 'right center' });
-  gsap.to(from, { rotationY: -70, opacity: 0, duration: 0.5, ease: 'power2.inOut',
+  gsap.to(from, { rotationY: -50, opacity: 0, duration: 0.4, ease: 'power2.inOut',
     onComplete: () => { from.classList.remove('show'); gsap.set(from, { clearProps: 'all' }); } });
-  gsap.fromTo(to, { rotationY: 70, opacity: 0 },
-    { rotationY: 0, opacity: 1, duration: 0.55, delay: 0.2, ease: 'power3.out',
+  gsap.fromTo(to, { rotationY: 50, opacity: 0 },
+    { rotationY: 0, opacity: 1, duration: 0.45, delay: 0.05, ease: 'power3.out',
       onComplete: () => { gsap.set(to, { clearProps: 'all' }); done(); } });
 }
 
 function centerExpandNext(from, to, done) {
-  gsap.to(from, { scale: 0.8, opacity: 0, duration: 0.35, ease: 'power2.in' });
-  gsap.fromTo(to, { scale: 0.8, opacity: 0 },
-    { scale: 1, opacity: 1, duration: 0.5, delay: 0.15, ease: 'power3.out', onComplete: done });
+  gsap.to(from, { scale: 0.9, opacity: 0, duration: 0.3, ease: 'power2.in' });
+  gsap.fromTo(to, { scale: 0.9, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 0.4, delay: 0.05, ease: 'power3.out', onComplete: done });
 }
 
 const NEXT_EFFECTS = [
@@ -1007,8 +980,8 @@ function reverseGo(fromEl, toEl, done) {
   gsap.set(toEl, { xPercent: -100, opacity: 1, zIndex: 20 });
   toEl.classList.add('show');
   const tl = gsap.timeline({ onComplete: done });
-  tl.to(toEl,  { xPercent: 0, duration: 0.5, ease: 'power3.out' }, 0)
-    .to(fromEl, { xPercent: 100, opacity: 0, duration: 0.5, ease: 'power3.in',
+  tl.to(toEl,  { xPercent: 0, duration: 0.4, ease: 'power3.out' }, 0)
+    .to(fromEl, { xPercent: 100, opacity: 0, duration: 0.4, ease: 'power3.in',
       onComplete: () => { fromEl.classList.remove('show'); gsap.set(fromEl, { clearProps: 'all' }); }
     }, 0);
 }
@@ -1046,18 +1019,18 @@ function goToSlide(index) {
       gsap.set(toEl, { clearProps: 'all', opacity: 1 });
       isAnimating = false;
       parallaxEnabled = true;
-      animateSlideContent(toEl);
-      if (index === 7) setTimeout(playScamScene, 300);
-      if (index === 9) setTimeout(launchConfetti, 400);
+      
+      if (index === 7) setTimeout(playScamScene, 200);
+      if (index === 9) setTimeout(launchConfetti, 300);
     });
   } else {
     reverseGo(fromEl, toEl, () => {
       gsap.set(toEl, { clearProps: 'all' });
       isAnimating = false;
       parallaxEnabled = true;
-      animateSlideContent(toEl);
-      if (index === 7) setTimeout(playScamScene, 300);
-      if (index === 9) setTimeout(launchConfetti, 400);
+      
+      if (index === 7) setTimeout(playScamScene, 200);
+      if (index === 9) setTimeout(launchConfetti, 300);
     });
   }
 
@@ -1081,10 +1054,8 @@ startBtn.addEventListener('click', () => {
   const first = slides[0];
   first.classList.add('show');
   gsap.fromTo(first,
-    { opacity: 0, scale: 1.05 },
-    { opacity: 1, scale: 1, duration: 0.7, ease: 'power3.out',
-      onComplete: () => { animateSlideContent(first); }
-    });
+    { opacity: 0, scale: 1.02 },
+    { opacity: 1, scale: 1, duration: 0.5, ease: 'power3.out' });
   updateUI();
 });
 
