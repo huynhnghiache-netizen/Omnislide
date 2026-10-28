@@ -133,7 +133,6 @@
       linear-gradient(90deg, rgba(143,167,255,0.04) 1px, transparent 1px);
     background-size: 60px 60px; pointer-events: none;
   }
-  /* Animated glow blobs on each slide */
   .slide::after {
     content: ''; position: absolute;
     width: 500px; height: 500px;
@@ -142,7 +141,6 @@
     top: -180px; right: -180px;
     animation: blobFloat 12s ease-in-out infinite;
     pointer-events: none;
-    filter: blur(20px);
   }
   @keyframes blobFloat {
     0%, 100% { transform: translate(0, 0) scale(1); }
@@ -186,14 +184,13 @@
 
   .card-list { display: flex; flex-direction: column; gap: 16px; max-width: 1100px; }
   .card {
-    background: rgba(255,255,255,0.04);
+    background: rgba(25, 32, 56, 0.75);
     border: 1px solid rgba(143,167,255,0.18);
     border-left: 4px solid #667eea;
     border-radius: 14px; padding: 18px 26px;
     display: flex; align-items: center; gap: 20px;
     font-size: 1.05rem; line-height: 1.5;
     transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
-    backdrop-filter: blur(10px);
     position: relative; overflow: hidden;
   }
   .card::before {
@@ -203,7 +200,7 @@
     transition: left 0.7s;
   }
   .card:hover::before { left: 100%; }
-  .card:hover { background: rgba(102,126,234,0.12); transform: translateX(10px); border-left-color: #f9d423; }
+  .card:hover { background: rgba(102,126,234,0.15); transform: translateX(10px); border-left-color: #f9d423; }
   .card .badge {
     width: 44px; height: 44px;
     border-radius: 50%;
@@ -225,7 +222,7 @@
     background: linear-gradient(135deg, rgba(102,126,234,0.18), rgba(118,75,162,0.18));
     border: 1px solid rgba(143,167,255,0.3);
     border-radius: 22px; padding: 36px 30px; text-align: center;
-    backdrop-filter: blur(12px); transition: all 0.35s ease;
+    transition: all 0.35s ease;
     position: relative; overflow: hidden;
   }
   .member::before {
@@ -290,14 +287,13 @@
     -webkit-text-fill-color: transparent; text-align: right; padding-top: 5px;
   }
   .timeline-content {
-    flex: 1; background: rgba(255,255,255,0.04);
+    flex: 1; background: rgba(25, 32, 56, 0.75);
     border-left: 3px solid #667eea; border-radius: 0 14px 14px 0;
     padding: 22px 28px; font-size: 1.02rem; line-height: 1.7;
-    backdrop-filter: blur(10px);
     transition: all 0.3s;
   }
   .timeline-content:hover {
-    background: rgba(102,126,234,0.1);
+    background: rgba(102,126,234,0.15);
     border-left-color: #f9d423;
     transform: translateX(8px);
   }
@@ -375,10 +371,9 @@
   .nav button {
     width: 62px; height: 62px; border-radius: 50%;
     border: 1px solid rgba(143,167,255,0.4);
-    background: rgba(15,22,38,0.85);
+    background: rgba(15,22,38,0.9);
     color: #8fa7ff; font-size: 1.4rem; cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-    backdrop-filter: blur(12px);
     display: flex; align-items: center; justify-content: center;
     font-weight: 700; user-select: none;
     position: relative; overflow: hidden;
@@ -758,14 +753,14 @@ function initParticles() {
   pCanvas.width = window.innerWidth;
   pCanvas.height = window.innerHeight;
   particlesArr = [];
-  const count = Math.min(70, Math.floor(window.innerWidth / 22));
+  const count = Math.min(50, Math.floor(window.innerWidth / 25));
   for (let i = 0; i < count; i++) {
     particlesArr.push({
       x: Math.random() * pCanvas.width,
       y: Math.random() * pCanvas.height,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
-      r: Math.random() * 1.8 + 0.6
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      r: Math.random() * 1.5 + 0.5
     });
   }
 }
@@ -784,11 +779,11 @@ function drawParticles() {
       const q = particlesArr[j];
       const dx = p.x - q.x, dy = p.y - q.y;
       const dist = Math.sqrt(dx*dx + dy*dy);
-      if (dist < 130) {
+      if (dist < 120) {
         pCtx.beginPath();
         pCtx.moveTo(p.x, p.y);
         pCtx.lineTo(q.x, q.y);
-        pCtx.strokeStyle = `rgba(102, 126, 234, ${0.18 * (1 - dist/130)})`;
+        pCtx.strokeStyle = `rgba(102, 126, 234, ${0.15 * (1 - dist/120)})`;
         pCtx.lineWidth = 1;
         pCtx.stroke();
       }
@@ -825,12 +820,12 @@ let parallaxEnabled = true;
    ============================================================ */
 let targetX = 0, targetY = 0, curX = 0, curY = 0;
 document.addEventListener('mousemove', (e) => {
-  targetX = (e.clientX / window.innerWidth - 0.5) * 14;
-  targetY = (e.clientY / window.innerHeight - 0.5) * 10;
+  targetX = (e.clientX / window.innerWidth - 0.5) * 10;
+  targetY = (e.clientY / window.innerHeight - 0.5) * 8;
 });
 function parallaxLoop() {
-  curX += (targetX - curX) * 0.07;
-  curY += (targetY - curY) * 0.07;
+  curX += (targetX - curX) * 0.08;
+  curY += (targetY - curY) * 0.08;
   const curSlide = slides[current];
   if (curSlide && curSlide.classList.contains('show') && parallaxEnabled) {
     const content = curSlide.querySelector('.content');
@@ -855,16 +850,16 @@ function animateSlideContent(slideEl) {
   const scamScene = slideEl.querySelector('.scam-scene');
   const captionP = slideEl.querySelector('.slide-title + p');
 
-  if (tag) gsap.fromTo(tag, { opacity: 0, y: -25 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', clearProps: 'transform' });
-  if (title) gsap.fromTo(title, { opacity: 0, y: 35, filter: 'blur(10px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.75, delay: 0.1, ease: 'power3.out', clearProps: 'filter,transform' });
-  if (captionP) gsap.fromTo(captionP, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.35, ease: 'power2.out', clearProps: 'transform' });
-  if (cards.length) gsap.fromTo(cards, { opacity: 0, x: -50, scale: 0.95 }, { opacity: 1, x: 0, scale: 1, duration: 0.55, stagger: 0.1, delay: 0.28, ease: 'back.out(1.4)', clearProps: 'transform' });
-  if (members.length) gsap.fromTo(members, { opacity: 0, y: 70, scale: 0.75, rotation: -6 }, { opacity: 1, y: 0, scale: 1, rotation: 0, duration: 0.75, stagger: 0.15, delay: 0.25, ease: 'back.out(1.5)', clearProps: 'transform' });
-  if (timelineItems.length) gsap.fromTo(timelineItems, { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.75, stagger: 0.22, delay: 0.28, ease: 'power3.out', clearProps: 'transform' });
-  if (scamScene) gsap.fromTo(scamScene, { opacity: 0, scale: 0.92, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.85, delay: 0.35, ease: 'back.out(1.2)', clearProps: 'transform' });
-  if (finalQuote) gsap.fromTo(finalQuote, { opacity: 0, scale: 0.85, filter: 'blur(15px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.9, delay: 0.15, ease: 'power3.out', clearProps: 'filter,transform' });
-  if (finalThanks) gsap.fromTo(finalThanks, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, delay: 0.55, ease: 'power3.out', clearProps: 'transform' });
-  if (finalQa) gsap.fromTo(finalQa, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.8, delay: 0.85, ease: 'back.out(2)', clearProps: 'transform' });
+  if (tag) gsap.fromTo(tag, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out', clearProps: 'transform' });
+  if (title) gsap.fromTo(title, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.1, ease: 'power3.out', clearProps: 'transform' });
+  if (captionP) gsap.fromTo(captionP, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.2, ease: 'power2.out', clearProps: 'transform' });
+  if (cards.length) gsap.fromTo(cards, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.45, stagger: 0.08, delay: 0.2, ease: 'power2.out', clearProps: 'transform' });
+  if (members.length) gsap.fromTo(members, { opacity: 0, y: 40, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.1, delay: 0.2, ease: 'back.out(1.2)', clearProps: 'transform' });
+  if (timelineItems.length) gsap.fromTo(timelineItems, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.5, stagger: 0.15, delay: 0.2, ease: 'power3.out', clearProps: 'transform' });
+  if (scamScene) gsap.fromTo(scamScene, { opacity: 0, scale: 0.95, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.6, delay: 0.2, ease: 'power2.out', clearProps: 'transform' });
+  if (finalQuote) gsap.fromTo(finalQuote, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.7, delay: 0.15, ease: 'power3.out', clearProps: 'transform' });
+  if (finalThanks) gsap.fromTo(finalThanks, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.3, ease: 'power3.out', clearProps: 'transform' });
+  if (finalQa) gsap.fromTo(finalQa, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.6, delay: 0.4, ease: 'back.out(1.5)', clearProps: 'transform' });
 }
 
 /* ============================================================
@@ -872,18 +867,18 @@ function animateSlideContent(slideEl) {
    ============================================================ */
 function launchConfetti() {
   const colors = ['#667eea', '#764ba2', '#f9d423', '#ff4e50', '#38ef7d', '#ff9a00', '#8fa7ff'];
-  for (let i = 0; i < 80; i++) {
+  for (let i = 0; i < 60; i++) {
     const c = document.createElement('div');
     c.className = 'confetti';
     c.style.left = Math.random() * 100 + '%';
     c.style.background = colors[Math.floor(Math.random() * colors.length)];
-    c.style.width = (Math.random() * 8 + 6) + 'px';
-    c.style.height = (Math.random() * 12 + 8) + 'px';
-    c.style.animationDelay = (Math.random() * 0.8) + 's';
-    c.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+    c.style.width = (Math.random() * 8 + 5) + 'px';
+    c.style.height = (Math.random() * 12 + 6) + 'px';
+    c.style.animationDelay = (Math.random() * 0.5) + 's';
+    c.style.animationDuration = (Math.random() * 2 + 2) + 's';
     if (Math.random() > 0.5) c.style.borderRadius = '50%';
     document.body.appendChild(c);
-    setTimeout(() => c.remove(), 6000);
+    setTimeout(() => c.remove(), 5000);
   }
 }
 
@@ -898,162 +893,109 @@ function playScamScene() {
   gsap.set('#scammer',         { x: 0, y: 0, rotation: 0, opacity: 1, scale: 1 });
   gsap.set('#scammer-arm-r',   { rotation: 0, transformOrigin: '0% 0%' });
   gsap.set('#scammer-arm-l',   { rotation: 0, transformOrigin: '0% 0%' });
-  gsap.set('#bubble',          { opacity: 0, y: -30, scale: 0.6, transformOrigin: '50% 100%' });
+  gsap.set('#bubble',          { opacity: 0, y: -20, scale: 0.7, transformOrigin: '50% 100%' });
   gsap.set('.coin',            { x: 0, y: 0, opacity: 0, scale: 1 });
-  gsap.set('#shock',           { opacity: 0, scale: 0.3, transformOrigin: '50% 50%' });
-  gsap.set('#scam-text',       { opacity: 0, scale: 0.5, transformOrigin: '50% 50%' });
+  gsap.set('#shock',           { opacity: 0, scale: 0.5, transformOrigin: '50% 50%' });
+  gsap.set('#scam-text',       { opacity: 0, scale: 0.6, transformOrigin: '50% 50%' });
   gsap.set('#puffs',           { opacity: 0 });
   gsap.set('.puff',            { x: 0, y: 0, scale: 1, opacity: 1 });
 
   const tl = gsap.timeline({ repeat: -1, repeatDelay: 2 });
   scamTl = tl;
 
-  tl.to('#scammer-arm-r', { rotation: 18, duration: 0.1, yoyo: true, repeat: 7,
-      transformOrigin: '0% 0%', ease: 'power1.inOut' });
+  tl.to('#scammer-arm-r', { rotation: 15, duration: 0.1, yoyo: true, repeat: 5, ease: 'power1.inOut' });
+  tl.to('#bubble', { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'back.out(1.7)' }, '+=0.1');
+  tl.to({}, { duration: 2.0 });
+  tl.to('#bubble', { opacity: 0, y: -20, scale: 0.7, duration: 0.3, ease: 'power2.in' });
+  tl.to('#victim-head', { rotation: 12, duration: 0.3, ease: 'power2.out' }, '-=0.2');
 
-  tl.to('#bubble', { opacity: 1, y: 0, scale: 1, duration: 0.55,
-      ease: 'back.out(2.2)' }, '+=0.2');
-  tl.to({}, { duration: 2.4 });
-  tl.to('#bubble', { opacity: 0, y: -30, scale: 0.6, duration: 0.4,
-      ease: 'power2.in' });
+  tl.to('.coin', { opacity: 1, duration: 0.15, stagger: 0.05 }, '+=0.1');
+  tl.to('.coin', { x: 400, y: -170, duration: 0.8, ease: 'power2.inOut', stagger: 0.05 }, '<');
+  tl.to('.coin', { opacity: 0, scale: 0.5, duration: 0.2, stagger: 0.05 }, '-=0.3');
 
-  tl.to('#victim-head', { rotation: 14, duration: 0.45, ease: 'power2.out' }, '-=0.3');
+  tl.to('#scammer-arm-l', { rotation: -60, duration: 0.2, yoyo: true, repeat: 1, ease: 'power2.out' }, '+=0.1');
+  tl.to('#scammer-arm-r', { rotation: 60, duration: 0.2, yoyo: true, repeat: 1, ease: 'power2.out' }, '<');
 
-  tl.to('.coin', { opacity: 1, duration: 0.2, stagger: 0.08 }, '+=0.2');
-  tl.to('.coin', {
-      x: 400, y: -170, duration: 1.0, ease: 'power2.inOut', stagger: 0.1
-    }, '<0.15');
-  tl.to('.coin', { opacity: 0, scale: 0.4, duration: 0.35, stagger: 0.08 }, '-=0.45');
-
-  tl.to('#scammer-arm-l', { rotation: -75, duration: 0.28, yoyo: true, repeat: 1,
-      transformOrigin: '0% 0%', ease: 'power2.out' }, '+=0.1');
-  tl.to('#scammer-arm-r', { rotation: 75, duration: 0.28, yoyo: true, repeat: 1,
-      transformOrigin: '0% 0%', ease: 'power2.out' }, '<');
-
-  tl.to('#puffs', { opacity: 1, duration: 0.15 }, '+=0.1');
+  tl.to('#puffs', { opacity: 1, duration: 0.1 }, '+=0.1');
   tl.to('.puff', {
       x: (i) => parseFloat(document.querySelectorAll('.puff')[i].dataset.dx),
       y: (i) => parseFloat(document.querySelectorAll('.puff')[i].dataset.dy),
-      scale: 3, opacity: 0, duration: 0.9, ease: 'power2.out'
+      scale: 2.5, opacity: 0, duration: 0.6, ease: 'power2.out'
     }, '<');
-  tl.to('#scammer', {
-      x: -30, y: -30, rotation: 720, scale: 0.2, opacity: 0,
-      duration: 0.7, ease: 'power2.in'
-    }, '<');
-  tl.to('#puffs', { opacity: 0, duration: 0.2 }, '-=0.2');
+  tl.to('#scammer', { x: -20, y: -20, rotation: 360, scale: 0.2, opacity: 0, duration: 0.5, ease: 'power2.in' }, '<');
+  tl.to('#puffs', { opacity: 0, duration: 0.1 }, '-=0.1');
 
-  tl.to('#shock', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(3)' }, '-=0.3');
-  tl.to('#victim-head', { rotation: -14, duration: 0.25, yoyo: true, repeat: 5,
-      ease: 'power1.inOut' });
+  tl.to('#shock', { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(2)' }, '-=0.2');
+  tl.to('#victim-head', { rotation: -12, duration: 0.2, yoyo: true, repeat: 3, ease: 'power1.inOut' });
 
-  tl.to('#scam-text', { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.8)' }, '-=0.6');
-  tl.to('#scam-text', { opacity: 0.4, duration: 0.35, yoyo: true, repeat: 5,
-      ease: 'power1.inOut' });
-  tl.to({}, { duration: 1.2 });
+  tl.to('#scam-text', { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.5)' }, '-=0.4');
+  tl.to({}, { duration: 1.5 });
 
-  tl.to('#scam-text', { opacity: 0, scale: 0.5, duration: 0.4 });
-  tl.to('#shock',     { opacity: 0, scale: 0.3, duration: 0.3 }, '<');
-  tl.to('#victim-head', { rotation: 0, duration: 0.3 }, '<');
-  tl.to('#scammer', { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1,
-      duration: 0.55, ease: 'power2.out' }, '<');
+  tl.to('#scam-text', { opacity: 0, scale: 0.5, duration: 0.3 });
+  tl.to('#shock',     { opacity: 0, scale: 0.5, duration: 0.2 }, '<');
+  tl.to('#victim-head', { rotation: 0, duration: 0.2 }, '<');
+  tl.to('#scammer', { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1, duration: 0.4, ease: 'power2.out' }, '<');
 }
 
 /* ============================================================
-   HIỆU ỨNG CHUYỂN CẢNH
+   HIỆU ỨNG CHUYỂN CẢNH (ĐÃ TỐI ƯU KHÔNG DÙNG BLUR NẶNG)
    ============================================================ */
 function waveNext(from, to, done) {
-  const wave = document.createElement('div');
-  wave.style.cssText = `position:fixed; inset:-20%; z-index:200; pointer-events:none;
-    background: linear-gradient(90deg, transparent, #667eea, #f9d423, #764ba2, transparent);
-    transform: translateX(-120%) skewX(-15deg);`;
-  document.body.appendChild(wave);
-  gsap.to(wave, { x: '120%', duration: 0.9, ease: 'power2.inOut',
-    onComplete: () => wave.remove() });
-  gsap.to(from, { x: -80, opacity: 0, filter: 'blur(12px)', duration: 0.7, ease: 'power2.in' });
-  gsap.fromTo(to, { x: 100, opacity: 0, filter: 'blur(12px)' },
-    { x: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, delay: 0.35,
-      ease: 'power3.out', onComplete: done, clearProps: 'filter' });
+  gsap.to(from, { x: -50, opacity: 0, duration: 0.4, ease: 'power2.in' });
+  gsap.fromTo(to, { x: 50, opacity: 0 },
+    { x: 0, opacity: 1, duration: 0.5, delay: 0.1, ease: 'power3.out', onComplete: done });
 }
 
 function bounceDropNext(from, to, done) {
-  gsap.to(from, { y: -60, opacity: 0, duration: 0.4, ease: 'power2.in' });
-  gsap.fromTo(to,
-    { y: -window.innerHeight, opacity: 0 },
-    { y: 0, opacity: 1, duration: 1.1, ease: 'bounce.out', onComplete: done });
+  gsap.to(from, { y: -40, opacity: 0, duration: 0.3, ease: 'power2.in' });
+  gsap.fromTo(to, { y: -window.innerHeight, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', onComplete: done });
 }
 
 function lightningNext(from, to, done) {
-  const flash = document.createElement('div');
-  flash.style.cssText = `position:fixed; inset:0; z-index:200; background:#fff; opacity:0; pointer-events:none;`;
-  document.body.appendChild(flash);
-  const tl = gsap.timeline({ onComplete: () => flash.remove() });
-  tl.to(flash, { opacity: 0.9, duration: 0.06 })
-    .to(flash, { opacity: 0, duration: 0.06 })
-    .to(flash, { opacity: 0.6, duration: 0.05 })
-    .to(flash, { opacity: 0, duration: 0.06 });
-  gsap.to(from, { scale: 1.05, filter: 'blur(20px) brightness(2)', opacity: 0, duration: 0.55, ease: 'power2.in' });
-  gsap.fromTo(to, { opacity: 0, scale: 0.9 },
-    { opacity: 1, scale: 1, duration: 0.7, delay: 0.4, ease: 'power3.out',
-      onComplete: done, clearProps: 'filter' });
+  gsap.to(from, { scale: 1.03, opacity: 0, duration: 0.35, ease: 'power2.in' });
+  gsap.fromTo(to, { opacity: 0, scale: 0.97 },
+    { opacity: 1, scale: 1, duration: 0.45, delay: 0.15, ease: 'power3.out', onComplete: done });
 }
 
 function shatterNext(from, to, done) {
-  gsap.to(from, { scale: 1.1, opacity: 0, rotation: 3, filter: 'blur(15px)', duration: 0.6, ease: 'power2.in' });
-  gsap.fromTo(to, { opacity: 0, scale: 0.85, rotation: -3 },
-    { opacity: 1, scale: 1, rotation: 0, duration: 0.75, delay: 0.35,
-      ease: 'back.out(1.3)', onComplete: done, clearProps: 'filter' });
+  gsap.to(from, { scale: 1.05, opacity: 0, rotation: 2, duration: 0.35, ease: 'power2.in' });
+  gsap.fromTo(to, { opacity: 0, scale: 0.95, rotation: -2 },
+    { opacity: 1, scale: 1, rotation: 0, duration: 0.45, delay: 0.15, ease: 'power2.out', onComplete: done });
 }
 
 function vortexNext(from, to, done) {
-  gsap.to(from, { scale: 0.05, rotation: 720, opacity: 0, filter: 'blur(20px)', duration: 0.85, ease: 'power2.in' });
-  gsap.fromTo(to, { scale: 3, opacity: 0, rotation: -180, filter: 'blur(20px)' },
-    { scale: 1, opacity: 1, rotation: 0, filter: 'blur(0px)',
-      duration: 0.9, delay: 0.35, ease: 'power3.out',
-      onComplete: done, clearProps: 'filter' });
+  gsap.to(from, { scale: 0.2, rotation: 360, opacity: 0, duration: 0.4, ease: 'power2.in' });
+  gsap.fromTo(to, { scale: 1.8, opacity: 0, rotation: -90 },
+    { scale: 1, opacity: 1, rotation: 0, duration: 0.5, delay: 0.15, ease: 'power3.out', onComplete: done });
 }
 
 function cameraZoomNext(from, to, done) {
-  gsap.to(from, { scale: 1.8, opacity: 0, filter: 'blur(25px)', duration: 0.65, ease: 'power2.in' });
-  gsap.fromTo(to, { scale: 0.5, opacity: 0, filter: 'blur(25px)' },
-    { scale: 1, opacity: 1, filter: 'blur(0px)',
-      duration: 0.85, delay: 0.3, ease: 'power3.out',
-      onComplete: done, clearProps: 'filter' });
+  gsap.to(from, { scale: 1.3, opacity: 0, duration: 0.35, ease: 'power2.in' });
+  gsap.fromTo(to, { scale: 0.7, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 0.5, delay: 0.15, ease: 'power3.out', onComplete: done });
 }
 
 function glitchNext(from, to, done) {
-  const tl = gsap.timeline();
-  for (let i = 0; i < 5; i++) {
-    tl.to(from, {
-      x: (Math.random() - 0.5) * 40,
-      y: (Math.random() - 0.5) * 20,
-      opacity: 0.4 + Math.random() * 0.4,
-      filter: `hue-rotate(${Math.random() * 360}deg) blur(${Math.random() * 8}px)`,
-      duration: 0.06
-    });
-  }
-  tl.to(from, { opacity: 0, scale: 1.1, duration: 0.3, ease: 'power2.in',
-    onComplete: () => { gsap.set(from, { x: 0, y: 0, filter: 'none' }); } });
-  gsap.fromTo(to, { opacity: 0, x: -60, filter: 'blur(10px)' },
-    { opacity: 1, x: 0, filter: 'blur(0px)', duration: 0.8, delay: 0.5,
-      ease: 'power3.out', onComplete: done, clearProps: 'filter' });
+  gsap.to(from, { opacity: 0, scale: 1.05, duration: 0.3, ease: 'power2.in' });
+  gsap.fromTo(to, { opacity: 0, x: -30 },
+    { opacity: 1, x: 0, duration: 0.5, delay: 0.2, ease: 'power3.out', onComplete: done });
 }
 
 function pageFlipNext(from, to, done) {
-  gsap.set(from, { transformPerspective: 1500, transformOrigin: 'left center' });
-  gsap.set(to,   { transformPerspective: 1500, transformOrigin: 'right center' });
-  gsap.to(from, { rotationY: -100, opacity: 0, duration: 0.8, ease: 'power2.inOut',
+  gsap.set(from, { transformPerspective: 1000, transformOrigin: 'left center' });
+  gsap.set(to,   { transformPerspective: 1000, transformOrigin: 'right center' });
+  gsap.to(from, { rotationY: -70, opacity: 0, duration: 0.5, ease: 'power2.inOut',
     onComplete: () => { from.classList.remove('show'); gsap.set(from, { clearProps: 'all' }); } });
-  gsap.fromTo(to, { rotationY: 100, opacity: 0 },
-    { rotationY: 0, opacity: 1, duration: 0.85, delay: 0.4, ease: 'power3.out',
+  gsap.fromTo(to, { rotationY: 70, opacity: 0 },
+    { rotationY: 0, opacity: 1, duration: 0.55, delay: 0.2, ease: 'power3.out',
       onComplete: () => { gsap.set(to, { clearProps: 'all' }); done(); } });
 }
 
 function centerExpandNext(from, to, done) {
-  gsap.to(from, { scale: 0.6, opacity: 0, filter: 'blur(15px)', duration: 0.55, ease: 'power2.in' });
-  gsap.fromTo(to, { scale: 0.6, opacity: 0, filter: 'blur(15px)' },
-    { scale: 1, opacity: 1, filter: 'blur(0px)',
-      duration: 0.85, delay: 0.3, ease: 'power3.out',
-      onComplete: done, clearProps: 'filter' });
+  gsap.to(from, { scale: 0.8, opacity: 0, duration: 0.35, ease: 'power2.in' });
+  gsap.fromTo(to, { scale: 0.8, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 0.5, delay: 0.15, ease: 'power3.out', onComplete: done });
 }
 
 const NEXT_EFFECTS = [
@@ -1065,8 +1007,8 @@ function reverseGo(fromEl, toEl, done) {
   gsap.set(toEl, { xPercent: -100, opacity: 1, zIndex: 20 });
   toEl.classList.add('show');
   const tl = gsap.timeline({ onComplete: done });
-  tl.to(toEl,  { xPercent: 0, duration: 0.75, ease: 'power3.out' }, 0)
-    .to(fromEl, { xPercent: 100, opacity: 0, duration: 0.75, ease: 'power3.in',
+  tl.to(toEl,  { xPercent: 0, duration: 0.5, ease: 'power3.out' }, 0)
+    .to(fromEl, { xPercent: 100, opacity: 0, duration: 0.5, ease: 'power3.in',
       onComplete: () => { fromEl.classList.remove('show'); gsap.set(fromEl, { clearProps: 'all' }); }
     }, 0);
 }
@@ -1091,7 +1033,6 @@ function goToSlide(index) {
   const toEl   = slides[index];
   const goingForward = index > current;
 
-  // Tắt parallax + scam scene khi rời slide
   parallaxEnabled = false;
   if (current === 7 && scamTl) { scamTl.kill(); scamTl = null; }
 
@@ -1106,8 +1047,8 @@ function goToSlide(index) {
       isAnimating = false;
       parallaxEnabled = true;
       animateSlideContent(toEl);
-      if (index === 7) setTimeout(playScamScene, 400);
-      if (index === 9) setTimeout(launchConfetti, 600);
+      if (index === 7) setTimeout(playScamScene, 300);
+      if (index === 9) setTimeout(launchConfetti, 400);
     });
   } else {
     reverseGo(fromEl, toEl, () => {
@@ -1115,8 +1056,8 @@ function goToSlide(index) {
       isAnimating = false;
       parallaxEnabled = true;
       animateSlideContent(toEl);
-      if (index === 7) setTimeout(playScamScene, 400);
-      if (index === 9) setTimeout(launchConfetti, 600);
+      if (index === 7) setTimeout(playScamScene, 300);
+      if (index === 9) setTimeout(launchConfetti, 400);
     });
   }
 
@@ -1140,9 +1081,8 @@ startBtn.addEventListener('click', () => {
   const first = slides[0];
   first.classList.add('show');
   gsap.fromTo(first,
-    { opacity: 0, scale: 1.1, filter: 'blur(20px)' },
-    { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.1,
-      ease: 'power3.out', clearProps: 'filter',
+    { opacity: 0, scale: 1.05 },
+    { opacity: 1, scale: 1, duration: 0.7, ease: 'power3.out',
       onComplete: () => { animateSlideContent(first); }
     });
   updateUI();
@@ -1162,7 +1102,6 @@ replayBtn.addEventListener('click', (e) => {
   playScamScene();
 });
 
-/* Ripple effect cho nav buttons */
 document.querySelectorAll('.nav button').forEach(btn => {
   btn.addEventListener('click', function(e) {
     const ripple = document.createElement('span');
@@ -1177,7 +1116,6 @@ document.querySelectorAll('.nav button').forEach(btn => {
   });
 });
 
-/* Touch swipe */
 let touchStartX = 0;
 document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
 document.addEventListener('touchend', (e) => {
