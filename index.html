@@ -1,257 +1,573 @@
-/* Particle Canvas Background */
-#particles {
-position: fixed; inset: 0;
-z-index: 9999;
-pointer-events: none;
-mix-blend-mode: screen;
-opacity: 0.55;
-}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tin học 6 - Ôn tập Bài 1 đến Bài 6 (Kết nối tri thức)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%; overflow: hidden;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    background: #0a0e27; color: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
 
-/* Lightning Flash Element */
-#flashOverlay {
-position: fixed; inset: 0;
-background: #ffffff;
-opacity: 0; z-index: 9990;
-pointer-events: none;
-}
+  /* ============ PARTICLE BACKGROUND ============ */
+  #particles {
+    position: fixed; inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0.55;
+  }
 
-/* Confetti */
-.confetti {
-position: fixed; top: -20px;
-width: 10px; height: 10px; z-index: 9998;
-pointer-events: none;
-animation: confettiFall linear forwards;
-border-radius: 2px;
-}
-@keyframes confettiFall {
-0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
-}
+  /* ============ CONFETTI ============ */
+  .confetti {
+    position: fixed;
+    top: -20px;
+    width: 10px; height: 10px;
+    z-index: 9998;
+    pointer-events: none;
+    animation: confettiFall linear forwards;
+    border-radius: 2px;
+  }
+  @keyframes confettiFall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+  }
 
-/* Start Screen */
-#startScreen {
-position: fixed; inset: 0;
-display: flex; flex-direction: column;
-align-items: center; justify-content: center;
-background: radial-gradient(circle at center, #1e295d 0%, #090d21 80%);
-z-index: 100; text-align: center; padding: 40px 20px;
-}
-#startScreen .tag {
-display: inline-block; padding: 8px 22px; border-radius: 30px;
-background: rgba(0,229,255,0.15); border: 1px solid rgba(0,229,255,0.4);
-color: #00e5ff; font-size: 0.9rem; font-weight: 700;
-letter-spacing: 3px; margin-bottom: 25px;
-}
-#startScreen h1 {
-font-size: clamp(1.8rem, 4vw, 3.2rem); max-width: 900px;
-line-height: 1.3; margin-bottom: 20px; font-weight: 900;
-background: linear-gradient(135deg, #ffffff 0%, #00e5ff 50%, #7000ff 100%);
--webkit-background-clip: text; background-clip: text;
--webkit-text-fill-color: transparent; text-transform: uppercase;
-}
-#startScreen p { color: #a0aec0; font-size: 1.15rem; margin-bottom: 40px; }
-.start-btn {
-padding: 20px 50px; font-size: 1.15rem; border: none; border-radius: 50px;
-background: linear-gradient(135deg, #00e5ff, #7000ff);
-color: white; cursor: pointer; font-weight: 800;
-box-shadow: 0 10px 30px rgba(0,229,255,0.4);
-transition: transform 0.3s ease, box-shadow 0.3s ease; letter-spacing: 1.5px;
-}
-.start-btn:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 15px 40px rgba(0,229,255,0.6); }
+  #startScreen {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(102,126,234,0.25), transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(118,75,162,0.25), transparent 50%),
+      #0a0e27;
+    z-index: 100; text-align: center; padding: 40px 20px;
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  #startScreen.hide { opacity: 0; transform: scale(1.1); pointer-events: none; }
+  #startScreen::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(143,167,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(143,167,255,0.06) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(circle at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 75%);
+    pointer-events: none;
+  }
+  #startScreen .tag {
+    display: inline-block; padding: 8px 20px; border-radius: 30px;
+    background: rgba(102,126,234,0.15);
+    border: 1px solid rgba(143,167,255,0.3);
+    color: #8fa7ff; font-size: 0.9rem; font-weight: 600;
+    letter-spacing: 3px; margin-bottom: 30px;
+    animation: tagPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes tagPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(143,167,255,0.4); }
+    50%      { box-shadow: 0 0 30px 6px rgba(143,167,255,0.05); }
+  }
+  #startScreen h1 {
+    font-size: clamp(1.5rem, 3.5vw, 2.8rem);
+    max-width: 1000px; line-height: 1.3; margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, #8fa7ff 50%, #f9d423 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+    animation: gradientShift 6s ease infinite;
+  }
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+  #startScreen .subtitle {
+    color: #a0a8c0; margin-bottom: 40px; font-size: 1.1rem;
+    max-width: 700px; line-height: 1.6;
+  }
+  .start-btn {
+    padding: 18px 50px; font-size: 1.1rem; border: none; border-radius: 60px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white; cursor: pointer; font-weight: 700;
+    box-shadow: 0 15px 50px rgba(102,126,234,0.5);
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    letter-spacing: 1.5px;
+    position: relative; overflow: hidden;
+  }
+  .start-btn:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 20px 60px rgba(102,126,234,0.75); }
 
-/* Presentation Container */
-#presentation { position: fixed; inset: 0; display: none; }
-#presentation.active { display: block; }
+  #presentation { position: fixed; inset: 0; display: none; }
+  #presentation.active { display: block; }
 
-.slide {
-position: absolute; inset: 0; display: none;
-flex-direction: column; padding: 60px 80px; overflow: hidden;
-background: radial-gradient(circle at 20% 20%, rgba(0,229,255,0.08), transparent 50%),
-radial-gradient(circle at 80% 80%, rgba(112,0,255,0.12), transparent 50%),
-#090d21;
-will-change: transform, opacity;
-}
-.slide.show { display: flex; }
+  .slide {
+    position: absolute; inset: 0;
+    display: none; flex-direction: column;
+    padding: 60px 80px; overflow: hidden;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(102,126,234,0.12), transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(118,75,162,0.12), transparent 45%),
+      linear-gradient(135deg, #0f1626, #1a1f3a);
+    will-change: transform, opacity;
+  }
+  .slide::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(143,167,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(143,167,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px; pointer-events: none;
+  }
+  .slide.show { display: flex; }
 
-.slide-num {
-position: absolute; top: 35px; right: 50px;
-font-size: 0.95rem; color: #4a5568; font-weight: 800; letter-spacing: 3px;
-}
-.slide-tag {
-display: inline-block; padding: 6px 16px; border-radius: 20px;
-background: rgba(0,229,255,0.12); border: 1px solid rgba(0,229,255,0.3);
-color: #00e5ff; font-size: 0.8rem; font-weight: 700;
-letter-spacing: 2.5px; margin-bottom: 15px; align-self: flex-start;
-}
-h2.slide-title {
-font-size: clamp(1.5rem, 2.8vw, 2.3rem); line-height: 1.3; margin-bottom: 30px;
-background: linear-gradient(135deg, #fff 0%, #00e5ff 100%);
--webkit-background-clip: text; background-clip: text;
--webkit-text-fill-color: transparent; font-weight: 800;
-}
-.content { flex: 1; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2; }
+  .slide-num {
+    position: absolute; top: 30px; right: 50px;
+    font-size: 0.95rem; color: #6a7ba0; font-weight: 700;
+    letter-spacing: 3px; z-index: 5;
+  }
+  .slide-tag {
+    display: inline-block; padding: 6px 16px; border-radius: 20px;
+    background: rgba(102,126,234,0.15);
+    border: 1px solid rgba(143,167,255,0.3);
+    color: #8fa7ff; font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 2px; margin-bottom: 15px; align-self: flex-start;
+  }
+  h2.slide-title {
+    font-size: clamp(1.3rem, 2.2vw, 1.9rem);
+    line-height: 1.3; margin-bottom: 25px;
+    background: linear-gradient(135deg, #fff 0%, #8fa7ff 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; font-weight: 800;
+  }
+  .content { flex: 1; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2; }
 
-/* Grid & Card layout */
-.card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 1100px; }
-.card-list { display: flex; flex-direction: column; gap: 15px; max-width: 1100px; }
+  .card-list { display: flex; flex-direction: column; gap: 14px; max-width: 1100px; }
+  .card {
+    background: rgba(25, 32, 56, 0.75);
+    border: 1px solid rgba(143,167,255,0.18);
+    border-left: 4px solid #667eea;
+    border-radius: 12px; padding: 14px 22px;
+    display: flex; align-items: center; gap: 18px;
+    font-size: 0.98rem; line-height: 1.4;
+    transition: all 0.3s;
+  }
+  .card:hover { background: rgba(102,126,234,0.15); transform: translateX(8px); border-left-color: #f9d423; }
+  .card .badge {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; font-weight: 800; color: #fff; flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(102,126,234,0.4);
+  }
+  .card:nth-child(2n) .badge { background: linear-gradient(135deg, #f9d423, #ff6b6b); }
+  .card:nth-child(3n) .badge { background: linear-gradient(135deg, #11998e, #38ef7d); }
+  .card:nth-child(4n) .badge { background: linear-gradient(135deg, #ff4e50, #f9d423); }
 
-.card {
-background: rgba(18, 26, 56, 0.85);
-border: 1px solid rgba(0,229,255,0.2);
-border-left: 4px solid #00e5ff;
-border-radius: 14px; padding: 20px 24px;
-display: flex; align-items: center; gap: 18px;
-font-size: 1.05rem; line-height: 1.6;
-box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-transition: transform 0.25s ease, border-color 0.25s ease;
-}
-.card:hover { transform: translateX(8px); border-left-color: #ff007f; }
-.card .badge {
-width: 42px; height: 42px; border-radius: 50%;
-background: linear-gradient(135deg, #00e5ff, #7000ff);
-display: flex; align-items: center; justify-content: center;
-font-size: 1rem; font-weight: 800; color: #fff; flex-shrink: 0;
-}
-.card:nth-child(2n) .badge { background: linear-gradient(135deg, #ff007f, #7000ff); }
-.card:nth-child(3n) .badge { background: linear-gradient(135deg, #00ff88, #00e5ff); }
+  .final { align-items: center; justify-content: center; text-align: center; }
+  .final .quote {
+    font-size: clamp(1.6rem, 3.5vw, 3rem);
+    background: linear-gradient(135deg, #f9d423 0%, #ff4e50 50%, #6a11cb 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 30px; font-weight: 900; max-width: 1000px;
+  }
+  .final .thanks { font-size: 1.4rem; color: #fff; font-weight: 700; margin-bottom: 20px; }
+  .final .qa {
+    display: inline-block; padding: 14px 40px; border-radius: 50px;
+    background: linear-gradient(135deg, rgba(102,126,234,0.25), rgba(118,75,162,0.25));
+    border: 1px solid rgba(143,167,255,0.4);
+    color: #8fa7ff; font-size: 1.2rem; font-weight: 800; letter-spacing: 5px;
+  }
 
-/* Navigation & Progress */
-.nav { position: fixed; bottom: 35px; right: 45px; display: flex; gap: 14px; z-index: 50; }
-.nav button {
-width: 60px; height: 60px; border-radius: 50%;
-border: 1px solid rgba(0,229,255,0.4);
-background: rgba(18, 26, 56, 0.9);
-color: #00e5ff; font-size: 1.4rem; cursor: pointer;
-display: flex; align-items: center; justify-content: center; font-weight: 700;
-transition: transform 0.2s ease, background 0.2s ease;
-}
-.nav button:hover:not(:disabled) { background: rgba(0,229,255,0.25); color: #fff; transform: scale(1.08); }
-.nav button:disabled { opacity: 0.25; cursor: not-allowed; }
+  .nav {
+    position: fixed; bottom: 30px; right: 40px;
+    display: flex; gap: 12px; z-index: 50;
+  }
+  .nav button {
+    width: 55px; height: 55px; border-radius: 50%;
+    border: 1px solid rgba(143,167,255,0.4);
+    background: rgba(15,22,38,0.9);
+    color: #8fa7ff; font-size: 1.2rem; cursor: pointer;
+    transition: all 0.3s; display: flex; align-items: center; justify-content: center; font-weight: 700;
+  }
+  .nav button:hover:not(:disabled) { background: rgba(102,126,234,0.35); color: #fff; transform: scale(1.1); }
+  .nav button:disabled { opacity: 0.3; cursor: not-allowed; }
 
-.progress {
-position: fixed; bottom: 45px; left: 50px;
-display: flex; align-items: center; gap: 15px;
-color: #00e5ff; font-weight: 700; font-size: 0.95rem; z-index: 50;
-}
-.progress-bar { width: 220px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, #00e5ff, #7000ff); width: 12.5%; transition: width 0.4s ease; }
+  .progress {
+    position: fixed; bottom: 40px; left: 40px;
+    display: flex; align-items: center; gap: 14px;
+    color: #8fa7ff; font-weight: 700; font-size: 0.9rem; z-index: 50;
+  }
+  .progress-bar { width: 180px; height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #f9d423, #764ba2); width: 10%; border-radius: 3px; transition: width 0.5s ease; }
+</style>
+</head>
+<body>
 
-/* Final Slide Special */
-.final { align-items: center; justify-content: center; text-align: center; }
-.final .quote {
-font-size: clamp(2rem, 4.5vw, 3.5rem);
-background: linear-gradient(135deg, #00e5ff 0%, #ff007f 50%, #00ff88 100%);
--webkit-background-clip: text; background-clip: text;
--webkit-text-fill-color: transparent; font-weight: 900; margin-bottom: 30px;
-}
-.final .thanks { font-size: 1.6rem; color: #a0aec0; font-weight: 700; margin-bottom: 25px; }
+<canvas id="particles"></canvas>
 
-
-<!-- SLIDE 1 -->
-<div class="slide" data-index="0">
-  <span class="slide-num">01 / 08</span>
-  <div class="content" style="align-items:center; text-align:center;">
-    <span class="slide-tag">TỔNG QUAN CHƯƠNG TRÌNH</span>
-    <h2 class="slide-title" style="font-size: clamp(2rem, 3.5vw, 3rem);">TỔNG HỢP KIẾN THỨC BÀI 1 - BÀI 6</h2>
-    <p style="color:#a0aec0; font-size:1.2rem; max-width:800px; line-height:1.7;">
-      Bộ sách Kết nối tri thức với cuộc sống — Môn Tin học Lớp 6<br>
-      <span style="color:#00e5ff; font-weight:700;">Chủ đề 1: Máy tính và cộng đồng & Chủ đề 2: Mạng máy tính & Internet</span>
-    </p>
-  </div>
+<div id="startScreen">
+  <div class="tag">TIN HỌC 6 • KẾT NỐI TRI THỨC</div>
+  <h1>Ôn tập kiến thức<br>Bài 1 đến Bài 6</h1>
+  <p class="subtitle">Hệ thống kiến thức trọng tâm Chủ đề 1 &amp; Chủ đề 2 giúp em nắm vững lý thuyết.</p>
+  <button class="start-btn" id="startBtn">BẮT ĐẦU THUYẾT TRÌNH →</button>
 </div>
 
-<!-- SLIDE 2 -->
-<div class="slide" data-index="1">
-  <span class="slide-num">02 / 08</span>
-  <div class="content">
-    <span class="slide-tag">BÀI 1: THÔNG TIN VÀ DỮ LIỆU</span>
-    <h2 class="slide-title">Thông tin & Dữ liệu trong đời sống</h2>
-    <div class="card-grid">
-      <div class="card"><span class="badge">01</span><span><b>Thông tin:</b> Những hiểu biết của con người về thế giới xung quanh và về chính bản thân mình.</span></div>
-      <div class="card"><span class="badge">02</span><span><b>Dữ liệu:</b> Thông tin được ghi lên vật mang tin (dưới dạng chữ viết, con số, hình ảnh, âm thanh...).</span></div>
-      <div class="card"><span class="badge">03</span><span><b>Vật mang tin:</b> Phương tiện dùng để lưu trữ và truyền tải dữ liệu (sách, đĩa CD, thẻ nhớ, USB...).</span></div>
-      <div class="card"><span class="badge">04</span><span><b>Tầm quan trọng:</b> Thông tin đúng đắn giúp con người đưa ra các quyết định hợp lý và hiệu quả.</span></div>
+<div id="presentation">
+  <div id="slides">
+
+    <!-- Slide 1: Bìa -->
+    <div class="slide" data-index="0">
+      <span class="slide-num">01 / 08</span>
+      <div class="content" style="justify-content:center; text-align:center; align-items:center;">
+        <span class="slide-tag" style="align-self:center;">TIN HỌC LỚP 6</span>
+        <h2 class="slide-title" style="font-size:clamp(1.5rem,2.8vw,2.5rem); text-align:center; max-width:1100px;">
+          TỔNG HỢP KIẾN THỨC TRỌNG TÂM<br>BÀI 1 ĐẾN BÀI 6 (KẾT NỐI TRI THỨC)
+        </h2>
+        <p style="color:#a0a8c0; font-size:1.05rem; margin-top:20px;">
+          Chủ đề 1: Máy tính và cộng đồng &amp; Chủ đề 2: Mạng máy tính và Internet
+        </p>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- SLIDE 3 -->
-<div class="slide" data-index="2">
-  <span class="slide-num">03 / 08</span>
-  <div class="content">
-    <span class="slide-tag">BÀI 2: XỬ LÝ THÔNG TIN</span>
-    <h2 class="slide-title">Quá trình xử lý thông tin</h2>
-    <div class="card-list">
-      <div class="card"><span class="badge">01</span><span><b>4 Hoạt động chính:</b> Thu nhận thông tin ➔ Lưu trữ thông tin ➔ Xử lý thông tin ➔ Truyền thông tin.</span></div>
-      <div class="card"><span class="badge">02</span><span><b>Xử lý thông tin ở máy tính:</b> Máy tính tiếp nhận dữ liệu đầu vào (Input), xử lý và xuất ra kết quả (Output).</span></div>
-      <div class="card"><span class="badge">03</span><span><b>Ưu thế của máy tính:</b> Tính toán siêu nhanh, lưu trữ dung lượng lớn, hoạt động bền bỉ và chính xác.</span></div>
+    <!-- Slide 2: Bài 1 -->
+    <div class="slide" data-index="1">
+      <span class="slide-num">02 / 08</span>
+      <div class="content">
+        <span class="slide-tag">BÀI 1</span>
+        <h2 class="slide-title">Thông tin và dữ liệu trong đời sống</h2>
+        <div class="card-list">
+          <div class="card"><span class="badge">01</span><span><b>Thông tin:</b> Những hiểu biết của con người về thế giới xung quanh và về chính bản thân mình.</span></div>
+          <div class="card"><span class="badge">02</span><span><b>Dữ liệu:</b> Thông tin được ghi lên vật mang tin (dưới dạng chữ viết, con số, hình ảnh, âm thanh...).</span></div>
+          <div class="card"><span class="badge">03</span><span><b>Vật mang tin:</b> Phương tiện dùng để lưu trữ và truyền tải dữ liệu (sách, đĩa CD, thẻ nhớ, USB...).</span></div>
+          <div class="card"><span class="badge">04</span><span><b>Tầm quan trọng:</b> Thông tin đúng đắn giúp con người đưa ra các quyết định hợp lý và hiệu quả.</span></div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- SLIDE 4 -->
-<div class="slide" data-index="3">
-  <span class="slide-num">04 / 08</span>
-  <div class="content">
-    <span class="slide-tag">BÀI 3: THÔNG TIN TRONG MÁY TÍNH</span>
-    <h2 class="slide-title">Dãy bít & Đơn vị đo dung lượng</h2>
-    <div class="card-grid">
-      <div class="card"><span class="badge">01</span><span><b>Biểu diễn thông tin:</b> Mọi thông tin trong máy tính đều được chuyển đổi thành <b>Dãy bít</b> (chỉ gồm ký tự <b>0</b> và <b>1</b>).</span></div>
-      <div class="card"><span class="badge">02</span><span><b>Bít (Bit):</b> Đơn vị nhỏ nhất để đo dung lượng thông tin trong máy tính.</span></div>
-      <div class="card"><span class="badge">03</span><span><b>Các đơn vị đo:</b> 1 Byte = 8 Bit. Ngoài ra còn có KB, MB, GB, TB (Mỗi đơn vị gấp 1024 lần đơn vị trước).</span></div>
-      <div class="card"><span class="badge">04</span><span><b>Ví dụ thực tế:</b> Một thẻ nhớ 16GB có thể chứa hàng ngàn bài hát và hình ảnh chất lượng cao.</span></div>
+    <!-- Slide 3: Bài 2 -->
+    <div class="slide" data-index="2">
+      <span class="slide-num">03 / 08</span>
+      <div class="content">
+        <span class="slide-tag">BÀI 2</span>
+        <h2 class="slide-title">Xử lý thông tin</h2>
+        <div class="card-list">
+          <div class="card"><span class="badge">01</span><span><b>Hoạt động chính:</b> Thu nhận thông tin → Lưu trữ thông tin → Xử lý thông tin → Truyền thông tin.</span></div>
+          <div class="card"><span class="badge">02</span><span><b>Xử lý thông tin ở máy tính:</b> Máy tính tiếp nhận dữ liệu đầu vào (Input), xử lý và xuất ra kết quả (Output).</span></div>
+          <div class="card"><span class="badge">03</span><span><b>Ưu thế của máy tính:</b> Tính toán siêu nhanh, lưu trữ dung lượng lớn, hoạt động bền bỉ và chính xác.</span></div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- SLIDE 5 -->
-<div class="slide" data-index="4">
-  <span class="slide-num">05 / 08</span>
-  <div class="content">
-    <span class="slide-tag">BÀI 4: MẠNG MÁY TÍNH</span>
-    <h2 class="slide-title">Khái niệm & Thành phần của Mạng</h2>
-    <div class="card-list">
-      <div class="card"><span class="badge">01</span><span><b>Khái niệm:</b> Tập hợp từ hai hay nhiều máy tính được kết nối với nhau để chia sẻ dữ liệu và thiết bị.</span></div>
-      <div class="card"><span class="badge">02</span><span><b>Các thành phần chính:</b> Thiết bị đầu cuối (Máy tính, điện thoại), Thiết bị kết nối (Router, Switch, dây cáp, Wifi) và Phần mềm mạng.</span></div>
-      <div class="card"><span class="badge">03</span><span><b>Lợi ích:</b> Người dùng có thể dùng chung máy in, ổ cứng, trao đổi tệp tin tức thì và tiết kiệm chi phí.</span></div>
+    <!-- Slide 4: Bài 3 -->
+    <div class="slide" data-index="3">
+      <span class="slide-num">04 / 08</span>
+      <div class="content">
+        <span class="slide-tag">BÀI 3</span>
+        <h2 class="slide-title">Thông tin trong máy tính</h2>
+        <div class="card-list">
+          <div class="card"><span class="badge">01</span><span><b>Biểu diễn thông tin:</b> Mọi thông tin trong máy tính đều được chuyển đổi thành <b>Dãy bít</b> (chỉ gồm ký tự <b>0</b> và <b>1</b>).</span></div>
+          <div class="card"><span class="badge">02</span><span><b>Bit (Bit):</b> Đơn vị nhỏ nhất để đo dung lượng thông tin trong máy tính.</span></div>
+          <div class="card"><span class="badge">03</span><span><b>Các đơn vị đo:</b> 1 Byte = 8 Bit. Ngoài ra còn có KB, MB, GB, TB (Mỗi đơn vị gấp 1024 lần đơn vị trước).</span></div>
+          <div class="card"><span class="badge">04</span><span><b>Ví dụ thực tế:</b> Một thẻ nhớ 16GB có thể chứa hàng ngàn bài hát và hình ảnh chất lượng cao.</span></div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- SLIDE 6 -->
-<div class="slide" data-index="5">
-  <span class="slide-num">06 / 08</span>
-  <div class="content">
-    <span class="slide-tag">BÀI 5: INTERNET</span>
-    <h2 class="slide-title">Mạng diện rộng toàn cầu - Internet</h2>
-    <div class="card-grid">
-      <div class="card"><span class="badge">01</span><span><b>Internet là gì?</b> Là mạng kết nối hàng triệu máy tính và mạng máy tính trên toàn thế giới.</span></div>
-      <div class="card"><span class="badge">02</span><span><b>Đặc điểm:</b> Phủ sóng toàn cầu, không thuộc sở hữu của riêng ai, kho thông tin khổng lồ.</span></div>
-      <div class="card"><span class="badge">03</span><span><b>Ứng dụng:</b> Giải trí, học tập trực tuyến, tìm kiếm thông tin, gửi thư điện tử, mạng xã hội...</span></div>
-      <div class="card"><span class="badge">04</span><span><b>Kết nối:</b> Qua đường dây điện thoại, cáp quang hoặc sóng không dây (Wifi, 4G/5G).</span></div>
+    <!-- Slide 5: Bài 4 -->
+    <div class="slide" data-index="4">
+      <span class="slide-num">05 / 08</span>
+      <div class="content">
+        <span class="slide-tag">BÀI 4</span>
+        <h2 class="slide-title">Mạng máy tính</h2>
+        <div class="card-list">
+          <div class="card"><span class="badge">01</span><span><b>Khái niệm:</b> Tập hợp từ hai hay nhiều máy tính được kết nối với nhau để chia sẻ dữ liệu và thiết bị.</span></div>
+          <div class="card"><span class="badge">02</span><span><b>Các thành phần chính:</b> Thiết bị đầu cuối (Máy tính, điện thoại), Thiết bị kết nối (Router, Switch, dây cáp, Wifi) và Phần mềm mạng.</span></div>
+          <div class="card"><span class="badge">03</span><span><b>Lợi ích:</b> Người dùng có thể dùng chung máy in, ổ cứng, trao đổi tệp tin tức thế và tiết kiệm chi phí.</span></div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- SLIDE 7 -->
-<div class="slide" data-index="6">
-  <span class="slide-num">07 / 08</span>
-  <div class="content">
-    <span class="slide-tag">BÀI 6: MẠNG THÔNG TIN TOÀN CẦU</span>
-    <h2 class="slide-title">World Wide Web (WWW) & Trang web</h2>
-    <div class="card-list">
-      <div class="card"><span class="badge">01</span><span><b>World Wide Web (WWW):</b> Mạng lưới các trang web liên kết với nhau trên toàn thế giới qua Internet.</span></div>
-      <div class="card"><span class="badge">02</span><span><b>Website & Địa chỉ Web:</b> Tập hợp các trang web liên quan (VD: <i>google.com</i>, <i>dantri.com.vn</i>).</span></div>
-      <div class="card"><span class="badge">03</span><span><b>Trình duyệt Web:</b> Phần mềm giúp truy cập WWW (Google Chrome, Cốc Cốc, Microsoft Edge, Safari...).</span></div>
+    <!-- Slide 6: Bài 5 -->
+    <div class="slide" data-index="5">
+      <span class="slide-num">06 / 08</span>
+      <div class="content">
+        <span class="slide-tag">BÀI 5</span>
+        <h2 class="slide-title">Internet</h2>
+        <div class="card-list">
+          <div class="card"><span class="badge">01</span><span><b>Internet là gì?</b> Là mạng kết nối hàng triệu máy tính và mạng máy tính trên toàn thế giới.</span></div>
+          <div class="card"><span class="badge">02</span><span><b>Đặc điểm:</b> Phủ sóng toàn cầu, không thuộc sở hữu của riêng ai, kho thông tin khổng lồ.</span></div>
+          <div class="card"><span class="badge">03</span><span><b>Ứng dụng:</b> Giải trí, học tập trực tuyến, tìm kiếm thông tin, gửi thư điện tử, mạng xã hội...</span></div>
+          <div class="card"><span class="badge">04</span><span><b>Kết nối:</b> Qua đường dây điện thoại, cáp quang hoặc sóng không dây (Wifi, 4G/5G).</span></div>
+        </div>
+      </div>
     </div>
+
+    <!-- Slide 7: Bài 6 -->
+    <div class="slide" data-index="6">
+      <span class="slide-num">07 / 08</span>
+      <div class="content">
+        <span class="slide-tag">BÀI 6</span>
+        <h2 class="slide-title">Mạng thông tin toàn cầu (World Wide Web)</h2>
+        <div class="card-list">
+          <div class="card"><span class="badge">01</span><span><b>World Wide Web (WWW):</b> Mạng lưới các trang web liên kết với nhau trên toàn thế giới qua Internet.</span></div>
+          <div class="card"><span class="badge">02</span><span><b>Website &amp; Địa chỉ Web:</b> Tập hợp các trang web liên quan (VD: <i>google.com</i>, <i>dantri.com.vn</i>).</span></div>
+          <div class="card"><span class="badge">03</span><span><b>Trình duyệt Web:</b> Phần mềm giúp truy cập WWW (Google Chrome, Cốc Cốc, Microsoft Edge, Safari...).</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Kết thúc -->
+    <div class="slide final" data-index="7">
+      <span class="slide-num">08 / 08</span>
+      <div class="content" style="align-items:center; justify-content:center; text-align:center;">
+        <div class="quote">
+          "Chúc các em ôn tập tốt và đạt kết quả cao môn Tin học 6!"
+        </div>
+        <div class="thanks">Cảm ơn thầy cô và các bạn đã chú ý lắng nghe!</div>
+        <div class="qa">Q &amp; A</div>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<!-- SLIDE 8 -->
-<div class="slide final" data-index="7">
-  <span class="slide-num">08 / 08</span>
-  <div class="content" style="align-items:center; text-align:center;">
-    <div class="quote">"CẢM ƠN THẦY CÔ VÀ CÁC BẠN<br>ĐÃ CHÚ Ý LẮNG NGHE!"</div>
-    <div class="thanks">Chúc các bạn học tốt môn Tin học 6 🎉</div>
-  </div>
+<div class="nav" id="nav" style="display:none;">
+  <button id="prevBtn" title="Quay lại (←)">←</button>
+  <button id="nextBtn" title="Tiếp theo (→)">→</button>
 </div>
+<div class="progress" id="progress" style="display:none;">
+  <span id="progressText">1 / 8</span>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+/* ============================================================
+   PARTICLE NETWORK BACKGROUND
+   ============================================================ */
+const pCanvas = document.getElementById('particles');
+const pCtx = pCanvas.getContext('2d');
+let particlesArr = [];
+function initParticles() {
+  pCanvas.width = window.innerWidth;
+  pCanvas.height = window.innerHeight;
+  particlesArr = [];
+  const count = Math.min(45, Math.floor(window.innerWidth / 25));
+  for (let i = 0; i < count; i++) {
+    particlesArr.push({
+      x: Math.random() * pCanvas.width,
+      y: Math.random() * pCanvas.height,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      r: Math.random() * 1.5 + 0.5
+    });
+  }
+}
+function drawParticles() {
+  pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+  for (let i = 0; i < particlesArr.length; i++) {
+    const p = particlesArr[i];
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > pCanvas.width) p.vx *= -1;
+    if (p.y < 0 || p.y > pCanvas.height) p.vy *= -1;
+    pCtx.beginPath();
+    pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    pCtx.fillStyle = 'rgba(143, 167, 255, 0.7)';
+    pCtx.fill();
+    for (let j = i + 1; j < particlesArr.length; j++) {
+      const q = particlesArr[j];
+      const dx = p.x - q.x, dy = p.y - q.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 120) {
+        pCtx.beginPath();
+        pCtx.moveTo(p.x, p.y);
+        pCtx.lineTo(q.x, q.y);
+        pCtx.strokeStyle = `rgba(102, 126, 234, ${0.15 * (1 - dist/120)})`;
+        pCtx.lineWidth = 1;
+        pCtx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+initParticles();
+drawParticles();
+window.addEventListener('resize', initParticles);
+
+/* ============================================================
+   BIẾN TOÀN CỤC & ĐIỀU HƯỚNG
+   ============================================================ */
+const slides       = Array.from(document.querySelectorAll('.slide'));
+const startScreen  = document.getElementById('startScreen');
+const startBtn     = document.getElementById('startBtn');
+const presentation = document.getElementById('presentation');
+const navEl        = document.getElementById('nav');
+const progressEl   = document.getElementById('progress');
+const prevBtn      = document.getElementById('prevBtn');
+const nextBtn      = document.getElementById('nextBtn');
+const progressText = document.getElementById('progressText');
+const progressFill = document.getElementById('progressFill');
+
+let current = 0;
+let isAnimating = false;
+
+/* ============================================================
+   CONFETTI CHO SLIDE CUỐI
+   ============================================================ */
+function launchConfetti() {
+  const colors = ['#667eea', '#764ba2', '#f9d423', '#ff4e50', '#38ef7d', '#ff9a00', '#8fa7ff'];
+  for (let i = 0; i < 60; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + '%';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.width = (Math.random() * 8 + 5) + 'px';
+    c.style.height = (Math.random() * 12 + 6) + 'px';
+    c.style.animationDelay = (Math.random() * 0.5) + 's';
+    c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+    if (Math.random() > 0.5) c.style.borderRadius = '50%';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 5000);
+  }
+}
+
+/* ============================================================
+   HIỆU ỨNG CHUYỂN CẢNH ĐỘC ĐÁO (SET ĐÁNH, RƠI, TAN BIẾN)
+   ============================================================ */
+// 1. Hiệu ứng Sét đánh (Lightning Flash)
+function lightningNext(from, to, done) {
+  const flash = document.createElement('div');
+  flash.style.cssText = `position:fixed; inset:0; z-index:200; background:#fff; opacity:0; pointer-events:none;`;
+  document.body.appendChild(flash);
+  const tl = gsap.timeline({ onComplete: () => flash.remove() });
+  tl.to(flash, { opacity: 0.85, duration: 0.05 })
+    .to(flash, { opacity: 0, duration: 0.05 })
+    .to(flash, { opacity: 0.5, duration: 0.04 })
+    .to(flash, { opacity: 0, duration: 0.05 });
+  gsap.to(from, { opacity: 0, scale: 1.05, duration: 0.3, ease: 'power2.in' });
+  gsap.fromTo(to, { opacity: 0, scale: 0.95 },
+    { opacity: 1, scale: 1, duration: 0.4, delay: 0.1, ease: 'power3.out', onComplete: done });
+}
+
+// 2. Hiệu ứng Rơi từ trên cao xuống (Bounce Drop)
+function bounceDropNext(from, to, done) {
+  gsap.to(from, { y: -30, opacity: 0, duration: 0.3, ease: 'power2.in' });
+  gsap.fromTo(to, { y: -window.innerHeight, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.6, ease: 'bounce.out', onComplete: done });
+}
+
+// 3. Hiệu ứng Tan biến / Xoay vòng (Vortex)
+function vortexNext(from, to, done) {
+  gsap.to(from, { scale: 0.2, rotation: 360, opacity: 0, duration: 0.4, ease: 'power2.in' });
+  gsap.fromTo(to, { scale: 1.6, opacity: 0, rotation: -90 },
+    { scale: 1, opacity: 1, rotation: 0, duration: 0.5, delay: 0.1, ease: 'power3.out', onComplete: done });
+}
+
+// 4. Hiệu ứng Lật trang sách (Page Flip)
+function pageFlipNext(from, to, done) {
+  gsap.set(from, { transformPerspective: 1000, transformOrigin: 'left center' });
+  gsap.set(to,   { transformPerspective: 1000, transformOrigin: 'right center' });
+  gsap.to(from, { rotationY: -60, opacity: 0, duration: 0.4, ease: 'power2.inOut',
+    onComplete: () => { from.classList.remove('show'); gsap.set(from, { clearProps: 'all' }); } });
+  gsap.fromTo(to, { rotationY: 60, opacity: 0 },
+    { rotationY: 0, opacity: 1, duration: 0.45, delay: 0.1, ease: 'power3.out',
+      onComplete: () => { gsap.set(to, { clearProps: 'all' }); done(); } });
+}
+
+const EFFECTS = [lightningNext, bounceDropNext, vortexNext, pageFlipNext, lightningNext, bounceDropNext, vortexNext];
+
+function reverseGo(fromEl, toEl, done) {
+  gsap.set(toEl, { xPercent: -100, opacity: 1, zIndex: 20 });
+  toEl.classList.add('show');
+  const tl = gsap.timeline({ onComplete: done });
+  tl.to(toEl,  { xPercent: 0, duration: 0.4, ease: 'power3.out' }, 0)
+    .to(fromEl, { xPercent: 100, opacity: 0, duration: 0.4, ease: 'power3.in',
+      onComplete: () => { fromEl.classList.remove('show'); gsap.set(fromEl, { clearProps: 'all' }); }
+    }, 0);
+}
+
+/* ============================================================
+   ĐIỀU HƯỚNG SLIDE
+   ============================================================ */
+function updateUI() {
+  progressText.textContent = `${current + 1} / ${slides.length}`;
+  progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = current === slides.length - 1;
+}
+
+function goToSlide(index) {
+  if (isAnimating) return;
+  if (index < 0 || index >= slides.length) return;
+  if (index === current && slides[current].classList.contains('show')) return;
+
+  isAnimating = true;
+  const fromEl = slides[current];
+  const toEl   = slides[index];
+  const goingForward = index > current;
+
+  if (goingForward) {
+    toEl.classList.add('show');
+    gsap.set(toEl, { opacity: 0 });
+    const fx = EFFECTS[current % EFFECTS.length] || lightningNext;
+    fx(fromEl, toEl, () => {
+      fromEl.classList.remove('show');
+      gsap.set(fromEl, { clearProps: 'all' });
+      gsap.set(toEl, { clearProps: 'all', opacity: 1 });
+      isAnimating = false;
+      if (index === slides.length - 1) setTimeout(launchConfetti, 300);
+    });
+  } else {
+    reverseGo(fromEl, toEl, () => {
+      gsap.set(toEl, { clearProps: 'all' });
+      isAnimating = false;
+      if (index === slides.length - 1) setTimeout(launchConfetti, 300);
+    });
+  }
+
+  current = index;
+  updateUI();
+}
+
+function nextSlide() { goToSlide(current + 1); }
+function prevSlide() { goToSlide(current - 1); }
+
+/* ============================================================
+   SỰ KIỆN TƯƠNG TÁC
+   ============================================================ */
+startBtn.addEventListener('click', () => {
+  startScreen.classList.add('hide');
+  setTimeout(() => { startScreen.style.display = 'none'; }, 600);
+  presentation.classList.add('active');
+  navEl.style.display = 'flex';
+  progressEl.style.display = 'flex';
+  current = 0;
+  const first = slides[0];
+  first.classList.add('show');
+  gsap.fromTo(first, { opacity: 0, scale: 1.05 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'power3.out' });
+  updateUI();
+});
+
+nextBtn.addEventListener('click', nextSlide);
+prevBtn.addEventListener('click', prevSlide);
+
+document.addEventListener('keydown', (e) => {
+  if (presentation.style.display === 'none') return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+});
+
+let touchStartX = 0;
+document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) { dx < 0 ? nextSlide() : prevSlide(); }
+});
+
+updateUI();
+</script>
+</body>
+</html>
